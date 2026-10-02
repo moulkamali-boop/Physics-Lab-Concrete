@@ -4,11 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover">
 <meta name="theme-color" content="#0a0f1a">
-<title>🧱 Physics Lab Concrete — Deep AI</title>
+<title>🧱 Physics Lab Concrete — Pure Physics</title>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%230a0f1a'/%3E%3Ctext x='50' y='68' font-size='58' text-anchor='middle'%3E🧱%3C/text%3E%3C/svg%3E">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.15.0/dist/tf.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/mobilenet@2.1.1/dist/mobilenet.min.js"></script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 body{background:#0a0f1a;color:#e2e8f0;font-family:'Segoe UI',system-ui,sans-serif;padding:.8rem;display:flex;justify-content:center;align-items:flex-start;min-height:100vh}
@@ -41,10 +39,8 @@ body{background:#0a0f1a;color:#e2e8f0;font-family:'Segoe UI',system-ui,sans-seri
 .start-btn:hover{transform:scale(1.02);box-shadow:0 0 30px #f5b81b44}
 .start-btn:disabled{opacity:.5;cursor:not-allowed}
 #labArea{display:none;margin-top:12px}
-.twin-status{display:flex;align-items:center;gap:8px;background:linear-gradient(135deg,#1e1b4b,#312e81);border:1px solid #8b5cf6;border-radius:30px;padding:6px 12px;margin:8px 0;font-size:.72rem;color:#e9d5ff}
-.twin-status button{background:transparent;border:none;color:#c4b5fd;cursor:pointer;font-size:.9rem;padding:2px 6px;border-radius:50%;font-family:inherit}
-.smart-analyze-btn{width:100%;padding:14px;background:linear-gradient(135deg,#8b5cf6,#7c3aed);border:none;border-radius:40px;font-weight:700;color:#fff;font-size:.95rem;cursor:pointer;margin:12px 0;transition:.2s;letter-spacing:.3px;display:flex;align-items:center;justify-content:center;gap:8px;font-family:inherit}
-.smart-analyze-btn:hover:not(:disabled){transform:scale(1.02);box-shadow:0 0 30px #8b5cf644}
+.smart-analyze-btn{width:100%;padding:14px;background:linear-gradient(135deg,#06b6d4,#0891b2);border:none;border-radius:40px;font-weight:700;color:#fff;font-size:.95rem;cursor:pointer;margin:12px 0;transition:.2s;letter-spacing:.3px;display:flex;align-items:center;justify-content:center;gap:8px;font-family:inherit}
+.smart-analyze-btn:hover:not(:disabled){transform:scale(1.02);box-shadow:0 0 30px #06b6d444}
 .smart-analyze-btn:disabled{opacity:.5;cursor:not-allowed}
 .sensor-accordion{background:#0b1220;border:3px solid #f5b81b;border-radius:16px;margin-bottom:16px;overflow:hidden;transition:all .3s;box-shadow:0 4px 12px rgba(245,184,27,.15)}
 .sensor-accordion.done{border-color:#2ecc71;background:#064e3b;box-shadow:0 4px 12px rgba(46,204,113,.25)}
@@ -57,6 +53,8 @@ body{background:#0a0f1a;color:#e2e8f0;font-family:'Segoe UI',system-ui,sans-seri
 .sensor-accordion-header .title > div{display:flex;flex-direction:column;min-width:0}
 .sensor-accordion-header .title span:first-child{font-weight:700;font-size:.9rem;color:#f5b81b}
 .sensor-accordion-header .title .tool{font-size:.65rem;color:#94a3b8;margin-top:2px}
+.info-btn{width:26px;height:26px;border-radius:50%;background:linear-gradient(135deg,#3b82f6,#1d4ed8);border:1px solid #60a5fa;color:#fff;font-size:.75rem;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:.2s;font-family:inherit;box-shadow:0 2px 6px rgba(59,130,246,.4)}
+.info-btn:hover{transform:scale(1.15);box-shadow:0 0 12px #3b82f6}
 .status-badge{padding:4px 10px;border-radius:20px;font-size:.62rem;font-weight:700;flex-shrink:0}
 .status-badge.waiting{background:#1e293b;color:#94a3b8;border:1px solid #334155}
 .status-badge.done{background:#2ecc7133;color:#2ecc71;border:1px solid #2ecc71}
@@ -112,19 +110,17 @@ body{background:#0a0f1a;color:#e2e8f0;font-family:'Segoe UI',system-ui,sans-seri
 .summary-text.good{background:#064e3b44;border:1px solid #2ecc71;color:#2ecc71}
 .summary-text.warning{background:#78350f44;border:1px solid #f59e0b;color:#f59e0b}
 .summary-text.danger{background:#7f1d1d44;border:1px solid #ef4444;color:#ef4444}
-.deep-panel{background:#0a0f1a;border:2px solid #06b6d4;border-radius:16px;padding:14px;margin:12px 0;animation:slideDeep .3s ease-out;text-align:right;direction:rtl}
+.phys-panel{background:#0a0f1a;border:2px solid #06b6d4;border-radius:16px;padding:14px;margin:12px 0;animation:slideDeep .3s ease-out;text-align:right;direction:rtl}
 @keyframes slideDeep{from{opacity:0;transform:translateY(-10px)}to{opacity:1;transform:translateY(0)}}
-.deep-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;padding-bottom:8px;border-bottom:1px solid #334155}
-.deep-title{font-size:.85rem;font-weight:700;color:#06b6d4}
-.deep-close{background:transparent;border:none;color:#94a3b8;cursor:pointer;font-size:1rem;padding:4px 8px;border-radius:50%;font-family:inherit}
-.deep-section{margin-bottom:12px}
-.deep-metric{display:flex;justify-content:space-between;font-size:.75rem;color:#cbd5e1;margin-bottom:4px}
-.deep-val{font-family:monospace;color:#06b6d4;font-weight:700}
-.deep-bar{background:#1e293b;height:6px;border-radius:3px;overflow:hidden}
-.deep-bar-fill{height:100%;background:linear-gradient(90deg,#06b6d4,#0891b2);transition:width .4s ease;border-radius:3px}
-.deep-bar-fill.warn{background:linear-gradient(90deg,#f59e0b,#d97706)}
-.deep-bar-fill.oil{background:linear-gradient(90deg,#f5b81b,#e67e22)}
-.deep-subtitle{font-size:.72rem;color:#94a3b8;font-weight:600;margin-bottom:6px;text-transform:uppercase;letter-spacing:.5px}
+.phys-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;padding-bottom:8px;border-bottom:1px solid #334155}
+.phys-title{font-size:.85rem;font-weight:700;color:#06b6d4}
+.phys-close{background:transparent;border:none;color:#94a3b8;cursor:pointer;font-size:1rem;padding:4px 8px;border-radius:50%;font-family:inherit}
+.phys-section{margin-bottom:12px}
+.phys-metric{display:flex;justify-content:space-between;font-size:.75rem;color:#cbd5e1;margin-bottom:4px}
+.phys-val{font-family:monospace;color:#06b6d4;font-weight:700}
+.phys-bar{background:#1e293b;height:6px;border-radius:3px;overflow:hidden}
+.phys-bar-fill{height:100%;background:linear-gradient(90deg,#06b6d4,#0891b2);transition:width .4s ease;border-radius:3px}
+.phys-subtitle{font-size:.72rem;color:#94a3b8;font-weight:600;margin-bottom:6px;text-transform:uppercase;letter-spacing:.5px}
 .family-row{display:flex;align-items:center;gap:8px;padding:6px 8px;background:#1e293b;border-radius:8px;margin-bottom:4px;font-size:.75rem}
 .family-row .fam-icon{font-size:1.1rem}
 .family-row .fam-name{flex:1;color:#e2e8f0}
@@ -132,23 +128,9 @@ body{background:#0a0f1a;color:#e2e8f0;font-family:'Segoe UI',system-ui,sans-seri
 .family-row.primary{background:linear-gradient(90deg,#92400e 0%,#1e293b 100%);border-left:3px solid #f5b81b}
 .family-row .fam-mini-bar{width:60px;height:4px;background:#0f172a;border-radius:2px;overflow:hidden}
 .family-row .fam-mini-fill{height:100%;background:#f5b81b;border-radius:2px;transition:width .3s}
-.xai-row{display:flex;justify-content:space-between;font-size:.7rem;color:#94a3b8;padding:4px 0;border-bottom:1px dashed #334155}
-.xai-row span:last-child{color:#06b6d4;font-family:monospace}
-.anomaly-box{padding:8px 10px;border-radius:8px;font-size:.75rem;background:#7c3aed22;border:1px solid #8b5cf6;color:#c4b5fd;margin-top:6px}
-.anomaly-box.high{background:#7f1d1d33;border-color:#ef4444;color:#fca5a5}
-.anomaly-box.medium{background:#78350f33;border-color:#f59e0b;color:#fcd34d}
-.deep-actions{margin-top:12px;padding-top:12px;border-top:1px solid #334155;text-align:center}
-.deep-btn{background:linear-gradient(135deg,#8b5cf6,#7c3aed);border:none;border-radius:30px;padding:10px 20px;color:#fff;font-weight:700;cursor:pointer;font-size:.8rem;transition:transform .2s;font-family:inherit}
-.deep-btn:disabled{opacity:.5;cursor:not-allowed}
-.train-overlay{position:fixed;inset:0;background:rgba(0,0,0,.95);display:none;align-items:center;justify-content:center;z-index:5000;backdrop-filter:blur(6px);padding:20px}
-.train-overlay.show{display:flex}
-.train-box{background:#1e293b;border:2px solid #8b5cf6;border-radius:20px;padding:24px;max-width:400px;width:100%;text-align:center}
-.train-box h3{color:#a78bfa;font-size:1rem;margin:10px 0}
-.train-msg{color:#cbd5e1;font-size:.8rem;margin:8px 0;min-height:40px;line-height:1.5}
-.train-progress{background:#0f172a;height:10px;border-radius:5px;overflow:hidden;margin:12px 0}
-.train-progress-fill{height:100%;background:linear-gradient(90deg,#8b5cf6,#a78bfa);transition:width .3s;border-radius:5px}
-.train-pct{font-size:1.4rem;font-weight:900;color:#a78bfa;font-family:monospace}
-.train-cancel{background:#334155;border:none;border-radius:30px;padding:8px 20px;color:#fff;font-weight:600;cursor:pointer;margin-top:12px;font-size:.8rem;font-family:inherit}
+.phys-row{display:flex;justify-content:space-between;font-size:.7rem;color:#94a3b8;padding:4px 0;border-bottom:1px dashed #334155}
+.phys-row span:last-child{color:#06b6d4;font-family:monospace}
+.phys-note{font-size:.7rem;color:#94a3b8;padding:8px;background:#1e293b;border-radius:8px;line-height:1.5;border-right:3px solid #06b6d4}
 .toolbar{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:14px 0 8px}
 .tool-btn{background:linear-gradient(135deg,#1e293b,#0f172a);border:1px solid #334155;border-radius:14px;padding:10px 6px;font-size:.7rem;color:#cbd5e1;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:4px;transition:all .25s;font-family:inherit;font-weight:600;box-shadow:0 2px 8px rgba(0,0,0,.2)}
 .tool-btn i{font-size:1rem;color:#f5b81b}
@@ -161,8 +143,8 @@ body{background:#0a0f1a;color:#e2e8f0;font-family:'Segoe UI',system-ui,sans-seri
 .legal-links-row{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin:14px 0 8px;padding-top:12px;border-top:1px solid #334155}
 .legal-link-btn{background:#1e293b;border:1px solid #334155;border-radius:30px;padding:8px 10px;font-size:.68rem;color:#cbd5e1;cursor:pointer;font-family:inherit;transition:.2s;display:flex;align-items:center;justify-content:center;gap:4px}
 .legal-link-btn:hover{background:#2d3a4e;border-color:#f5b81b;color:#f5b81b}
-.consent-overlay,.calibration-overlay,.secret-modal,.confirm-overlay,.legal-modal-overlay,.share-overlay{position:fixed;inset:0;background:rgba(0,0,0,.95);display:none;align-items:center;justify-content:center;z-index:999;padding:16px;backdrop-filter:blur(4px)}
-.consent-overlay.show,.calibration-overlay.show,.secret-modal.show,.confirm-overlay.show,.legal-modal-overlay.show,.share-overlay.show{display:flex}
+.consent-overlay,.calibration-overlay,.secret-modal,.confirm-overlay,.legal-modal-overlay,.share-overlay,.sensor-info-overlay{position:fixed;inset:0;background:rgba(0,0,0,.95);display:none;align-items:center;justify-content:center;z-index:999;padding:16px;backdrop-filter:blur(4px)}
+.consent-overlay.show,.calibration-overlay.show,.secret-modal.show,.confirm-overlay.show,.legal-modal-overlay.show,.share-overlay.show,.sensor-info-overlay.show{display:flex}
 .consent-box,.calibration-box{background:#1e293b;border:2px solid #f5b81b;border-radius:24px;padding:20px;max-width:400px;width:100%;text-align:center}
 .consent-box h2,.calibration-box h2{color:#f5b81b;font-size:1.1rem;margin-bottom:6px}
 .consent-box .legal-text,.calibration-box .legal-text{color:#cbd5e1;font-size:.85rem;line-height:1.6;text-align:right;padding:8px 0}
@@ -206,6 +188,26 @@ body{background:#0a0f1a;color:#e2e8f0;font-family:'Segoe UI',system-ui,sans-seri
 .legal-modal-body a{color:#f5b81b;text-decoration:none;word-break:break-all}
 .legal-modal-footer{padding:8px 12px;border-top:1px solid #334155;display:flex;justify-content:center}
 .legal-modal-close-btn{background:#334155;border:none;border-radius:40px;padding:8px 24px;color:#fff;font-weight:600;cursor:pointer;font-size:.8rem;font-family:inherit;transition:.2s}
+/* Sensor Info Modal */
+.sensor-info-box{background:#0f172a;border:2px solid #3b82f6;border-radius:20px;max-width:600px;width:100%;max-height:88vh;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 0 40px #3b82f633}
+.sensor-info-header{display:flex;align-items:center;justify-content:space-between;padding:14px 16px;background:linear-gradient(135deg,#1e3a8a,#1d4ed8);border-bottom:2px solid #3b82f6}
+.sensor-info-title{color:#fff;font-size:.95rem;font-weight:700;display:flex;align-items:center;gap:8px}
+.sensor-info-close{background:rgba(255,255,255,.15);border:none;color:#fff;font-size:1.1rem;cursor:pointer;padding:4px 10px;border-radius:50%;font-family:inherit;transition:.2s}
+.sensor-info-close:hover{background:rgba(255,255,255,.3)}
+.sensor-info-body{flex:1;overflow-y:auto;padding:16px 20px;color:#cbd5e1;font-size:.8rem;line-height:1.75;text-align:right}
+.sensor-info-body h4{color:#60a5fa;font-size:.85rem;margin:14px 0 6px;border-right:3px solid #3b82f6;padding-right:8px}
+.sensor-info-body h4:first-child{margin-top:0}
+.sensor-info-body p{margin-bottom:8px}
+.sensor-info-body ul{margin:6px 20px 10px 0;padding-right:10px}
+.sensor-info-body li{margin-bottom:4px}
+.sensor-info-body code{background:#1e293b;color:#f5b81b;padding:2px 6px;border-radius:6px;font-family:'Courier New',monospace;font-size:.75rem;direction:ltr;display:inline-block}
+.sensor-info-body .formula{background:#0a0f1a;border:1px solid #334155;border-radius:10px;padding:10px 14px;margin:8px 0;direction:ltr;text-align:center;font-family:'Courier New',monospace;color:#06b6d4;font-size:.85rem;overflow-x:auto}
+.sensor-info-body .ref{background:#1e293b;border-right:3px solid #f5b81b;padding:8px 12px;border-radius:8px;margin:8px 0;font-size:.72rem;color:#fbbf24;line-height:1.6}
+.sensor-info-body .dev-note{background:#312e81;border-right:3px solid #8b5cf6;padding:8px 12px;border-radius:8px;margin:8px 0;font-size:.72rem;color:#c4b5fd;line-height:1.6}
+.sensor-info-tabs{display:flex;border-bottom:2px solid #334155;background:#0a0f1a}
+.sensor-info-tabs button{flex:1;background:transparent;border:none;color:#94a3b8;padding:10px;font-size:.75rem;font-weight:700;cursor:pointer;font-family:inherit;transition:.2s;border-bottom:3px solid transparent}
+.sensor-info-tabs button.active{color:#3b82f6;border-bottom-color:#3b82f6;background:#1e293b}
+.sensor-info-footer{padding:10px 16px;border-top:1px solid #334155;display:flex;justify-content:center;background:#0a0f1a}
 .history-section{background:#0f172a;border:2px solid #334155;border-radius:16px;padding:10px;margin:10px 0;display:none}
 .history-section.show{display:block}
 .history-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;padding-bottom:6px;border-bottom:1px solid #334155}
@@ -278,12 +280,6 @@ body{background:#0a0f1a;color:#e2e8f0;font-family:'Segoe UI',system-ui,sans-seri
         <div class="id-box">🆔 <span id="deviceId">----</span></div>
     </div>
 
-    <div class="twin-status" id="twinStatus" style="display:none">
-        <span id="twinIcon">🧱</span>
-        <span id="twinText">—</span>
-        <button id="twinResetBtn" onclick="resetTwinConcrete()" title="Reset">🗑️</button>
-    </div>
-
     <div class="credit-section">
         <div class="free-badge">🎁 <span id="freeLabel">فحوصات فيزيائية مجانية</span>: <span id="freeCount">3</span>/3</div>
         <div class="pack-row">
@@ -303,8 +299,8 @@ body{background:#0a0f1a;color:#e2e8f0;font-family:'Segoe UI',system-ui,sans-seri
     <div id="labArea">
         <div id="sensorsContainer"></div>
 
-        <button class="smart-analyze-btn" id="smartAnalyzeBtn" onclick="runDeepAnalysis()" disabled>
-            🧠 <span id="smartAnalyzeLabel">تحليل ذكي بالتعلم العميق</span>
+        <button class="smart-analyze-btn" id="smartAnalyzeBtn" onclick="runPhysicalAnalysis(false)" disabled>
+            🔬 <span id="smartAnalyzeLabel">تحليل فيزيائي مطابق للبصمة المرجعية</span>
         </button>
 
         <div class="notes-area">
@@ -333,39 +329,29 @@ body{background:#0a0f1a;color:#e2e8f0;font-family:'Segoe UI',system-ui,sans-seri
             <div class="verdict-sentence" id="verdictSentence"></div>
             <div class="verdict-solution" id="verdictSolution"></div>
 
-            <div class="deep-panel" id="deepPanel" style="display:none">
-                <div class="deep-header">
-                    <span class="deep-title">🧠 <span id="deepPanelTitle">تحليل عميق</span></span>
-                    <button class="deep-close" onclick="document.getElementById('deepPanel').style.display='none'">✖</button>
+            <div class="phys-panel" id="physPanel" style="display:none">
+                <div class="phys-header">
+                    <span class="phys-title">🔬 <span id="physPanelTitle">تحليل فيزيائي</span></span>
+                    <button class="phys-close" onclick="document.getElementById('physPanel').style.display='none'">✖</button>
                 </div>
-                <div class="deep-section">
-                    <div class="deep-metric"><span id="lblConfidence">الثقة</span><span class="deep-val" id="valConfidence">—</span></div>
-                    <div class="deep-bar"><div class="deep-bar-fill oil" id="barConfidence" style="width:0%"></div></div>
+                <div class="phys-section">
+                    <div class="phys-metric"><span id="lblQuality">جودة القياس</span><span class="phys-val" id="valQuality">—</span></div>
+                    <div class="phys-bar"><div class="phys-bar-fill" id="barQuality" style="width:0%"></div></div>
                 </div>
-                <div class="deep-section">
-                    <div class="deep-metric"><span id="lblUncertainty">عدم اليقين</span><span class="deep-val" id="valUncertainty">—</span></div>
-                    <div class="deep-bar"><div class="deep-bar-fill warn" id="barUncertainty" style="width:0%"></div></div>
+                <div class="phys-section">
+                    <div class="phys-metric"><span id="lblCompleteness">اكتمال البيانات</span><span class="phys-val" id="valCompleteness">—</span></div>
+                    <div class="phys-bar"><div class="phys-bar-fill" id="barCompleteness" style="width:0%"></div></div>
                 </div>
-                <div class="deep-section">
-                    <div class="deep-metric"><span id="lblSNR">جودة الإشارة</span><span class="deep-val" id="valSNR">—</span></div>
-                    <div class="deep-bar"><div class="deep-bar-fill" id="barSNR" style="width:0%"></div></div>
-                </div>
-                <div class="deep-section" id="topFamiliesSection">
-                    <div class="deep-subtitle" id="lblTopFamilies">الاحتمالات المرشحة</div>
+                <div class="phys-section" id="topFamiliesSection">
+                    <div class="phys-subtitle" id="lblTopFamilies">التطابق مع البصمات المرجعية</div>
                     <div id="topFamiliesList"></div>
                 </div>
-                <div class="deep-section" id="xaiSection" style="display:none">
-                    <div class="deep-subtitle" id="lblXAI">لماذا هذا القرار؟</div>
-                    <div id="xaiList"></div>
+                <div class="phys-section" id="distSection" style="display:none">
+                    <div class="phys-subtitle" id="lblDistances">المسافات الإقليدية المقيسة</div>
+                    <div id="distList"></div>
                 </div>
-                <div class="deep-section" id="anomalySection" style="display:none">
-                    <div class="deep-subtitle" id="lblAnomaly">كشف الشذوذ</div>
-                    <div id="anomalyText"></div>
-                </div>
-                <div class="deep-actions">
-                    <button class="deep-btn" id="trainBtn" onclick="trainOnMySample()" style="display:none">
-                        🎓 <span id="trainBtnLabel">تدريب على عينتي</span>
-                    </button>
+                <div class="phys-section">
+                    <div class="phys-note" id="physNote">—</div>
                 </div>
             </div>
 
@@ -487,6 +473,21 @@ body{background:#0a0f1a;color:#e2e8f0;font-family:'Segoe UI',system-ui,sans-seri
     </div>
 </div>
 
+<div class="sensor-info-overlay" id="sensorInfoOverlay">
+    <div class="sensor-info-box">
+        <div class="sensor-info-header">
+            <div class="sensor-info-title"><span id="sensorInfoIcon">ℹ️</span> <span id="sensorInfoTitle">—</span></div>
+            <button class="sensor-info-close" onclick="closeSensorInfo()">✖</button>
+        </div>
+        <div class="sensor-info-tabs">
+            <button id="sensorTabBrief" class="active" onclick="switchSensorTab('brief')">📱 <span id="sensorTabBriefLabel">كيف أستعمل</span></button>
+            <button id="sensorTabDeep" style="display:none" onclick="switchSensorTab('deep')">🔬 <span id="sensorTabDeepLabel">للمطور</span></button>
+        </div>
+        <div class="sensor-info-body" id="sensorInfoBody">—</div>
+        <div class="sensor-info-footer"><button class="legal-modal-close-btn" onclick="closeSensorInfo()">✖ إغلاق</button></div>
+    </div>
+</div>
+
 <div class="secret-modal" id="secretModal">
     <div class="secret-box">
         <div class="lock-icon">🔐</div>
@@ -502,22 +503,13 @@ body{background:#0a0f1a;color:#e2e8f0;font-family:'Segoe UI',system-ui,sans-seri
     <div class="report-container" id="reportContainer"></div>
 </div>
 
-<div class="train-overlay" id="trainOverlay">
-    <div class="train-box">
-        <div style="font-size:2.5rem">🎓</div>
-        <h3 id="trainTitle">التدريب على عينتي</h3>
-        <div id="trainMsg" class="train-msg">—</div>
-        <div class="train-progress"><div class="train-progress-fill" id="trainProgressFill" style="width:0%"></div></div>
-        <div class="train-pct" id="trainPct">0%</div>
-        <button class="train-cancel" id="trainCloseBtn" onclick="closeTrainOverlay()" style="display:none">✖ إغلاق</button>
-    </div>
-</div>
-
 <div id="toast" class="toast-custom" role="status" aria-live="polite"></div>
 
 <script>
 // ═══════════════════════════════════════════════════════════
-// 🧱 Physics Lab Concrete — V-Final + Deep AI Layer
+// 🧱 Physics Lab Concrete — Pure Physics Edition
+// Users see: usage instructions only
+// Developers (after password) see: full physics + references
 // ═══════════════════════════════════════════════════════════
 
 var APP_CONFIG = {
@@ -537,6 +529,225 @@ var APP_CONFIG = {
           fingerprints: { camera: { r: 130, g: 150, b: 170 }, microphone: { freq: 400 }, accelerometer: { mag: 0.8 } } }
     ]
 };
+
+// ═════ Sensor content: usage (for users) + deep physics (for developer only) ═════
+var SENSOR_INFO = {
+    camera: {
+        icon: '📸',
+        title: { ar: 'الكاميرا — التقاط لون السطح', en: 'Camera — Surface Color Capture' },
+        usage: {
+            ar: '📱 <b>خطوات الاستعمال:</b><br>1. وجّه الكاميرا الخلفية نحو سطح الخرسانة من مسافة 30 سم.<br>2. تأكّد من وجود إضاءة كافية وثابتة (بدون ظلال حادة).<br>3. ثبّت يدك دون حركة.<br>4. اضغط زر القياس وانتظر ثانيتين حتى تُلتقط الصورة.',
+            en: '📱 <b>Steps:</b><br>1. Point the rear camera at the concrete surface from 30 cm.<br>2. Ensure adequate, steady lighting (no harsh shadows).<br>3. Hold still.<br>4. Tap Measure and wait 2 seconds for the capture.'
+        },
+        deep: {
+            ar: `
+<h4>المبدأ الفيزيائي</h4>
+<p>الانعكاس الطيفي المنتشر (Diffuse Reflectance) للسطح تحت إضاءة بيئية. يُقاس متوسط شدة القنوات RGB على N بيكسل:</p>
+<div class="formula">R̄ = (1/N)·Σ Rᵢ   ,   Ḡ = (1/N)·Σ Gᵢ   ,   B̄ = (1/N)·Σ Bᵢ</div>
+
+<h4>المسافة الإقليدية في فضاء RGB</h4>
+<p>تُقاس درجة التشابه مع البصمة المرجعية (R₀,G₀,B₀):</p>
+<div class="formula">d = √((R̄−R₀)² + (Ḡ−G₀)² + (B̄−B₀)²) / 255</div>
+<p>ثم: <code>score = max(0, 1 − d)</code></p>
+
+<h4>العلاقة بالإصابة</h4>
+<ul>
+<li><b>تشقق:</b> الشقوق تحبس الغبار والظل فينخفض المتوسط الكلي بـ 15–25%.</li>
+<li><b>رطوبة:</b> الماء يمتص الضوء في النطاق الأحمر (660nm) فيبقى الأزرق غالباً → ميل لوني نحو B.</li>
+<li><b>فراغ:</b> تجويفات داخلية لا تُرى بصرياً إلا إن ظهرت أثراً سطحياً.</li>
+</ul>
+
+<h4>المعادلة التمثيلية للانعكاس</h4>
+<div class="formula">I(λ) = I₀(λ) · ρ(λ) · exp(−2μ(λ)·h)</div>
+<p>ρ = معامل الانعكاس، μ = معامل الامتصاص، h = سماكة الوسيط الماص (طبقة الرطوبة).</p>
+
+<h4>مصادر علمية</h4>
+<div class="ref">
+• ACI 201.1R — Guide for Conducting a Visual Inspection of Concrete.<br>
+• ASTM C805 / C856 — Visual & petrographic inspection.<br>
+• T. R. Naik et al., "Use of Color Analysis for Concrete Condition Assessment", ACI Materials Journal (2005).<br>
+• González et al., "Digital image processing for crack detection", Construction and Building Materials (2018).
+</div>
+
+<div class="dev-note">🔧 <b>للمطور:</b> يمكن لاحقاً استبدال المطابقة الإقليدية بمصنِّف Bayes أو SVM يُدرَّب على متجهات RGB المُسجَّلة محلياً في <code>concreteMLLog</code> عند تراكم ≥ 200 عينة موثوقة.</div>
+            `,
+            en: `
+<h4>Physical Principle</h4>
+<p>Diffuse spectral reflectance under ambient lighting. Mean RGB intensity over N pixels:</p>
+<div class="formula">R̄ = (1/N)·Σ Rᵢ   ,   Ḡ = (1/N)·Σ Gᵢ   ,   B̄ = (1/N)·Σ Bᵢ</div>
+
+<h4>Euclidean distance in RGB space</h4>
+<div class="formula">d = √((R̄−R₀)² + (Ḡ−G₀)² + (B̄−B₀)²) / 255</div>
+<p>then <code>score = max(0, 1 − d)</code></p>
+
+<h4>Relation to damage</h4>
+<ul>
+<li><b>Cracks:</b> dust and shadows trapped inside → 15–25% drop in mean level.</li>
+<li><b>Moisture:</b> water absorbs red band (660nm), leaving blue dominant → B shift.</li>
+<li><b>Voids:</b> internal cavities not visible optically unless near-surface.</li>
+</ul>
+
+<h4>Reflectance model</h4>
+<div class="formula">I(λ) = I₀(λ) · ρ(λ) · exp(−2μ(λ)·h)</div>
+
+<h4>Scientific references</h4>
+<div class="ref">
+• ACI 201.1R<br>
+• ASTM C805 / C856<br>
+• T. R. Naik et al., ACI Materials Journal (2005).<br>
+• González et al., Construction and Building Materials (2018).
+</div>
+
+<div class="dev-note">🔧 <b>Developer:</b> can later replace Euclidean matching with a Bayes/SVM classifier trained on locally logged RGB vectors in <code>concreteMLLog</code> once ≥ 200 labelled samples accumulate.</div>
+            `
+        }
+    },
+    microphone: {
+        icon: '🎤',
+        title: { ar: 'الميكروفون — التقاط الرنين', en: 'Microphone — Resonance Capture' },
+        usage: {
+            ar: '📱 <b>خطوات الاستعمال:</b><br>1. قرّب الميكروفون من السطح (أقل من 10 سم).<br>2. انقر على الخرسانة برفق ثلاث مرات متتالية بظفر إصبعك.<br>3. اضغط زر القياس فوراً بعد آخر نقرة.<br>4. تجنّب الضوضاء المحيطة أثناء القياس.',
+            en: '📱 <b>Steps:</b><br>1. Bring the mic close to the surface (&lt; 10 cm).<br>2. Tap the concrete gently three times with your fingernail.<br>3. Tap Measure immediately after the last tap.<br>4. Avoid surrounding noise during measurement.'
+        },
+        deep: {
+            ar: `
+<h4>المبدأ الفيزيائي — طريقة Impact-Echo</h4>
+<p>عند الطرق على صفيحة خرسانية، تنبعث موجات P (انضغاطية) وموجات S (قص) وموجات Rayleigh. يعتمد التردد الرنان على سماكتها وخصائصها المرنة:</p>
+<div class="formula">f = (β² · h) / (4π · a²) · √( E / (12 ρ (1−ν²)) )</div>
+<p>h = سماكة الصفيحة، a = البعد المميز، E = معامل يونغ، ρ = الكثافة، ν = نسبة بواسون، β = ثابت النمط.</p>
+
+<h4>تحويل فورييه السريع (FFT)</h4>
+<p>خوارزمية Cooley–Tukey على N=2048 عينة:</p>
+<div class="formula">X(k) = Σₙ₌₀^{N−1} x(n) · e^{−j2πkn/N}</div>
+<p>ثم يُحدَّد التردد الأقصى:</p>
+<div class="formula">f_peak = (k_max · f_s) / N</div>
+
+<h4>معايير التمييز</h4>
+<ul>
+<li><b>سليمة:</b> f ≈ 500–600 Hz — انتقال سريع عبر جسم متجانس.</li>
+<li><b>تشقق سطحي:</b> f ≈ 250–350 Hz — انقطاع جزئي لمسار الموجة.</li>
+<li><b>فراغ داخلي:</b> f ≈ 100–180 Hz — الفراغ يعمل كعاكس ومُمتص للطاقة.</li>
+<li><b>رطوبة:</b> f ≈ 380–430 Hz — زيادة كثافة الماء تُخفض c = √(E/ρ).</li>
+</ul>
+
+<h4>سرعة الموجة P داخل الخرسانة</h4>
+<div class="formula">c_p = √( E(1−ν) / (ρ(1+ν)(1−2ν)) )</div>
+<p>القيم المرجعية: c_p ≈ 3500–4500 m/s سليمة، وتنخفض 20–35% عند التشقق.</p>
+
+<h4>مصادر علمية</h4>
+<div class="ref">
+• ASTM C1383 — Impact-Echo Method.<br>
+• M. Sansalone & W. Streett, <i>Impact-Echo: Nondestructive Evaluation of Concrete and Masonry</i>, Bullbrier Press (1997).<br>
+• J.-M. Lin, "Impact-echo response of concrete", NIST (2003).<br>
+• Carino N.J., "The Impact-Echo Method: An Overview", NIST (2001).
+</div>
+
+<div class="dev-note">🔧 <b>للمطور:</b> المتجه المُستخرج (48 بُعد) = <code>freq</code> + 32 قمة طيفية + RMS + Crest + Kurtosis. عند تراكم بيانات كافية، يُدرَّب 1D-CNN على أطياف FFT الخام.</div>
+            `,
+            en: `
+<h4>Impact-Echo Method</h4>
+<p>P-waves, S-waves, and Rayleigh waves are generated when tapping a concrete plate. Resonant frequency depends on thickness and elastic properties:</p>
+<div class="formula">f = (β² · h) / (4π · a²) · √( E / (12 ρ (1−ν²)) )</div>
+
+<h4>Fast Fourier Transform</h4>
+<div class="formula">X(k) = Σₙ₌₀^{N−1} x(n) · e^{−j2πkn/N}</div>
+<div class="formula">f_peak = (k_max · f_s) / N</div>
+
+<h4>Discrimination criteria</h4>
+<ul>
+<li><b>Sound:</b> f ≈ 500–600 Hz</li>
+<li><b>Surface crack:</b> f ≈ 250–350 Hz</li>
+<li><b>Internal void:</b> f ≈ 100–180 Hz</li>
+<li><b>Moisture:</b> f ≈ 380–430 Hz</li>
+</ul>
+
+<h4>P-wave speed</h4>
+<div class="formula">c_p = √( E(1−ν) / (ρ(1+ν)(1−2ν)) )</div>
+
+<h4>References</h4>
+<div class="ref">
+• ASTM C1383<br>
+• Sansalone & Streett, <i>Impact-Echo</i>, Bullbrier Press (1997).<br>
+• J.-M. Lin, NIST (2003).<br>
+• Carino N.J., NIST (2001).
+</div>
+
+<div class="dev-note">🔧 <b>Developer:</b> 48-D feature = <code>freq</code> + 32 spectral peaks + RMS + Crest + Kurtosis. Train 1D-CNN on raw FFT spectra when data accumulates.</div>
+            `
+        }
+    },
+    accelerometer: {
+        icon: '📳',
+        title: { ar: 'حساس الحركة — التقاط الاهتزاز', en: 'Motion Sensor — Vibration Capture' },
+        usage: {
+            ar: '📱 <b>خطوات الاستعمال:</b><br>1. ضع الهاتف مستوياً على سطح الخرسانة.<br>2. اترك الهاتف ساكناً تماماً ولا تلمسه.<br>3. انقر على الخرسانة بجانب الهاتف بإصبعك.<br>4. اضغط زر القياس دون تحريك الهاتف.',
+            en: '📱 <b>Steps:</b><br>1. Place the phone flat on the concrete surface.<br>2. Keep the phone perfectly still, do not touch it.<br>3. Tap the concrete next to the phone with your finger.<br>4. Tap Measure without moving the phone.'
+        },
+        deep: {
+            ar: `
+<h4>المبدأ الفيزيائي — التحليل النمطي</h4>
+<p>يمكن نمذجة الخرسانة كنظام كتلة-نابض-مُخمِّد (SDOF):</p>
+<div class="formula">m·ẍ + c·ẋ + k·x = F(t)</div>
+<p>التردد الطبيعي غير المُخمَّد:</p>
+<div class="formula">ω_n = √( k / m )   →   f_n = (1/2π)·√(k/m)</div>
+<p>انخفاض صلابة k (تشقق أو فراغ) يُخفض f_n ويرفع سعة الاهتزاز.</p>
+
+<h4>حسابات إحصائية</h4>
+<div class="formula">a_rms = √( (1/N)·Σ aᵢ² )</div>
+<div class="formula">Crest = a_peak / a_rms</div>
+<div class="formula">Kurtosis = E[(a−μ)⁴] / σ⁴</div>
+<p>المتوسط: <code>mag = mean(√(aₓ² + a_y² + a_z²))</code></p>
+
+<h4>دلالة كل مقياس</h4>
+<ul>
+<li><b>a_rms:</b> طاقة الاهتزاز — ترتفع مع التلف.</li>
+<li><b>Crest:</b> حِدّة القمم — > 4 تشير إلى نبضات صدمية (تشقق).</li>
+<li><b>Kurtosis:</b> طبيعة التوزيع — > 5 تدل على شواذّ (فراغات).</li>
+</ul>
+
+<h4>مصادر علمية</h4>
+<div class="ref">
+• ASTM C215-19 — Fundamental Transverse, Longitudinal, Torsional Resonant Frequencies of Concrete Specimens.<br>
+• D. J. Ewins, <i>Modal Testing: Theory, Practice and Application</i>, 2nd ed., Research Studies Press (2000).<br>
+• ISO 4866:2010 — Vibration of fixed structures.<br>
+• Liang & Su, <i>Journal of Sound and Vibration</i>, Vol. 288 (2005).
+</div>
+
+<div class="dev-note">🔧 <b>للمطور:</b> 48-D = mag + 40 قمة طيفية + RMS + Crest + Kurtosis. مسار التطور: Autoencoder لاكتشاف الشذوذ ثم تصنيف خاضع للإشراف.</div>
+            `,
+            en: `
+<h4>Modal Analysis</h4>
+<p>SDOF model:</p>
+<div class="formula">m·ẍ + c·ẋ + k·x = F(t)</div>
+<div class="formula">ω_n = √( k / m )   →   f_n = (1/2π)·√(k/m)</div>
+
+<h4>Statistical metrics</h4>
+<div class="formula">a_rms = √( (1/N)·Σ aᵢ² )</div>
+<div class="formula">Crest = a_peak / a_rms</div>
+<div class="formula">Kurtosis = E[(a−μ)⁴] / σ⁴</div>
+
+<h4>Meaning</h4>
+<ul>
+<li><b>a_rms:</b> vibration energy.</li>
+<li><b>Crest:</b> peak sharpness &gt; 4 → impulsive hits.</li>
+<li><b>Kurtosis:</b> &gt; 5 → anomalies.</li>
+</ul>
+
+<h4>References</h4>
+<div class="ref">
+• ASTM C215-19<br>
+• D. J. Ewins, <i>Modal Testing</i>, 2nd ed. (2000).<br>
+• ISO 4866:2010<br>
+• Liang & Su, <i>JSV</i>, Vol. 288 (2005).
+</div>
+
+<div class="dev-note">🔧 <b>Developer:</b> 48-D = mag + 40 peaks + RMS + Crest + Kurtosis. Evolution: anomaly-detection Autoencoder → supervised classifier.</div>
+            `
+        }
+    }
+};
+
+var currentSensorInfo = { id: null, tab: 'brief' };
 
 var LANG_LIST = [
     { code: 'ar', flag: '🇸🇦', name: 'العربية', dir: 'rtl' },
@@ -566,7 +777,7 @@ var LANG_LIST = [
 
 var TRANSLATIONS = {};
 
-var T_KEYS = ['title_dynamic','free_label','activate','activation_code','developer','password','confirm','cancel','copied','shared','thanks','back','listen','copy','share','print','new_exam','reset','history','start_btn','measure','retry','done_btn','skip','sensor_camera','sensor_microphone','sensor_accelerometer','tool_camera','tool_microphone','tool_accelerometer','instr_camera','instr_microphone','instr_accelerometer','waiting','measuring','done','skipped','not_measured','status_waiting','status_measuring','status_done','status_skipped','status_error','confidence_label','no_data','fault_healthy','fault_crack','fault_void','fault_moisture','solution_healthy','solution_crack','solution_void','solution_moisture','summary_good','summary_med','summary_low','summary_none','summary_zero','consent_title','consent_text','consent_btn','refuse_btn','calibration_title','calibration_text','calibration_yes','calibration_no','baseline_saved','legal','no_credits','invalid','permission_denied','license_activated','measure_or_skip_first','health_score','analysis_type','metric_freq','metric_color','metric_intensity','notes_title','notes_sub','notes_char','notes_mic','notes_clear','notes_status_recording','user_notes_label','write_btn','summary_btn','final_confirm_title','final_confirm_yes','final_confirm_no','sensor_count_3','sensor_count_2','sensor_count_1','sensor_count_0','confirm_deduct','confirm_no_deduct','no_credit_notice','report_title','report_device','report_date','report_time','report_gps','report_sensors_used','report_verdict','report_solution','report_close_btn','location_denied','location_na','location_loading','location_unavailable','verifying','network_error','wrong_password','print_needs_verdict','legal_privacy_tab','legal_terms_tab','legal_refund_tab','legal_contact_tab','legal_close_btn','history_title','history_empty','history_clear','history_export','history_cleared','history_exported','share_title','share_email','share_native','share_copy','share_whatsapp','share_telegram','share_twitter','deep_panel_title','deep_analyze_btn','deep_confidence','deep_uncertainty','deep_snr','deep_alternatives','deep_xai','deep_anomaly_detected','deep_train_btn','deep_train_running','deep_train_success','deep_train_need_sessions','deep_twin_ready','deep_twin_building','deep_running','deep_analyze_done','deep_analyze_error','deep_need_measure_first'];
+var T_KEYS = ['title_dynamic','free_label','activate','activation_code','developer','password','confirm','cancel','copied','shared','thanks','back','listen','copy','share','print','new_exam','reset','history','start_btn','measure','retry','done_btn','skip','sensor_camera','sensor_microphone','sensor_accelerometer','tool_camera','tool_microphone','tool_accelerometer','instr_camera','instr_microphone','instr_accelerometer','waiting','done','skipped','not_measured','status_waiting','status_measuring','status_done','status_skipped','status_error','confidence_label','no_data','fault_healthy','fault_crack','fault_void','fault_moisture','solution_healthy','solution_crack','solution_void','solution_moisture','summary_good','summary_med','summary_low','summary_zero','consent_title','consent_text','consent_btn','refuse_btn','calibration_title','calibration_text','calibration_yes','calibration_no','baseline_saved','legal','no_credits','invalid','permission_denied','license_activated','measure_or_skip_first','health_score','analysis_type','metric_freq','metric_color','metric_intensity','notes_title','notes_sub','notes_char','notes_mic','notes_clear','notes_status_recording','user_notes_label','write_btn','summary_btn','final_confirm_title','final_confirm_yes','final_confirm_no','sensor_count_3','sensor_count_2','sensor_count_1','sensor_count_0','confirm_deduct','confirm_no_deduct','no_credit_notice','report_title','report_device','report_date','report_time','report_gps','report_sensors_used','report_verdict','report_solution','report_close_btn','location_denied','location_na','location_loading','location_unavailable','verifying','network_error','wrong_password','print_needs_verdict','legal_privacy_tab','legal_terms_tab','legal_refund_tab','legal_contact_tab','legal_close_btn','history_title','history_empty','history_clear','history_export','history_cleared','history_exported','share_title','share_email','share_native','share_copy','share_whatsapp','share_telegram','share_twitter','phys_panel_title','phys_analyze_btn','phys_quality','phys_completeness','phys_alternatives','phys_distances','phys_note_ok','phys_note_insufficient','phys_analyze_running','phys_analyze_done','phys_analyze_error','phys_need_measure','sensor_info_brief','sensor_info_deep','sensor_info_close','ml_log_note'];
 
 function mkDict(vals) {
     var d = {};
@@ -575,100 +786,59 @@ function mkDict(vals) {
 }
 
 TRANSLATIONS.ar = mkDict([
-    'مخبر الخرسانة الفيزيائي','فحوصات فيزيائية مجانية','تفعيل','كود التفعيل','وضع المطور','كلمة المرور','تأكيد','إلغاء','تم النسخ','تمت المشاركة','شكراً','العودة','اسمع','نسخ','مشاركة','طباعة','فحص جديد','إعادة الضبط','السجل','بدء الفحص الفيزيائي','قياس','إعادة','تم','تخطي','📸 الكاميرا (اللون)','🎤 الميكروفون (الرنين)','📳 الاهتزاز','📸 كاميرا خلفية + فلاش','🎙️ ميكروفون هيكلي','📳 محرك اهتزاز + تسارع','صوّر سطح الخرسانة من مسافة 30 سم','انقر برفق على الخرسانة','ضع الهاتف على الخرسانة','جاهز للقياس','جاري القياس... {p}%','تم القياس','تم التخطي','لم يتم القياس','🔒 جاهز','⏳ جاري القياس...','✅ تم القياس','⏭ تم التخطي','⚠️ ضعيفة','الاكتمال','لم يتم قياس أي حساس','الخرسانة سليمة','تشققات في الخرسانة','فراغات داخل الخرسانة','رطوبة في الخرسانة','لا حاجة لأي تدخل','حقن التشققات بالإيبوكسي','الحفر والتدعيم','معالجة مصدر الرطوبة','تم قياس جميع الحساسات','تم تخطي حساس واحد','تم تخطي حساسين','تم تخطي أكثر من النصف','لم يُقَس أي حساس','موافقة مسبقة','سيتم استخدام الكاميرا والميكروفون وحساس الحركة','أوافق وأبدأ','أرفض','معايرة البصمة المرجعية','هل الخرسانة في حالتها الطبيعية الآن؟','نعم، اجعله مرجعي','ليس الآن','تم حفظ المرجع','تقدير فيزيائي استرشادي – ليس تشخيصاً نهائياً','رصيد غير كافٍ','كود غير صالح','تم رفض الإذن','تم تفعيل {0} رصيد','أكمِل القياس أو تخطَ','التشابه مع المرجع','تحليل الإشارة','التردد','اللون','الشدة','هل تريد إضافة ملاحظتك؟','(اختياري)','حرف','🎤 تكلّم','🗑 مسح','جاري التسجيل...','ملاحظات المستخدم:','⌨️ اكتب','اعرض الخلاصة','هل تريد رؤية الخلاصة؟','تأكيد','إلغاء','✅ 3 من 3','⚡ 2 من 3','⚠️ 1 من 3','❌ لم يتم قياس','سيُنزع 1 من رصيدك','لن يُنزع رصيدك','رصيدك محفوظ','تقرير الفحص الفيزيائي','معرّف الجهاز','التاريخ','الوقت','الإحداثيات','الحساسات المستخدمة','الخلاصة','الحل المقترح','إغلاق','مرفوض','غير متاح','جاري التحديد...','غير مدعوم','جاري التحقق...','تعذّر الاتصال','كلمة المرور غير صحيحة','اعرض الخلاصة أولاً','سياسة الخصوصية','شروط الاستخدام','سياسة الاسترجاع','تواصل معنا','إغلاق','سجل الفحوصات','لا توجد فحوصات','حذف الكل','تصدير JSON','تم الحذف','تم التصدير','📤 مشاركة','Email','مشاركة النظام','نسخ النص','WhatsApp','Telegram','Twitter','تحليل عميق','تحليل ذكي بالتعلم العميق','الثقة','عدم اليقين','جودة الإشارة','الاحتمالات المرشحة','لماذا هذا القرار؟','شذوذ مكتشف','تدريب على عينتي','جاري التدريب...','تم التدريب بنجاح','تحتاج 3 قياسات على الأقل','التوأم الرقمي جاهز','بناء التوأم الرقمي','جاري التحليل العميق...','اكتمل التحليل الذكي','فشل التحليل الذكي','قِس حساساً واحداً على الأقل'
+    'مخبر الخرسانة الفيزيائي','فحوصات فيزيائية مجانية','تفعيل','كود التفعيل','وضع المطور','كلمة المرور','تأكيد','إلغاء','تم النسخ','تمت المشاركة','شكراً','العودة','اسمع','نسخ','مشاركة','طباعة','فحص جديد','إعادة الضبط','السجل','بدء الفحص الفيزيائي','قياس','إعادة','تم','تخطي','📸 الكاميرا (اللون)','🎤 الميكروفون (الرنين)','📳 الاهتزاز','📸 كاميرا خلفية + فلاش','🎙️ ميكروفون هيكلي','📳 محرك اهتزاز + تسارع','صوّر سطح الخرسانة من مسافة 30 سم','انقر برفق على الخرسانة','ضع الهاتف على الخرسانة','جاهز للقياس','تم القياس','تم التخطي','لم يتم القياس','🔒 جاهز','⏳ جاري القياس...','✅ تم القياس','⏭ تم التخطي','⚠️ ضعيفة','الاكتمال','لم يتم قياس أي حساس','الخرسانة سليمة','تشققات في الخرسانة','فراغات داخل الخرسانة','رطوبة في الخرسانة','لا حاجة لأي تدخل','حقن التشققات بالإيبوكسي','الحفر والتدعيم','معالجة مصدر الرطوبة','تم قياس جميع الحساسات','تم تخطي حساس واحد','تم تخطي حساسين','تم تخطي أكثر من النصف','لم يُقَس أي حساس','موافقة مسبقة','سيتم استخدام الكاميرا والميكروفون وحساس الحركة','أوافق وأبدأ','أرفض','معايرة البصمة المرجعية','هل الخرسانة في حالتها الطبيعية الآن؟','نعم، اجعله مرجعي','ليس الآن','تم حفظ المرجع','تقدير فيزيائي استرشادي – ليس تشخيصاً نهائياً','رصيد غير كافٍ','كود غير صالح','تم رفض الإذن','تم تفعيل {0} رصيد','أكمِل القياس أو تخطَ','التشابه مع المرجع','تحليل الإشارة','التردد','اللون','الشدة','هل تريد إضافة ملاحظتك؟','(اختياري)','حرف','🎤 تكلّم','🗑 مسح','جاري التسجيل...','ملاحظات المستخدم:','⌨️ اكتب','اعرض الخلاصة','هل تريد رؤية الخلاصة؟','تأكيد','إلغاء','✅ 3 من 3','⚡ 2 من 3','⚠️ 1 من 3','❌ لم يتم قياس','سيُنزع 1 من رصيدك','لن يُنزع رصيدك','رصيدك محفوظ','تقرير الفحص الفيزيائي','معرّف الجهاز','التاريخ','الوقت','الإحداثيات','الحساسات المستخدمة','الخلاصة','الحل المقترح','إغلاق','مرفوض','غير متاح','جاري التحديد...','غير مدعوم','جاري التحقق...','تعذّر الاتصال','كلمة المرور غير صحيحة','اعرض الخلاصة أولاً','سياسة الخصوصية','شروط الاستخدام','سياسة الاسترجاع','تواصل معنا','إغلاق','سجل الفحوصات','لا توجد فحوصات','حذف الكل','تصدير JSON','تم الحذف','تم التصدير','📤 مشاركة','Email','مشاركة النظام','نسخ النص','WhatsApp','Telegram','Twitter','تحليل فيزيائي','تحليل فيزيائي مطابق للبصمة المرجعية','جودة القياس','اكتمال البيانات','التطابق مع البصمات المرجعية','المسافات الإقليدية المقيسة','النتيجة مبنية على مطابقة فيزيائية إقليدية مع بصمات مرجعية مسجّلة مسبقاً. لا يستخدم التطبيق أي شبكة عصبية.','عيّنات كافية للتحليل الفيزيائي','عيّنات غير كافية — يُنصح بقياس المزيد','جاري التحليل الفيزيائي...','اكتمل التحليل الفيزيائي','فشل التحليل الفيزيائي','قِس حساساً واحداً على الأقل','📱 كيف أستعمل','🔬 للمطور — فيزياء','إغلاق','سجل محلي صامت لجلسات القياس مهيّأ لتدريب ML لاحقاً'
 ]);
 
 TRANSLATIONS.en = mkDict([
-    'Concrete Physics Lab','Free physical inspections','Activate','Activation code','Developer Mode','Password','Confirm','Cancel','Copied','Shared','Thanks','Back','Listen','Copy','Share','Print','New Inspection','Reset','History','Start Physical Inspection','Measure','Retry','Done','Skip','📸 Camera (Color)','🎤 Mic (Resonance)','📳 Vibration','📸 Rear Camera + Flash','🎙️ Structural Mic','📳 Haptic + Accelerometer','Photograph concrete surface from 30 cm','Tap gently on concrete','Place phone on concrete','Ready','Measuring... {p}%','Measured','Skipped','Not measured','🔒 Ready','⏳ Measuring...','✅ Measured','⏭ Skipped','⚠️ Weak','Completeness','No sensor measured','Concrete is sound','Cracks in concrete','Voids inside concrete','Moisture in concrete','No intervention needed','Inject cracks with epoxy','Excavate and reinforce','Treat moisture source','All sensors measured','One sensor skipped','Two sensors skipped','More than half skipped','No sensors measured','Prior Consent','Camera, mic and motion will be used','I Agree & Start','Refuse','Reference Baseline Calibration','Is the concrete in its normal state?','Yes, use as reference','Not now','Baseline saved','Physical estimate only – not a definitive diagnosis','Insufficient balance','Invalid code','Permission denied','{0} credit(s) activated','Measure or skip first','Similarity to reference','Signal Analysis','Frequency','Color','Intensity','Want to add a note?','(Optional)','char','🎤 Speak','🗑 Clear','Recording...','User notes:','⌨️ Write','Show Summary','Show the verdict?','Confirm','Cancel','✅ 3 of 3','⚡ 2 of 3','⚠️ 1 of 3','❌ None measured','1 credit will be deducted','No credit deducted','Credit preserved','Physical Inspection Report','Device ID','Date','Time','Coordinates','Sensors used','Verdict','Suggested solution','Close','Denied','N/A','Locating...','Not supported','Verifying...','Connection failed','Wrong password','Show verdict first','Privacy Policy','Terms of Use','Refund Policy','Contact Us','Close','Inspection History','No previous inspections','Clear All','Export JSON','Cleared','Exported','📤 Share','Email','Native Share','Copy Text','WhatsApp','Telegram','Twitter','Deep Neural Analysis','Smart Deep-Learning Analysis','Confidence','Uncertainty','Signal Quality','Candidate Probabilities','Why this decision?','Anomaly detected','Train on my sample','Training...','Training complete','Need at least 3 sessions','Digital Twin ready','Building Digital Twin','Running deep analysis...','Deep analysis complete','Deep analysis failed','Measure at least one sensor'
+    'Concrete Physics Lab','Free physical inspections','Activate','Activation code','Developer Mode','Password','Confirm','Cancel','Copied','Shared','Thanks','Back','Listen','Copy','Share','Print','New Inspection','Reset','History','Start Physical Inspection','Measure','Retry','Done','Skip','📸 Camera (Color)','🎤 Mic (Resonance)','📳 Vibration','📸 Rear Camera + Flash','🎙️ Structural Mic','📳 Haptic + Accelerometer','Photograph concrete surface from 30 cm','Tap gently on concrete','Place phone on concrete','Ready','Measured','Skipped','Not measured','🔒 Ready','⏳ Measuring...','✅ Measured','⏭ Skipped','⚠️ Weak','Completeness','No sensor measured','Concrete is sound','Cracks in concrete','Voids inside concrete','Moisture in concrete','No intervention needed','Inject cracks with epoxy','Excavate and reinforce','Treat moisture source','All sensors measured','One sensor skipped','Two sensors skipped','More than half skipped','No sensors measured','Prior Consent','Camera, mic and motion will be used','I Agree & Start','Refuse','Reference Baseline Calibration','Is the concrete in its normal state?','Yes, use as reference','Not now','Baseline saved','Physical estimate only – not a definitive diagnosis','Insufficient balance','Invalid code','Permission denied','{0} credit(s) activated','Measure or skip first','Similarity to reference','Signal Analysis','Frequency','Color','Intensity','Want to add a note?','(Optional)','char','🎤 Speak','🗑 Clear','Recording...','User notes:','⌨️ Write','Show Summary','Show the verdict?','Confirm','Cancel','✅ 3 of 3','⚡ 2 of 3','⚠️ 1 of 3','❌ None measured','1 credit will be deducted','No credit deducted','Credit preserved','Physical Inspection Report','Device ID','Date','Time','Coordinates','Sensors used','Verdict','Suggested solution','Close','Denied','N/A','Locating...','Not supported','Verifying...','Connection failed','Wrong password','Show verdict first','Privacy Policy','Terms of Use','Refund Policy','Contact Us','Close','Inspection History','No previous inspections','Clear All','Export JSON','Cleared','Exported','📤 Share','Email','Native Share','Copy Text','WhatsApp','Telegram','Twitter','Physical Analysis','Physical Analysis — Euclidean Match to Reference','Measurement Quality','Data Completeness','Match with Reference Fingerprints','Measured Euclidean Distances','Result based on Euclidean physical matching against pre-recorded reference fingerprints. No neural network is used.','Sufficient samples for physical analysis','Insufficient samples — more measurements recommended','Running physical analysis...','Physical analysis complete','Physical analysis failed','Measure at least one sensor','📱 How to use','🔬 Developer — Physics','Close','Silent local log of measurement sessions ready for future ML training'
 ]);
 
-TRANSLATIONS.fr = mkDict([
-    'Laboratoire de Physique du Béton','Inspections physiques gratuites','Activer',"Code d'activation",'Mode développeur','Mot de passe','Confirmer','Annuler','Copié','Partagé','Merci','Retour','Écouter','Copier','Partager','Imprimer','Nouvelle inspection','Réinitialiser','Historique',"Démarrer l'inspection physique",'Mesurer','Réessayer','Fait','Ignorer','📸 Caméra (Couleur)','🎤 Micro (Résonance)','📳 Vibration','📸 Caméra arrière + Flash','🎙️ Micro structurel','📳 Haptique + Accéléromètre','Photographiez la surface à 30 cm','Tapotez doucement le béton','Placez le téléphone sur le béton','Prêt','Mesure... {p}%','Mesuré','Ignoré','Non mesuré','🔒 Prêt','⏳ Mesure...','✅ Mesuré','⏭ Ignoré','⚠️ Faible','Complétude','Aucun capteur mesuré','Béton sain','Fissures dans le béton','Vides dans le béton','Humidité dans le béton','Aucune intervention','Injectez les fissures à l\'époxy','Excavez et renforcez','Traitez l\'humidité','Tous mesurés','Un ignoré','Deux ignorés','Plus de la moitié ignorés','Aucun mesuré','Consentement préalable','Caméra, micro et mouvement',"J'accepte et commence",'Refuser','Étalonnage de référence','Le béton est-il normal ?','Oui, comme référence','Pas maintenant','Référence sauvegardée','Estimation physique uniquement','Solde insuffisant','Code invalide','Permission refusée','{0} crédit(s) activé(s)','Mesurez ou ignorez','Similarité','Analyse du signal','Fréquence','Couleur','Intensité','Ajouter une note ?','(Optionnel)','car','🎤 Parler','🗑 Effacer','Enregistrement...','Notes :','⌨️ Écrire','Afficher résumé','Afficher le verdict ?','Confirmer','Annuler','✅ 3/3','⚡ 2/3','⚠️ 1/3','❌ Aucun','1 crédit déduit','Aucune déduction','Crédit préservé','Rapport d\'inspection','ID appareil','Date','Heure','Coordonnées','Capteurs utilisés','Verdict','Solution suggérée','Fermer','Refusé','N/D','Localisation...','Non supporté','Vérification...','Échec','Mot de passe incorrect','Affichez le verdict','Confidentialité','Conditions','Remboursement','Contactez-nous','Fermer','Historique','Aucune inspection','Tout effacer','Exporter JSON','Effacé','Exporté','📤 Partager','Email','Partage natif','Copier le texte','WhatsApp','Telegram','Twitter','Analyse neuronale profonde','Analyse IA profonde','Confiance','Incertitude','Qualité du signal','Probabilités candidates','Pourquoi cette décision ?','Anomalie détectée','Entraîner sur mon échantillon','Entraînement...','Entraînement terminé','Au moins 3 sessions requises','Jumeau numérique prêt','Construction du jumeau','Analyse approfondie...','Analyse terminée','Analyse échouée','Mesurez au moins un capteur'
-]);
+TRANSLATIONS.fr = mkDict(['Laboratoire de Physique du Béton','Inspections physiques gratuites','Activer',"Code d'activation",'Mode développeur','Mot de passe','Confirmer','Annuler','Copié','Partagé','Merci','Retour','Écouter','Copier','Partager','Imprimer','Nouvelle inspection','Réinitialiser','Historique',"Démarrer l'inspection",'Mesurer','Réessayer','Fait','Ignorer','📸 Caméra (Couleur)','🎤 Micro (Résonance)','📳 Vibration','📸 Caméra arrière + Flash','🎙️ Micro structurel','📳 Haptique + Accéléromètre','Photographiez à 30 cm','Tapotez doucement','Placez le téléphone','Prêt','Mesuré','Ignoré','Non mesuré','🔒 Prêt','⏳ Mesure...','✅ Mesuré','⏭ Ignoré','⚠️ Faible','Complétude','Aucun capteur','Béton sain','Fissures','Vides','Humidité','Aucune intervention','Injectez époxy','Excavez et renforcez','Traitez l\'humidité','Tous mesurés','Un ignoré','Deux ignorés','Plus de la moitié','Aucun mesuré','Consentement','Caméra, micro et mouvement',"J'accepte",'Refuser','Calibration','Béton normal?','Oui, référence','Pas maintenant','Référence sauvegardée','Estimation physique','Solde insuffisant','Code invalide','Permission refusée','{0} crédit(s)','Mesurez ou ignorez','Similarité','Analyse','Fréquence','Couleur','Intensité','Ajouter une note?','(Optionnel)','car','🎤 Parler','🗑 Effacer','Enregistrement...','Notes :','⌨️ Écrire','Résumé','Afficher?','Confirmer','Annuler','✅ 3/3','⚡ 2/3','⚠️ 1/3','❌ Aucun','1 crédit','Aucune déduction','Crédit préservé','Rapport','ID','Date','Heure','Coordonnées','Capteurs','Verdict','Solution','Fermer','Refusé','N/D','Localisation...','Non supporté','Vérification...','Échec','Mot de passe incorrect','Verdict d\'abord','Confidentialité','Conditions','Remboursement','Contact','Fermer','Historique','Aucune','Tout effacer','Exporter','Effacé','Exporté','📤 Partager','Email','Partage natif','Copier','WhatsApp','Telegram','Twitter','Analyse physique','Analyse physique — Équivalence euclidienne','Qualité','Complétude','Correspondance avec références','Distances euclidiennes','Résultat basé sur l\'appariement physique euclidien.','Échantillons suffisants','Échantillons insuffisants','Analyse physique...','Analyse terminée','Échec analyse','Mesurez au moins un capteur','📱 Comment utiliser','🔬 Développeur — Physique','Fermer','Journal local silencieux pour ML futur']);
 
-TRANSLATIONS.es = mkDict([
-    'Laboratorio de Física del Hormigón','Inspecciones físicas gratuitas','Activar','Código de activación','Modo desarrollador','Contraseña','Confirmar','Cancelar','Copiado','Compartido','Gracias','Atrás','Escuchar','Copiar','Compartir','Imprimir','Nueva inspección','Reiniciar','Historial','Iniciar inspección física','Medir','Reintentar','Hecho','Omitir','📸 Cámara (Color)','🎤 Micrófono (Resonancia)','📳 Vibración','📸 Cámara trasera + Flash','🎙️ Micrófono estructural','📳 Háptico + Acelerómetro','Fotografía la superficie a 30 cm','Golpea suavemente el hormigón','Coloca el teléfono sobre el hormigón','Listo','Midiendo... {p}%','Medido','Omitido','No medido','🔒 Listo','⏳ Midiendo...','✅ Medido','⏭ Omitido','⚠️ Débil','Integridad','Ningún sensor medido','Hormigón sólido','Grietas','Vacíos','Humedad','Sin intervención','Inyecta epoxi','Excava y refuerza','Trata la humedad','Todos medidos','Uno omitido','Dos omitidos','Más de la mitad','Ninguno medido','Consentimiento','Cámara, micrófono y movimiento','Acepto y comienzo','Rechazar','Calibración','¿Hormigón normal?','Sí, como referencia','Ahora no','Referencia guardada','Solo estimación física','Saldo insuficiente','Código inválido','Permiso denegado','{0} crédito(s)','Mide u omite','Similitud','Análisis','Frecuencia','Color','Intensidad','¿Añadir nota?','(Opcional)','car','🎤 Hablar','🗑 Borrar','Grabando...','Notas:','⌨️ Escribir','Mostrar resumen','¿Mostrar veredicto?','Confirmar','Cancelar','✅ 3/3','⚡ 2/3','⚠️ 1/3','❌ Ninguno','1 crédito descontado','Sin descuento','Crédito preservado','Informe de inspección','ID dispositivo','Fecha','Hora','Coordenadas','Sensores usados','Veredicto','Solución sugerida','Cerrar','Denegado','N/D','Localizando...','No soportado','Verificando...','Error','Contraseña incorrecta','Muestra el veredicto','Privacidad','Términos','Reembolso','Contacto','Cerrar','Historial','Sin inspecciones','Borrar todo','Exportar JSON','Borrado','Exportado','📤 Compartir','Email','Compartir nativo','Copiar texto','WhatsApp','Telegram','Twitter','Análisis neuronal profundo','Análisis IA profundo','Confianza','Incertidumbre','Calidad de señal','Probabilidades candidatas','¿Por qué esta decisión?','Anomalía detectada','Entrenar en mi muestra','Entrenando...','Entrenamiento completo','Se necesitan 3 sesiones','Gemelo digital listo','Construyendo gemelo','Análisis profundo...','Análisis completo','Análisis fallido','Mide al menos un sensor'
-]);
+TRANSLATIONS.es = mkDict(['Laboratorio de Física del Hormigón','Inspecciones gratis','Activar','Código','Modo desarrollador','Contraseña','Confirmar','Cancelar','Copiado','Compartido','Gracias','Atrás','Escuchar','Copiar','Compartir','Imprimir','Nueva','Reiniciar','Historial','Iniciar','Medir','Reintentar','Hecho','Omitir','📸 Cámara','🎤 Micrófono','📳 Vibración','📸 Cámara trasera + Flash','🎙️ Micrófono','📳 Acelerómetro','Fotografía a 30 cm','Golpea suavemente','Coloca el teléfono','Listo','Medido','Omitido','No medido','🔒 Listo','⏳ Midiendo...','✅ Medido','⏭ Omitido','⚠️ Débil','Integridad','Sin sensor','Hormigón sólido','Grietas','Vacíos','Humedad','Sin intervención','Epoxi','Excavar','Humedad','Todos','Uno','Dos','Más de la mitad','Ninguno','Consentimiento','Cámara, micrófono','Acepto','Rechazar','Calibración','¿Normal?','Sí','Ahora no','Guardado','Estimación','Saldo','Inválido','Denegado','{0} créditos','Mide u omite','Similitud','Análisis','Frecuencia','Color','Intensidad','¿Nota?','(Opcional)','car','🎤 Hablar','🗑 Borrar','Grabando...','Notas:','⌨️ Escribir','Resumen','¿Mostrar?','Confirmar','Cancelar','✅ 3/3','⚡ 2/3','⚠️ 1/3','❌ Ninguno','1 crédito','Sin descuento','Preservado','Informe','ID','Fecha','Hora','Coordenadas','Sensores','Veredicto','Solución','Cerrar','Denegado','N/D','Localizando...','No soportado','Verificando...','Error','Contraseña','Veredicto primero','Privacidad','Términos','Reembolso','Contacto','Cerrar','Historial','Sin inspecciones','Borrar','Exportar','Borrado','Exportado','📤 Compartir','Email','Sistema','Copiar','WhatsApp','Telegram','Twitter','Análisis físico','Análisis físico — Coincidencia euclidiana','Calidad','Completitud','Coincidencia con referencias','Distancias euclidianas','Resultado basado en coincidencia euclidiana.','Muestras suficientes','Muestras insuficientes','Análisis...','Completado','Falló','Mide al menos un sensor','📱 Cómo usar','🔬 Desarrollador — Física','Cerrar','Registro local silencioso para ML futuro']);
 
-TRANSLATIONS.de = mkDict([
-    'Physikalisches Betonlabor','Kostenlose physische Inspektionen','Aktivieren','Aktivierungscode','Entwicklermodus','Passwort','Bestätigen','Abbrechen','Kopiert','Geteilt','Danke','Zurück','Anhören','Kopieren','Teilen','Drucken','Neue Inspektion','Zurücksetzen','Verlauf','Physische Inspektion starten','Messen','Wiederholen','Fertig','Überspringen','📸 Kamera (Farbe)','🎤 Mikrofon (Resonanz)','📳 Vibration','📸 Rückkamera + Blitz','🎙️ Strukturmikrofon','📳 Haptik + Beschleunigungssensor','Fotografieren Sie aus 30 cm','Klopfen Sie sanft an','Legen Sie das Telefon auf den Beton','Bereit','Messung... {p}%','Gemessen','Übersprungen','Nicht gemessen','🔒 Bereit','⏳ Messung...','✅ Gemessen','⏭ Übersprungen','⚠️ Schwach','Vollständigkeit','Kein Sensor gemessen','Beton intakt','Risse','Hohlräume','Feuchtigkeit','Kein Eingriff','Epoxidharz injizieren','Ausheben und verstärken','Feuchtigkeit behandeln','Alle gemessen','Einer übersprungen','Zwei übersprungen','Mehr als Hälfte','Keine gemessen','Zustimmung','Kamera, Mikrofon und Bewegung','Ich stimme zu','Ablehnen','Referenzkalibrierung','Beton normal?','Ja, als Referenz','Jetzt nicht','Referenz gespeichert','Nur physische Schätzung','Unzureichendes Guthaben','Ungültiger Code','Zugriff verweigert','{0} Guthaben aktiviert','Messen oder überspringen','Ähnlichkeit','Signalanalyse','Frequenz','Farbe','Intensität','Notiz hinzufügen?','(Optional)','Zeichen','🎤 Sprechen','🗑 Löschen','Aufnahme...','Benutzernotizen:','⌨️ Schreiben','Zusammenfassung','Ergebnis anzeigen?','Bestätigen','Abbrechen','✅ 3/3','⚡ 2/3','⚠️ 1/3','❌ Keine','1 Guthaben abgezogen','Kein Abzug','Guthaben erhalten','Inspektionsbericht','Geräte-ID','Datum','Zeit','Koordinaten','Verwendete Sensoren','Ergebnis','Lösung','Schließen','Verweigert','N/V','Ortung...','Nicht unterstützt','Prüfung...','Fehler','Falsches Passwort','Ergebnis zuerst','Datenschutz','Nutzungsbedingungen','Rückerstattung','Kontakt','Schließen','Verlauf','Keine Inspektionen','Alle löschen','JSON exportieren','Gelöscht','Exportiert','📤 Teilen','E-Mail','System-Share','Text kopieren','WhatsApp','Telegram','Twitter','Tiefe neuronale Analyse','Intelligente Deep-Learning-Analyse','Zuversicht','Unsicherheit','Signalqualität','Kandidatenwahrscheinlichkeiten','Warum diese Entscheidung?','Anomalie erkannt','Auf meiner Probe trainieren','Training läuft...','Training abgeschlossen','Mindestens 3 Sitzungen nötig','Digitaler Zwilling bereit','Zwilling wird erstellt','Tiefenanalyse läuft...','Tiefenanalyse abgeschlossen','Tiefenanalyse fehlgeschlagen','Messen Sie mindestens einen Sensor'
-]);
+TRANSLATIONS.de = mkDict(['Beton-Physiklabor','Kostenlose Inspektionen','Aktivieren','Aktivierungscode','Entwicklermodus','Passwort','Bestätigen','Abbrechen','Kopiert','Geteilt','Danke','Zurück','Anhören','Kopieren','Teilen','Drucken','Neue','Zurücksetzen','Verlauf','Starten','Messen','Erneut','Fertig','Überspringen','📸 Kamera','🎤 Mikrofon','📳 Vibration','📸 Kamera + Blitz','🎙️ Strukturmikrofon','📳 Beschleunigung','Aus 30 cm','Sanft klopfen','Telefon auflegen','Bereit','Gemessen','Übersprungen','Nicht gemessen','🔒 Bereit','⏳ Messung...','✅ Gemessen','⏭ Übersprungen','⚠️ Schwach','Vollständigkeit','Kein Sensor','Beton intakt','Risse','Hohlräume','Feuchtigkeit','Kein Eingriff','Epoxid','Ausgraben','Feuchtigkeit','Alle','Einer','Zwei','Mehr als Hälfte','Keine','Zustimmung','Kamera, Mikrofon','Zustimmen','Ablehnen','Kalibrierung','Beton normal?','Ja','Jetzt nicht','Gespeichert','Schätzung','Guthaben','Ungültig','Verweigert','{0} Credits','Messen oder überspringen','Ähnlichkeit','Analyse','Frequenz','Farbe','Intensität','Notiz?','(Optional)','Zeichen','🎤 Sprechen','🗑 Löschen','Aufnahme...','Notizen:','⌨️ Schreiben','Zusammenfassung','Anzeigen?','Bestätigen','Abbrechen','✅ 3/3','⚡ 2/3','⚠️ 1/3','❌ Keine','1 Credit','Kein Abzug','Erhalten','Bericht','ID','Datum','Zeit','Koordinaten','Sensoren','Ergebnis','Lösung','Schließen','Verweigert','N/V','Ortung...','Nicht unterstützt','Prüfung...','Fehler','Passwort','Ergebnis zuerst','Datenschutz','Bedingungen','Rückerstattung','Kontakt','Schließen','Verlauf','Keine','Alle löschen','Exportieren','Gelöscht','Exportiert','📤 Teilen','E-Mail','System','Text kopieren','WhatsApp','Telegram','Twitter','Physikalische Analyse','Physikalische Analyse — Euklidische Übereinstimmung','Qualität','Vollständigkeit','Übereinstimmung mit Referenzen','Euklidische Abstände','Ergebnis basiert auf euklidischem Abgleich.','Ausreichend','Unzureichend','Analyse läuft...','Abgeschlossen','Fehlgeschlagen','Messen Sie mindestens einen Sensor','📱 Wie benutzen','🔬 Entwickler — Physik','Schließen','Lokales stilles Protokoll für zukünftiges ML']);
 
-TRANSLATIONS.it = mkDict([
-    'Laboratorio Fisico del Calcestruzzo','Ispezioni fisiche gratuite','Attiva','Codice di attivazione','Modalità sviluppatore','Password','Conferma','Annulla','Copiato','Condiviso','Grazie','Indietro','Ascolta','Copia','Condividi','Stampa','Nuova ispezione','Reimposta','Cronologia','Avvia ispezione','Misura','Riprova','Fatto','Salta','📸 Fotocamera (Colore)','🎤 Microfono (Risonanza)','📳 Vibrazione','📸 Fotocamera posteriore + Flash','🎙️ Microfono strutturale','📳 Haptic + Accelerometro','Fotografa da 30 cm','Tocca delicatamente','Posiziona il telefono','Pronto','Misurazione... {p}%','Misurato','Saltato','Non misurato','🔒 Pronto','⏳ Misurazione...','✅ Misurato','⏭ Saltato','⚠️ Debole','Completezza','Nessun sensore','Calcestruzzo sano','Crepe','Vuoti','Umidità','Nessun intervento','Inietta epossidica','Scava e rinforza','Tratta umidità','Tutti misurati','Uno saltato','Due saltati','Più della metà','Nessuno misurato','Consenso','Fotocamera, microfono e movimento','Accetto e inizio','Rifiuta','Calibrazione','Calcestruzzo normale?','Sì, come riferimento','Non ora','Riferimento salvato','Solo stima fisica','Saldo insufficiente','Codice non valido','Permesso negato','{0} credito(i)','Misura o salta','Somiglianza','Analisi','Frequenza','Colore','Intensità','Aggiungere nota?','(Opzionale)','car','🎤 Parla','🗑 Cancella','Registrazione...','Note utente:','⌨️ Scrivi','Mostra riepilogo','Mostrare il verdetto?','Conferma','Annulla','✅ 3/3','⚡ 2/3','⚠️ 1/3','❌ Nessuno','1 credito detratto','Nessuna detrazione','Credito preservato','Rapporto di ispezione','ID dispositivo','Data','Ora','Coordinate','Sensori usati','Verdetto','Soluzione suggerita','Chiudi','Negato','N/D','Localizzazione...','Non supportato','Verifica...','Errore','Password errata','Mostra il verdetto','Privacy','Termini','Rimborso','Contatti','Chiudi','Cronologia','Nessuna ispezione','Cancella tutto','Esporta JSON','Cancellato','Esportato','📤 Condividi','Email','Condivisione di sistema','Copia testo','WhatsApp','Telegram','Twitter','Analisi neurale profonda','Analisi IA profonda','Affidabilità','Incertezza','Qualità del segnale','Probabilità candidate','Perché questa decisione?','Anomalia rilevata','Allena sul mio campione','Addestramento...','Addestramento completato','Servono almeno 3 sessioni','Gemello digitale pronto','Costruzione del gemello','Analisi profonda in corso...','Analisi profonda completata','Analisi profonda fallita','Misura almeno un sensore'
-]);
+TRANSLATIONS.it = mkDict(['Lab Fisico Calcestruzzo','Ispezioni gratis','Attiva','Codice','Modalità sviluppatore','Password','Conferma','Annulla','Copiato','Condiviso','Grazie','Indietro','Ascolta','Copia','Condividi','Stampa','Nuova','Reimposta','Cronologia','Avvia','Misura','Riprova','Fatto','Salta','📸 Fotocamera','🎤 Microfono','📳 Vibrazione','📸 Fotocamera + Flash','🎙️ Microfono strutturale','📳 Accelerometro','Da 30 cm','Tocca delicatamente','Posiziona telefono','Pronto','Misurato','Saltato','Non misurato','🔒 Pronto','⏳ Misurazione...','✅ Misurato','⏭ Saltato','⚠️ Debole','Completezza','Nessun sensore','Calcestruzzo sano','Crepe','Vuoti','Umidità','Nessun intervento','Epossidica','Scava','Umidità','Tutti','Uno','Due','Più della metà','Nessuno','Consenso','Fotocamera, microfono','Accetto','Rifiuta','Calibrazione','Normale?','Sì','Non ora','Salvato','Stima','Saldo','Non valido','Negato','{0} crediti','Misura o salta','Somiglianza','Analisi','Frequenza','Colore','Intensità','Nota?','(Opzionale)','car','🎤 Parla','🗑 Cancella','Registrazione...','Note:','⌨️ Scrivi','Riepilogo','Mostrare?','Conferma','Annulla','✅ 3/3','⚡ 2/3','⚠️ 1/3','❌ Nessuno','1 credito','Nessun addebito','Preservato','Rapporto','ID','Data','Ora','Coordinate','Sensori','Verdetto','Soluzione','Chiudi','Negato','N/D','Localizzazione...','Non supportato','Verifica...','Errore','Password','Verdetto prima','Privacy','Termini','Rimborso','Contatto','Chiudi','Cronologia','Nessuna','Cancella tutto','Esporta','Cancellato','Esportato','📤 Condividi','Email','Sistema','Copia','WhatsApp','Telegram','Twitter','Analisi fisica','Analisi fisica — Corrispondenza euclidea','Qualità','Completezza','Corrispondenza con riferimenti','Distanze euclidee','Risultato basato su corrispondenza euclidea.','Campioni sufficienti','Campioni insufficienti','Analisi in corso...','Completata','Fallita','Misura almeno un sensore','📱 Come usare','🔬 Sviluppatore — Fisica','Chiudi','Log locale silenzioso per ML futuro']);
 
-TRANSLATIONS.pt = mkDict([
-    'Laboratório de Física do Concreto','Inspeções físicas gratuitas','Ativar','Código de ativação','Modo desenvolvedor','Senha','Confirmar','Cancelar','Copiado','Compartilhado','Obrigado','Voltar','Ouvir','Copiar','Compartilhar','Imprimir','Nova inspeção','Redefinir','Histórico','Iniciar inspeção física','Medir','Repetir','Concluído','Pular','📸 Câmera (Cor)','🎤 Microfone (Ressonância)','📳 Vibração','📸 Câmera traseira + Flash','🎙️ Microfone estrutural','📳 Háptico + Acelerômetro','Fotografe a superfície a 30 cm','Toque suavemente o concreto','Coloque o telefone sobre o concreto','Pronto','Medindo... {p}%','Medido','Ignorado','Não medido','🔒 Pronto','⏳ Medindo...','✅ Medido','⏭ Ignorado','⚠️ Fraco','Integridade','Nenhum sensor medido','Concreto sólido','Rachaduras','Vazios','Umidade','Sem intervenção','Injete epóxi','Escave e reforce','Trate umidade','Todos medidos','Um ignorado','Dois ignorados','Mais da metade','Nenhum medido','Consentimento','Câmera, microfone e movimento','Concordo e começo','Recusar','Calibração','Concreto normal?','Sim, como referência','Agora não','Referência salva','Apenas estimativa','Saldo insuficiente','Código inválido','Permissão negada','{0} crédito(s)','Meça ou pule','Semelhança','Análise','Frequência','Cor','Intensidade','Adicionar nota?','(Opcional)','car','🎤 Falar','🗑 Limpar','Gravando...','Notas:','⌨️ Escrever','Mostrar resumo','Mostrar o veredito?','Confirmar','Cancelar','✅ 3/3','⚡ 2/3','⚠️ 1/3','❌ Nenhum','1 crédito descontado','Sem desconto','Crédito preservado','Relatório de inspeção','ID dispositivo','Data','Hora','Coordenadas','Sensores usados','Veredito','Solução sugerida','Fechar','Negado','N/D','Localizando...','Não suportado','Verificando...','Erro','Senha incorreta','Mostre o veredito','Privacidade','Termos','Reembolso','Contato','Fechar','Histórico','Sem inspeções','Limpar tudo','Exportar JSON','Limpo','Exportado','📤 Compartilhar','Email','Compartilhamento do sistema','Copiar texto','WhatsApp','Telegram','Twitter','Análise neural profunda','Análise IA profunda','Confiança','Incerteza','Qualidade do sinal','Probabilidades candidatas','Por que esta decisão?','Anomalia detectada','Treinar na minha amostra','Treinando...','Treinamento concluído','Necessárias 3 sessões','Gêmeo digital pronto','Construindo gêmeo','Análise profunda...','Análise profunda concluída','Análise profunda falhou','Meça pelo menos um sensor'
-]);
+TRANSLATIONS.pt = mkDict(['Laboratório de Física do Concreto','Inspeções grátis','Ativar','Código','Modo dev','Senha','Confirmar','Cancelar','Copiado','Compartilhado','Obrigado','Voltar','Ouvir','Copiar','Compartilhar','Imprimir','Nova','Redefinir','Histórico','Iniciar','Medir','Repetir','Feito','Pular','📸 Câmera','🎤 Microfone','📳 Vibração','📸 Câmera + Flash','🎙️ Microfone estrutural','📳 Acelerômetro','De 30 cm','Toque suave','Coloque telefone','Pronto','Medido','Ignorado','Não medido','🔒 Pronto','⏳ Medindo...','✅ Medido','⏭ Ignorado','⚠️ Fraco','Completude','Sem sensor','Concreto sólido','Rachaduras','Vazios','Umidade','Sem intervenção','Epóxi','Escave','Umidade','Todos','Um','Dois','Mais da metade','Nenhum','Consentimento','Câmera, microfone','Aceito','Recusar','Calibração','Normal?','Sim','Agora não','Salvo','Estimativa','Saldo','Inválido','Negado','{0} créditos','Meça ou pule','Semelhança','Análise','Frequência','Cor','Intensidade','Nota?','(Opcional)','car','🎤 Falar','🗑 Limpar','Gravando...','Notas:','⌨️ Escrever','Resumo','Mostrar?','Confirmar','Cancelar','✅ 3/3','⚡ 2/3','⚠️ 1/3','❌ Nenhum','1 crédito','Sem desconto','Preservado','Relatório','ID','Data','Hora','Coordenadas','Sensores','Veredito','Solução','Fechar','Negado','N/D','Localizando...','Não suportado','Verificando...','Erro','Senha','Veredito antes','Privacidade','Termos','Reembolso','Contato','Fechar','Histórico','Nenhuma','Limpar tudo','Exportar','Limpo','Exportado','📤 Compartilhar','Email','Sistema','Copiar','WhatsApp','Telegram','Twitter','Análise física','Análise física — Correspondência euclidiana','Qualidade','Completude','Correspondência com referências','Distâncias euclidianas','Resultado baseado em correspondência euclidiana.','Amostras suficientes','Amostras insuficientes','Análise...','Concluída','Falhou','Meça pelo menos um sensor','📱 Como usar','🔬 Desenvolvedor — Física','Fechar','Log local silencioso para ML futuro']);
 
-TRANSLATIONS.ru = mkDict([
-    'Физическая лаборатория бетона','Бесплатные физические проверки','Активировать','Код активации','Режим разработчика','Пароль','Подтвердить','Отмена','Скопировано','Отправлено','Спасибо','Назад','Слушать','Копировать','Поделиться','Печать','Новая проверка','Сбросить','История','Начать физическую проверку','Измерить','Повторить','Готово','Пропустить','📸 Камера (Цвет)','🎤 Микрофон (Резонанс)','📳 Вибрация','📸 Задняя камера + Вспышка','🎙️ Структурный микрофон','📳 Тактильный + Акселерометр','Сфотографируйте с 30 см','Постучите по бетону','Положите телефон на бетон','Готово','Измерение... {p}%','Измерено','Пропущено','Не измерено','🔒 Готово','⏳ Измерение...','✅ Измерено','⏭ Пропущено','⚠️ Слабый','Полнота','Ни один датчик','Бетон в порядке','Трещины','Пустоты','Влажность','Вмешательство не нужно','Заполните эпоксидом','Выкопайте и укрепите','Устраните влагу','Все измерены','Один пропущен','Два пропущены','Более половины','Ни один не измерен','Согласие','Камера, микрофон и движение','Согласен и начинаю','Отказаться','Калибровка','Бетон в норме?','Да, как эталон','Не сейчас','Эталон сохранён','Только физическая оценка','Недостаточно средств','Неверный код','Доступ запрещён','{0} кредит(ов)','Измерьте или пропустите','Сходство','Анализ','Частота','Цвет','Интенсивность','Добавить заметку?','(Опционально)','симв','🎤 Говорить','🗑 Очистить','Запись...','Заметки:','⌨️ Написать','Показать итог','Показать заключение?','Подтвердить','Отмена','✅ 3/3','⚡ 2/3','⚠️ 1/3','❌ Ни один','Списан 1 кредит','Не списано','Кредит сохранён','Отчёт о проверке','ID устройства','Дата','Время','Координаты','Использованные датчики','Заключение','Решение','Закрыть','Отклонено','Н/Д','Определение...','Не поддерживается','Проверка...','Ошибка','Неверный пароль','Сначала покажите','Конфиденциальность','Условия','Возврат','Контакт','Закрыть','История','Нет проверок','Очистить','Экспорт JSON','Очищено','Экспортировано','📤 Поделиться','Email','Системный обмен','Копировать текст','WhatsApp','Telegram','Twitter','Глубокий нейронный анализ','Умный анализ глубокого обучения','Уверенность','Неопределённость','Качество сигнала','Вероятности кандидатов','Почему это решение?','Обнаружена аномалия','Обучить на моём образце','Обучение...','Обучение завершено','Нужно минимум 3 сессии','Цифровой двойник готов','Построение двойника','Глубокий анализ...','Глубокий анализ завершён','Глубокий анализ не удался','Измерьте хотя бы один датчик'
-]);
+TRANSLATIONS.ru = mkDict(['Физическая лаборатория бетона','Бесплатные проверки','Активировать','Код','Режим разработчика','Пароль','Подтвердить','Отмена','Скопировано','Отправлено','Спасибо','Назад','Слушать','Копировать','Поделиться','Печать','Новая','Сброс','История','Начать','Измерить','Повторить','Готово','Пропустить','📸 Камера','🎤 Микрофон','📳 Вибрация','📸 Камера + Вспышка','🎙️ Микрофон','📳 Акселерометр','С 30 см','Легко стучите','Положите телефон','Готово','Измерено','Пропущено','Не измерено','🔒 Готово','⏳ Измерение...','✅ Измерено','⏭ Пропущено','⚠️ Слабый','Полнота','Ни один','Бетон в порядке','Трещины','Пустоты','Влажность','Без вмешательства','Эпоксид','Копать','Влажность','Все','Один','Два','Более половины','Ни один','Согласие','Камера, микрофон','Согласен','Отказ','Калибровка','Нормально?','Да','Не сейчас','Сохранено','Оценка','Баланс','Неверно','Отказ','{0} кредитов','Измерьте или пропустите','Сходство','Анализ','Частота','Цвет','Интенсивность','Заметка?','(Опционально)','симв','🎤 Говорить','🗑 Очистить','Запись...','Заметки:','⌨️ Написать','Итог','Показать?','Подтвердить','Отмена','✅ 3/3','⚡ 2/3','⚠️ 1/3','❌ Ни один','1 кредит','Не списано','Сохранён','Отчёт','ID','Дата','Время','Координаты','Датчики','Заключение','Решение','Закрыть','Отказ','Н/Д','Поиск...','Не поддерживается','Проверка...','Ошибка','Пароль','Сначала итог','Приватность','Условия','Возврат','Контакт','Закрыть','История','Нет','Очистить','Экспорт','Очищено','Экспортировано','📤 Поделиться','Email','Система','Копировать','WhatsApp','Telegram','Twitter','Физический анализ','Физический анализ — Евклидово соответствие','Качество','Полнота','Соответствие эталонам','Евклидовы расстояния','Результат на основе евклидова сопоставления.','Достаточно образцов','Недостаточно образцов','Анализ...','Завершён','Ошибка','Измерьте датчик','📱 Как использовать','🔬 Разработчик — Физика','Закрыть','Локальный лог для будущего ML']);
 
-TRANSLATIONS.zh = mkDict([
-    '混凝土物理实验室','免费物理检查','激活','激活码','开发者模式','密码','确认','取消','已复制','已分享','谢谢','返回','朗读','复制','分享','打印','新检查','重置','历史','开始物理检查','测量','重试','完成','跳过','📸 摄像头（颜色）','🎤 麦克风（共振）','📳 振动','📸 后置摄像头 + 闪光灯','🎙️ 结构麦克风','📳 触觉 + 加速度计','从30厘米处拍摄','轻轻敲击混凝土','将手机放在混凝土上','准备','测量中... {p}%','已测量','已跳过','未测量','🔒 准备','⏳ 测量中...','✅ 已测量','⏭ 已跳过','⚠️ 弱','完整度','未测量任何传感器','混凝土完好','混凝土裂缝','混凝土空鼓','混凝土受潮','无需干预','用环氧树脂注入','开挖并加固','处理潮湿源','所有传感器已测量','跳过一个','跳过两个','跳过超过一半','未测量','事前同意','将使用摄像头、麦克风和运动传感器','同意并开始','拒绝','基准校准','混凝土处于正常状态吗？','是，用作基准','暂不','基准已保存','仅为物理评估','余额不足','无效代码','权限被拒绝','已激活{0}次','请先测量或跳过','与基准的相似度','信号分析','频率','颜色','强度','添加备注？','（可选）','字','🎤 说话','🗑 清除','录音中...','用户备注：','⌨️ 输入','显示摘要','显示结果？','确认','取消','✅ 3/3','⚡ 2/3','⚠️ 1/3','❌ 无','将扣除1次','不扣除','额度保留','物理检查报告','设备ID','日期','时间','坐标','使用的传感器','结论','建议方案','关闭','已拒绝','不可用','定位中...','不支持','验证中...','失败','密码错误','请先显示结果','隐私政策','使用条款','退款政策','联系我们','关闭','检查历史','无检查','清除全部','导出 JSON','已清除','已导出','📤 分享','邮件','系统分享','复制文本','WhatsApp','Telegram','Twitter','深度神经网络分析','智能深度学习分析','置信度','不确定性','信号质量','候选项概率','为什么这个决定？','检测到异常','在我的样本上训练','训练中...','训练完成','至少需要3次会话','数字孪生就绪','构建数字孪生','深度分析中...','深度分析完成','深度分析失败','至少测量一个传感器'
-]);
+TRANSLATIONS.zh = mkDict(['混凝土物理实验室','免费检查','激活','代码','开发者模式','密码','确认','取消','已复制','已分享','谢谢','返回','朗读','复制','分享','打印','新检查','重置','历史','开始','测量','重试','完成','跳过','📸 摄像头','🎤 麦克风','📳 振动','📸 后置 + 闪光灯','🎙️ 结构麦克风','📳 加速度计','30cm 拍摄','轻轻敲击','放置手机','准备','已测量','已跳过','未测量','🔒 准备','⏳ 测量中...','✅ 已测量','⏭ 已跳过','⚠️ 弱','完整度','无传感器','混凝土完好','裂缝','空鼓','潮湿','无需干预','环氧','开挖','潮湿','全部','一个','两个','超过一半','无','同意','摄像头、麦克风','同意','拒绝','校准','正常？','是','暂不','已保存','估计','余额','无效','拒绝','{0} 积分','测量或跳过','相似度','分析','频率','颜色','强度','备注？','（可选）','字','🎤 说话','🗑 清除','录音中...','备注：','⌨️ 输入','摘要','显示？','确认','取消','✅ 3/3','⚡ 2/3','⚠️ 1/3','❌ 无','1 积分','不扣除','保留','报告','ID','日期','时间','坐标','传感器','结论','方案','关闭','拒绝','无','定位...','不支持','验证...','失败','密码','先看结论','隐私','条款','退款','联系','关闭','历史','无','全部清除','导出','已清','已导出','📤 分享','邮件','系统','复制','WhatsApp','Telegram','Twitter','物理分析','物理分析 — 欧几里得匹配','质量','完整度','与参考指纹匹配','欧几里得距离','基于欧几里得物理匹配。','样本充足','样本不足','分析中...','完成','失败','至少测量一个传感器','📱 如何使用','🔬 开发者 — 物理','关闭','本地静默日志用于未来 ML']);
 
-TRANSLATIONS.ja = mkDict([
-    'コンクリート物理研究所','無料物理検査','アクティベート','アクティベーションコード','開発者モード','パスワード','確認','キャンセル','コピーしました','共有しました','ありがとう','戻る','読み上げ','コピー','共有','印刷','新しい検査','リセット','履歴','物理検査を開始','測定','再試行','完了','スキップ','📸 カメラ（色）','🎤 マイク（共鳴）','📳 振動','📸 背面カメラ + フラッシュ','🎙️ 構造マイク','📳 ハプティック + 加速度計','30cmから撮影','コンクリートを軽く叩く','スマホをコンクリートに置く','準備','測定中... {p}%','測定済み','スキップ済み','未測定','🔒 準備','⏳ 測定中...','✅ 測定済み','⏭ スキップ','⚠️ 弱','完全性','未測定','コンクリート健全','ひび割れ','内部空洞','湿気','介入不要','エポキシ注入','掘削補強','湿気処理','全て測定','1つスキップ','2つスキップ','過半数スキップ','未測定','事前同意','カメラ、マイク、モーションセンサー','同意して開始','拒否','基準校正','コンクリートは正常？','はい、基準として','今はしない','基準保存','物理的評価のみ','残高不足','無効コード','権限拒否','{0}クレジット','測定またはスキップ','類似性','信号解析','周波数','色','強度','メモ追加？','(任意)','文字','🎤 話す','🗑 クリア','録音中...','ユーザーメモ:','⌨️ 入力','要約を表示','結果を表示？','確認','キャンセル','✅ 3/3','⚡ 2/3','⚠️ 1/3','❌ なし','1クレジット消費','消費なし','クレジット保持','物理検査レポート','デバイスID','日付','時刻','座標','使用センサー','結果','解決策','閉じる','拒否','N/A','位置取得中...','非対応','確認中...','失敗','パスワードエラー','先に結果','プライバシー','利用規約','返金','お問い合わせ','閉じる','履歴','検査なし','すべてクリア','JSONエクスポート','クリア済み','エクスポート済み','📤 共有','メール','システム共有','テキストをコピー','WhatsApp','Telegram','Twitter','深層ニューラル分析','スマート深層学習分析','信頼度','不確実性','信号品質','候補確率','なぜこの判断？','異常検出','自分のサンプルで訓練','訓練中...','訓練完了','最低3セッション必要','デジタルツイン準備完了','ツイン構築中','深層分析中...','深層分析完了','深層分析失敗','少なくとも1つのセンサーを測定してください'
-]);
+TRANSLATIONS.ja = mkDict(['コンクリート物理研究室','無料検査','アクティベート','コード','開発者モード','パスワード','確認','キャンセル','コピー','共有','ありがとう','戻る','読み上げ','コピー','共有','印刷','新規','リセット','履歴','開始','測定','再試行','完了','スキップ','📸 カメラ','🎤 マイク','📳 振動','📸 カメラ + フラッシュ','🎙️ 構造マイク','📳 加速度計','30cm から','軽く叩く','スマホを置く','準備','測定済','スキップ','未測定','🔒 準備','⏳ 測定中...','✅ 測定済','⏭ スキップ','⚠️ 弱','完全性','センサーなし','健全','ひび','空洞','湿気','介入不要','エポキシ','掘削','湿気','全て','1つ','2つ','過半数','なし','同意','カメラ、マイク','同意','拒否','校正','正常？','はい','後で','保存','推定','残高','無効','拒否','{0} クレジット','測定またはスキップ','類似性','分析','周波数','色','強度','メモ？','(任意)','文字','🎤 話す','🗑 クリア','録音中...','メモ:','⌨️ 入力','要約','表示？','確認','キャンセル','✅ 3/3','⚡ 2/3','⚠️ 1/3','❌ なし','1 クレジット','消費なし','保持','レポート','ID','日付','時刻','座標','センサー','結果','解決策','閉じる','拒否','N/A','位置...','非対応','確認中...','失敗','パスワード','先に結果','プライバシー','規約','返金','連絡','閉じる','履歴','なし','全てクリア','エクスポート','クリア','エクスポート','📤 共有','メール','システム','コピー','WhatsApp','Telegram','Twitter','物理分析','物理分析 — ユークリッド一致','品質','完全性','参照との一致','ユークリッド距離','ユークリッド物理マッチングの結果。','十分','不十分','分析中...','完了','失敗','少なくとも1つのセンサーを測定','📱 使い方','🔬 開発者 — 物理','閉じる','将来の ML 用ローカルログ']);
 
-TRANSLATIONS.ko = mkDict([
-    '콘크리트 물리 연구소','무료 물리 검사','활성화','활성화 코드','개발자 모드','비밀번호','확인','취소','복사됨','공유됨','감사합니다','뒤로','듣기','복사','공유','인쇄','새 검사','초기화','기록','물리 검사 시작','측정','재시도','완료','건너뛰기','📸 카메라 (색상)','🎤 마이크 (공진)','📳 진동','📸 후면 카메라 + 플래시','🎙️ 구조 마이크','📳 햅틱 + 가속도계','30cm에서 촬영','콘크리트 두드리기','콘크리트 위에 놓기','준비','측정 중... {p}%','측정됨','건너뜀','미측정','🔒 준비','⏳ 측정 중...','✅ 측정됨','⏭ 건너뜀','⚠️ 약함','완전성','센서 미측정','콘크리트 양호','균열','공극','습기','개입 불필요','에폭시 주입','굴착 보강','습기 처리','모두 측정','1개 건너뜀','2개 건너뜀','절반 이상','미측정','사전 동의','카메라, 마이크, 모션 센서','동의하고 시작','거부','기준 보정','콘크리트 정상?','예, 기준으로','나중에','기준 저장','물리적 평가만','잔액 부족','잘못된 코드','권한 거부','{0} 크레딧','측정 또는 건너뛰기','유사성','신호 분석','주파수','색상','강도','메모 추가?','(선택)','자','🎤 말하기','🗑 지우기','녹음 중...','사용자 메모:','⌨️ 입력','요약 보기','결과 표시?','확인','취소','✅ 3/3','⚡ 2/3','⚠️ 1/3','❌ 없음','1 크레딧 차감','차감 없음','크레딧 보존','물리 검사 보고서','기기 ID','날짜','시간','좌표','사용 센서','판정','해결책','닫기','거부','N/A','위치 확인...','미지원','확인 중...','실패','잘못된 비밀번호','먼저 결과','개인정보','약관','환불','문의','닫기','기록','검사 없음','모두 지우기','JSON 내보내기','지움','내보냄','📤 공유','이메일','시스템 공유','텍스트 복사','WhatsApp','Telegram','Twitter','심층 신경망 분석','스마트 딥러닝 분석','신뢰도','불확실성','신호 품질','후보 확률','왜 이런 결정?','이상 감지','내 샘플로 훈련','훈련 중...','훈련 완료','최소 3 세션 필요','디지털 트윈 준비','트윈 구축 중','심층 분석 중...','심층 분석 완료','심층 분석 실패','최소 하나의 센서를 측정하세요'
-]);
+TRANSLATIONS.ko = mkDict(['콘크리트 물리 연구소','무료 검사','활성화','코드','개발자 모드','비밀번호','확인','취소','복사','공유','감사','뒤로','듣기','복사','공유','인쇄','새로','초기화','기록','시작','측정','재시도','완료','건너뛰기','📸 카메라','🎤 마이크','📳 진동','📸 카메라 + 플래시','🎙️ 구조 마이크','📳 가속도계','30cm 에서','살짝 두드림','폰을 놓음','준비','측정됨','건너뜀','미측정','🔒 준비','⏳ 측정 중...','✅ 측정됨','⏭ 건너뜀','⚠️ 약함','완전성','센서 없음','양호','균열','공극','습기','개입 없음','에폭시','굴착','습기','모두','1개','2개','절반 이상','없음','동의','카메라, 마이크','동의','거부','교정','정상?','예','나중에','저장됨','추정','잔액','무효','거부','{0} 크레딧','측정 또는 건너뛰기','유사성','분석','주파수','색상','강도','메모?','(선택)','자','🎤 말하기','🗑 지우기','녹음 중...','메모:','⌨️ 입력','요약','표시?','확인','취소','✅ 3/3','⚡ 2/3','⚠️ 1/3','❌ 없음','1 크레딧','차감 없음','보존','보고서','ID','날짜','시간','좌표','센서','판정','해결','닫기','거부','N/A','위치...','미지원','확인 중...','실패','비밀번호','먼저 결과','개인정보','약관','환불','문의','닫기','기록','없음','모두 지우기','내보내기','지움','내보냄','📤 공유','이메일','시스템','복사','WhatsApp','Telegram','Twitter','물리 분석','물리 분석 — 유클리드 일치','품질','완전성','참조 지문 일치','유클리드 거리','유클리드 물리 매칭 결과.','충분','불충분','분석 중...','완료','실패','적어도 하나의 센서를 측정','📱 사용 방법','🔬 개발자 — 물리','닫기','미래 ML용 로컬 로그']);
 
-TRANSLATIONS.hi = mkDict([
-    'कंक्रीट भौतिक प्रयोगशाला','मुफ्त भौतिक निरीक्षण','सक्रिय करें','सक्रियण कोड','डेवलपर मोड','पासवर्ड','पुष्टि','रद्द','कॉपी','साझा','धन्यवाद','वापस','सुनें','कॉपी','साझा','प्रिंट','नया निरीक्षण','रीसेट','इतिहास','भौतिक निरीक्षण शुरू','मापें','पुनः प्रयास','हो गया','छोड़ें','📸 कैमरा (रंग)','🎤 माइक (अनुनाद)','📳 कंपन','📸 रियर कैमरा + फ्लैश','🎙️ संरचनात्मक माइक','📳 हैप्टिक + एक्सेलेरोमीटर','30 सेमी से फोटो','कंक्रीट को थपथपाएं','फोन को कंक्रीट पर रखें','तैयार','माप... {p}%','मापा','छोड़ा','नहीं मापा','🔒 तैयार','⏳ माप...','✅ मापा','⏭ छोड़ा','⚠️ कमजोर','पूर्णता','कोई सेंसर नहीं','कंक्रीट सुदृढ़','दरारें','रिक्तियाँ','नमी','कोई हस्तक्षेप नहीं','एपॉक्सी भरें','खोदें और मजबूत करें','नमी का इलाज','सभी मापे','एक छोड़ा','दो छोड़े','आधे से अधिक','कोई नहीं','पूर्व सहमति','कैमरा, माइक, मोशन सेंसर','सहमत और शुरू','मना','संदर्भ अंशांकन','कंक्रीट सामान्य?','हां, संदर्भ बनाएं','अभी नहीं','संदर्भ सहेजा','केवल भौतिक मूल्यांकन','अपर्याप्त शेष','अमान्य कोड','अनुमति अस्वीकृत','{0} क्रेडिट','मापें या छोड़ें','समानता','सिग्नल विश्लेषण','आवृत्ति','रंग','तीव्रता','नोट जोड़ें?','(वैकल्पिक)','अक्षर','🎤 बोलें','🗑 साफ','रिकॉर्डिंग...','उपयोगकर्ता नोट्स:','⌨️ लिखें','सारांश दिखाएं','परिणाम दिखाएं?','पुष्टि','रद्द','✅ 3/3','⚡ 2/3','⚠️ 1/3','❌ कोई नहीं','1 क्रेडिट कटेगा','नहीं कटेगा','क्रेडिट सुरक्षित','भौतिक निरीक्षण रिपोर्ट','डिवाइस ID','तारीख','समय','निर्देशांक','उपयोग किए सेंसर','निर्णय','समाधान','बंद','अस्वीकृत','N/A','स्थान...','असमर्थित','सत्यापन...','विफल','गलत पासवर्ड','पहले परिणाम','गोपनीयता','शर्तें','धनवापसी','संपर्क','बंद','इतिहास','कोई निरीक्षण नहीं','सभी साफ','JSON निर्यात','साफ','निर्यात','📤 साझा','ईमेल','सिस्टम साझा','पाठ कॉपी','WhatsApp','Telegram','Twitter','गहन तंत्रिका विश्लेषण','स्मार्ट गहन शिक्षण विश्लेषण','आत्मविश्वास','अनिश्चितता','सिग्नल गुणवत्ता','उम्मीदवार संभावनाएं','यह निर्णय क्यों?','विसंगति पाई गई','मेरे नमूने पर प्रशिक्षण','प्रशिक्षण...','प्रशिक्षण पूर्ण','कम से कम 3 सत्र आवश्यक','डिजिटल ट्विन तैयार','ट्विन बनाया जा रहा','गहन विश्लेषण...','गहन विश्लेषण पूर्ण','गहन विश्लेषण विफल','कम से कम एक सेंसर मापें'
-]);
+TRANSLATIONS.hi = mkDict(['कंक्रीट भौतिक प्रयोगशाला','मुफ्त निरीक्षण','सक्रिय','कोड','डेवलपर मोड','पासवर्ड','पुष्टि','रद्द','कॉपी','साझा','धन्यवाद','वापस','सुनें','कॉपी','साझा','प्रिंट','नया','रीसेट','इतिहास','शुरू','मापें','पुनः','हो गया','छोड़ें','📸 कैमरा','🎤 माइक','📳 कंपन','📸 कैमरा + फ्लैश','🎙️ माइक','📳 एक्सेलेरोमीटर','30 सेमी से','धीरे थपथपाएं','फोन रखें','तैयार','मापा','छोड़ा','नहीं मापा','🔒 तैयार','⏳ माप...','✅ मापा','⏭ छोड़ा','⚠️ कमजोर','पूर्णता','कोई सेंसर नहीं','सुदृढ़','दरारें','रिक्तियाँ','नमी','हस्तक्षेप नहीं','एपॉक्सी','खोदें','नमी','सभी','एक','दो','आधे से अधिक','कोई नहीं','सहमति','कैमरा, माइक','सहमत','मना','अंशांकन','सामान्य?','हाँ','अभी नहीं','सहेजा','अनुमान','शेष','अमान्य','अस्वीकृत','{0} क्रेडिट','मापें या छोड़ें','समानता','विश्लेषण','आवृत्ति','रंग','तीव्रता','नोट?','(वैकल्पिक)','अक्षर','🎤 बोलें','🗑 साफ','रिकॉर्डिंग...','नोट्स:','⌨️ लिखें','सारांश','दिखाएं?','पुष्टि','रद्द','✅ 3/3','⚡ 2/3','⚠️ 1/3','❌ कोई','1 क्रेडिट','नहीं कटा','सुरक्षित','रिपोर्ट','ID','तारीख','समय','निर्देशांक','सेंसर','निर्णय','समाधान','बंद','अस्वीकृत','N/A','स्थान...','असमर्थित','सत्यापन...','विफल','पासवर्ड','पहले परिणाम','गोपनीयता','शर्तें','धनवापसी','संपर्क','बंद','इतिहास','कोई नहीं','सभी साफ','निर्यात','साफ','निर्यात','📤 साझा','ईमेल','सिस्टम','कॉपी','WhatsApp','Telegram','Twitter','भौतिक विश्लेषण','भौतिक विश्लेषण — यूक्लिडियन मिलान','गुणवत्ता','पूर्णता','संदर्भ से मेल','यूक्लिडियन दूरी','यूक्लिडियन भौतिक मिलान पर आधारित।','पर्याप्त','अपर्याप्त','विश्लेषण...','पूर्ण','विफल','कम से कम एक सेंसर मापें','📱 कैसे उपयोग करें','🔬 डेवलपर — भौतिकी','बंद','भविष्य ML के लिए स्थानीय लॉग']);
 
-TRANSLATIONS.tr = mkDict([
-    'Beton Fizik Laboratuvarı','Ücretsiz fiziksel denetimler','Etkinleştir','Etkinleştirme kodu','Geliştirici Modu','Parola','Onayla','İptal','Kopyalandı','Paylaşıldı','Teşekkürler','Geri','Dinle','Kopyala','Paylaş','Yazdır','Yeni denetim','Sıfırla','Geçmiş','Fiziksel denetimi başlat','Ölç','Tekrar','Tamam','Atla','📸 Kamera (Renk)','🎤 Mikrofon (Rezonans)','📳 Titreşim','📸 Arka Kamera + Flaş','🎙️ Yapısal Mikrofon','📳 Haptik + İvmeölçer','30 cm\'den fotoğrafla','Betona hafifçe vur','Telefonu betona koy','Hazır','Ölçülüyor... {p}%','Ölçüldü','Atlandı','Ölçülmedi','🔒 Hazır','⏳ Ölçülüyor...','✅ Ölçüldü','⏭ Atlandı','⚠️ Zayıf','Bütünlük','Sensör ölçülmedi','Beton sağlam','Çatlaklar','Boşluklar','Nem','Müdahale gerekmez','Epoksi enjekte et','Kaz ve güçlendir','Nemi tedavi et','Hepsi ölçüldü','Bir atlandı','İki atlandı','Yarıdan fazla','Hiç ölçülmedi','Ön Onay','Kamera, mikrofon ve hareket','Kabul ve başla','Reddet','Referans Kalibrasyonu','Beton normal mi?','Evet, referans','Şimdi değil','Referans kaydedildi','Sadece fiziksel değerlendirme','Yetersiz bakiye','Geçersiz kod','İzin reddedildi','{0} kredi','Ölç veya atla','Benzerlik','Sinyal Analizi','Frekans','Renk','Yoğunluk','Not ekle?','(İsteğe bağlı)','karakter','🎤 Konuş','🗑 Temizle','Kaydediliyor...','Kullanıcı notları:','⌨️ Yaz','Özeti göster','Sonucu göster?','Onayla','İptal','✅ 3/3','⚡ 2/3','⚠️ 1/3','❌ Hiç','1 kredi düşülecek','Düşülmez','Kredi korundu','Fiziksel Denetim Raporu','Cihaz ID','Tarih','Saat','Koordinatlar','Kullanılan sensörler','Sonuç','Çözüm','Kapat','Reddedildi','Yok','Konum...','Desteklenmiyor','Doğrulanıyor...','Hata','Yanlış parola','Önce sonucu göster','Gizlilik','Şartlar','İade','İletişim','Kapat','Geçmiş','Denetim yok','Tümünü temizle','JSON dışa aktar','Temizlendi','Dışa aktarıldı','📤 Paylaş','E-posta','Sistem paylaşımı','Metin kopyala','WhatsApp','Telegram','Twitter','Derin sinirsel analiz','Akıllı derin öğrenme analizi','Güven','Belirsizlik','Sinyal kalitesi','Aday olasılıklar','Neden bu karar?','Anomali tespit edildi','Numunemde eğit','Eğitiliyor...','Eğitim tamamlandı','En az 3 oturum gerekli','Dijital İkiz hazır','İkiz oluşturuluyor','Derin analiz yapılıyor...','Derin analiz tamamlandı','Derin analiz başarısız','En az bir sensör ölçün'
-]);
+TRANSLATIONS.tr = mkDict(['Beton Fizik Laboratuvarı','Ücretsiz denetim','Etkinleştir','Kod','Geliştirici modu','Parola','Onayla','İptal','Kopyalandı','Paylaşıldı','Teşekkürler','Geri','Dinle','Kopyala','Paylaş','Yazdır','Yeni','Sıfırla','Geçmiş','Başlat','Ölç','Tekrar','Tamam','Atla','📸 Kamera','🎤 Mikrofon','📳 Titreşim','📸 Kamera + Flaş','🎙️ Yapısal mikrofon','📳 İvmeölçer','30 cm','Hafifçe vur','Telefonu koy','Hazır','Ölçüldü','Atlandı','Ölçülmedi','🔒 Hazır','⏳ Ölçüm...','✅ Ölçüldü','⏭ Atlandı','⚠️ Zayıf','Bütünlük','Sensör yok','Sağlam','Çatlaklar','Boşluklar','Nem','Müdahale yok','Epoksi','Kaz','Nem','Hepsi','Bir','İki','Yarıdan fazla','Hiç','Onay','Kamera, mikrofon','Kabul','Reddet','Kalibrasyon','Normal?','Evet','Şimdi değil','Kaydedildi','Tahmin','Bakiye','Geçersiz','Reddedildi','{0} kredi','Ölç veya atla','Benzerlik','Analiz','Frekans','Renk','Yoğunluk','Not?','(İsteğe)','karakter','🎤 Konuş','🗑 Temizle','Kayıt...','Notlar:','⌨️ Yaz','Özet','Göster?','Onayla','İptal','✅ 3/3','⚡ 2/3','⚠️ 1/3','❌ Hiç','1 kredi','Düşülmez','Korundu','Rapor','ID','Tarih','Saat','Koordinatlar','Sensörler','Sonuç','Çözüm','Kapat','Reddedildi','Yok','Konum...','Desteklenmiyor','Doğrulanıyor...','Hata','Parola','Önce sonuç','Gizlilik','Şartlar','İade','İletişim','Kapat','Geçmiş','Yok','Tümünü temizle','Dışa aktar','Temizlendi','Dışa aktarıldı','📤 Paylaş','E-posta','Sistem','Kopyala','WhatsApp','Telegram','Twitter','Fiziksel analiz','Fiziksel analiz — Öklid eşleşmesi','Kalite','Bütünlük','Referans eşleşmesi','Öklid mesafeleri','Öklid fiziksel eşleşmesine dayanır.','Yeterli','Yetersiz','Analiz...','Tamamlandı','Başarısız','En az bir sensör ölçün','📱 Nasıl kullanılır','🔬 Geliştirici — Fizik','Kapat','Gelecek ML için yerel sessiz kayıt']);
 
-TRANSLATIONS.id = mkDict([
-    'Laboratorium Fisika Beton','Inspeksi fisik gratis','Aktifkan','Kode aktivasi','Mode Pengembang','Kata sandi','Konfirmasi','Batal','Disalin','Dibagikan','Terima kasih','Kembali','Dengarkan','Salin','Bagikan','Cetak','Inspeksi baru','Reset','Riwayat','Mulai inspeksi fisik','Ukur','Coba lagi','Selesai','Lewati','📸 Kamera (Warna)','🎤 Mikrofon (Resonansi)','📳 Getaran','📸 Kamera Belakang + Flash','🎙️ Mikrofon Struktural','📳 Haptik + Akselerometer','Foto permukaan dari 30 cm','Ketuk beton dengan lembut','Letakkan ponsel di beton','Siap','Mengukur... {p}%','Terukur','Dilewati','Belum diukur','🔒 Siap','⏳ Mengukur...','✅ Terukur','⏭ Dilewati','⚠️ Lemah','Kelengkapan','Tidak ada sensor','Beton kokoh','Retakan','Rongga','Kelembaban','Tidak perlu intervensi','Suntik epoksi','Gali dan perkuat','Atasi kelembaban','Semua terukur','Satu dilewati','Dua dilewati','Lebih dari separuh','Tidak ada diukur','Persetujuan','Kamera, mikrofon dan gerakan','Setuju dan mulai','Tolak','Kalibrasi Referensi','Beton normal?','Ya, jadikan referensi','Nanti','Referensi disimpan','Hanya estimasi fisik','Saldo tidak cukup','Kode tidak valid','Izin ditolak','{0} kredit','Ukur atau lewati','Kemiripan','Analisis Sinyal','Frekuensi','Warna','Intensitas','Tambah catatan?','(Opsional)','karakter','🎤 Bicara','🗑 Hapus','Merekam...','Catatan pengguna:','⌨️ Tulis','Tampilkan ringkasan','Tampilkan hasil?','Konfirmasi','Batal','✅ 3/3','⚡ 2/3','⚠️ 1/3','❌ Tidak ada','1 kredit dipotong','Tidak dipotong','Kredit dipertahankan','Laporan Inspeksi Fisik','ID Perangkat','Tanggal','Waktu','Koordinat','Sensor digunakan','Hasil','Solusi','Tutup','Ditolak','T/A','Lokasi...','Tidak didukung','Memverifikasi...','Gagal','Sandi salah','Tampilkan hasil dulu','Privasi','Ketentuan','Pengembalian','Hubungi kami','Tutup','Riwayat','Tidak ada inspeksi','Hapus semua','Ekspor JSON','Dihapus','Diekspor','📤 Bagikan','Email','Bagikan sistem','Salin teks','WhatsApp','Telegram','Twitter','Analisis neural mendalam','Analisis deep learning cerdas','Kepercayaan','Ketidakpastian','Kualitas sinyal','Probabilitas kandidat','Mengapa keputusan ini?','Anomali terdeteksi','Latih pada sampel saya','Melatih...','Pelatihan selesai','Perlu minimal 3 sesi','Kembar Digital siap','Membangun kembar','Analisis mendalam...','Analisis mendalam selesai','Analisis mendalam gagal','Ukur minimal satu sensor'
-]);
+TRANSLATIONS.id = mkDict(['Lab Fisika Beton','Inspeksi gratis','Aktifkan','Kode','Mode dev','Kata sandi','Konfirmasi','Batal','Disalin','Dibagikan','Terima kasih','Kembali','Dengar','Salin','Bagikan','Cetak','Baru','Reset','Riwayat','Mulai','Ukur','Ulang','Selesai','Lewati','📸 Kamera','🎤 Mikrofon','📳 Getaran','📸 Kamera + Flash','🎙️ Mikrofon struktural','📳 Akselerometer','Dari 30 cm','Ketuk lembut','Taruh ponsel','Siap','Terukur','Dilewati','Belum','🔒 Siap','⏳ Mengukur...','✅ Terukur','⏭ Dilewati','⚠️ Lemah','Kelengkapan','Tanpa sensor','Kokoh','Retak','Rongga','Kelembaban','Tanpa intervensi','Epoksi','Gali','Kelembaban','Semua','Satu','Dua','Lebih separuh','Tidak ada','Persetujuan','Kamera, mikrofon','Setuju','Tolak','Kalibrasi','Normal?','Ya','Nanti','Disimpan','Estimasi','Saldo','Tidak valid','Ditolak','{0} kredit','Ukur atau lewati','Kemiripan','Analisis','Frekuensi','Warna','Intensitas','Catatan?','(Opsional)','karakter','🎤 Bicara','🗑 Hapus','Merekam...','Catatan:','⌨️ Tulis','Ringkasan','Tampilkan?','Konfirmasi','Batal','✅ 3/3','⚡ 2/3','⚠️ 1/3','❌ Tidak','1 kredit','Tidak dipotong','Dipertahankan','Laporan','ID','Tanggal','Waktu','Koordinat','Sensor','Hasil','Solusi','Tutup','Ditolak','N/A','Lokasi...','Tidak didukung','Memverifikasi...','Gagal','Sandi','Hasil dulu','Privasi','Ketentuan','Pengembalian','Kontak','Tutup','Riwayat','Tidak ada','Hapus semua','Ekspor','Dihapus','Diekspor','📤 Bagikan','Email','Sistem','Salin','WhatsApp','Telegram','Twitter','Analisis fisik','Analisis fisik — Kecocokan Euclidean','Kualitas','Kelengkapan','Kecocokan dengan referensi','Jarak Euclidean','Hasil berdasarkan kecocokan Euclidean.','Cukup','Kurang','Analisis...','Selesai','Gagal','Ukur minimal satu sensor','📱 Cara pakai','🔬 Pengembang — Fisika','Tutup','Log lokal senyap untuk ML mendatang']);
 
-TRANSLATIONS.ms = mkDict([
-    'Makmal Fizik Konkrit','Pemeriksaan fizikal percuma','Aktifkan','Kod pengaktifan','Mod Pembangun','Kata laluan','Sahkan','Batal','Disalin','Dikongsi','Terima kasih','Kembali','Dengar','Salin','Kongsi','Cetak','Pemeriksaan baharu','Set semula','Sejarah','Mulakan pemeriksaan','Ukur','Cuba lagi','Selesai','Langkau','📸 Kamera (Warna)','🎤 Mikrofon (Resonans)','📳 Getaran','📸 Kamera Belakang + Denyar','🎙️ Mikrofon Struktur','📳 Haptik + Akselerometer','Foto permukaan dari 30 cm','Ketuk konkrit perlahan','Letak telefon atas konkrit','Sedia','Mengukur... {p}%','Diukur','Dilangkau','Tidak diukur','🔒 Sedia','⏳ Mengukur...','✅ Diukur','⏭ Dilangkau','⚠️ Lemah','Kelengkapan','Tiada sensor','Konkrit kukuh','Rekahan','Rongga','Kelembapan','Tiada campur tangan','Suntik epoksi','Gali dan perkuat','Rawatan kelembapan','Semua diukur','Satu dilangkau','Dua dilangkau','Lebih separuh','Tiada diukur','Persetujuan','Kamera, mikrofon dan pergerakan','Setuju dan mula','Tolak','Penentukuran Rujukan','Konkrit normal?','Ya, rujukan','Bukan sekarang','Rujukan disimpan','Anggaran fizikal sahaja','Baki tidak cukup','Kod tidak sah','Kebenaran ditolak','{0} kredit','Ukur atau langkau','Persamaan','Analisis Isyarat','Frekuensi','Warna','Intensiti','Tambah nota?','(Pilihan)','aksara','🎤 Bercakap','🗑 Padam','Merakam...','Nota pengguna:','⌨️ Tulis','Tunjuk ringkasan','Tunjuk keputusan?','Sahkan','Batal','✅ 3/3','⚡ 2/3','⚠️ 1/3','❌ Tiada','1 kredit ditolak','Tidak ditolak','Kredit dipelihara','Laporan Pemeriksaan','ID Peranti','Tarikh','Masa','Koordinat','Sensor digunakan','Keputusan','Penyelesaian','Tutup','Ditolak','T/A','Lokasi...','Tidak disokong','Mengesahkan...','Gagal','Kata laluan salah','Tunjuk keputusan dulu','Privasi','Terma','Bayaran balik','Hubungi kami','Tutup','Sejarah','Tiada pemeriksaan','Padam semua','Eksport JSON','Dipadam','Dieksport','📤 Kongsi','E-mel','Kongsi sistem','Salin teks','WhatsApp','Telegram','Twitter','Analisis neural mendalam','Analisis pembelajaran mendalam pintar','Keyakinan','Ketidakpastian','Kualiti isyarat','Kebarangkalian calon','Mengapa keputusan ini?','Anomali dikesan','Latih pada sampel saya','Melatih...','Latihan selesai','Perlu sekurang-kurangnya 3 sesi','Kembar Digital sedia','Membina kembar','Analisis mendalam...','Analisis mendalam selesai','Analisis mendalam gagal','Ukur sekurang-kurangnya satu sensor'
-]);
+TRANSLATIONS.ms = mkDict(['Makmal Fizik Konkrit','Pemeriksaan percuma','Aktifkan','Kod','Mod pembangun','Kata laluan','Sahkan','Batal','Disalin','Dikongsi','Terima kasih','Kembali','Dengar','Salin','Kongsi','Cetak','Baharu','Set semula','Sejarah','Mula','Ukur','Cuba lagi','Selesai','Langkau','📸 Kamera','🎤 Mikrofon','📳 Getaran','📸 Kamera + Denyar','🎙️ Mikrofon struktur','📳 Akselerometer','Dari 30 cm','Ketuk perlahan','Letak telefon','Sedia','Diukur','Dilangkau','Tidak diukur','🔒 Sedia','⏳ Mengukur...','✅ Diukur','⏭ Dilangkau','⚠️ Lemah','Kelengkapan','Tiada sensor','Kukuh','Rekahan','Rongga','Kelembapan','Tiada campur','Epoksi','Gali','Kelembapan','Semua','Satu','Dua','Lebih separuh','Tiada','Persetujuan','Kamera, mikrofon','Setuju','Tolak','Penentukuran','Normal?','Ya','Bukan sekarang','Disimpan','Anggaran','Baki','Tidak sah','Ditolak','{0} kredit','Ukur atau langkau','Persamaan','Analisis','Frekuensi','Warna','Intensiti','Nota?','(Pilihan)','aksara','🎤 Bercakap','🗑 Padam','Merakam...','Nota:','⌨️ Tulis','Ringkasan','Tunjuk?','Sahkan','Batal','✅ 3/3','⚡ 2/3','⚠️ 1/3','❌ Tiada','1 kredit','Tidak ditolak','Dipelihara','Laporan','ID','Tarikh','Masa','Koordinat','Sensor','Keputusan','Penyelesaian','Tutup','Ditolak','T/A','Lokasi...','Tidak disokong','Mengesahkan...','Gagal','Kata laluan','Keputusan dulu','Privasi','Terma','Bayaran balik','Hubungi','Tutup','Sejarah','Tiada','Padam semua','Eksport','Dipadam','Dieksport','📤 Kongsi','E-mel','Sistem','Salin','WhatsApp','Telegram','Twitter','Analisis fizikal','Analisis fizikal — Padanan Euclidean','Kualiti','Kelengkapan','Padanan dengan rujukan','Jarak Euclidean','Hasil berdasarkan padanan Euclidean.','Cukup','Tidak cukup','Analisis...','Selesai','Gagal','Ukur sekurang-kurangnya satu sensor','📱 Cara guna','🔬 Pembangun — Fizik','Tutup','Log setempat senyap untuk ML akan datang']);
 
-TRANSLATIONS.vi = mkDict([
-    'Phòng thí nghiệm Vật lý Bê tông','Kiểm tra vật lý miễn phí','Kích hoạt','Mã kích hoạt','Chế độ nhà phát triển','Mật khẩu','Xác nhận','Hủy','Đã sao chép','Đã chia sẻ','Cảm ơn','Quay lại','Nghe','Sao chép','Chia sẻ','In','Kiểm tra mới','Đặt lại','Lịch sử','Bắt đầu kiểm tra','Đo','Thử lại','Xong','Bỏ qua','📸 Camera (Màu)','🎤 Micrô (Cộng hưởng)','📳 Rung động','📸 Camera sau + Flash','🎙️ Micrô cấu trúc','📳 Haptic + Gia tốc kế','Chụp từ 30 cm','Gõ nhẹ lên bê tông','Đặt điện thoại lên bê tông','Sẵn sàng','Đang đo... {p}%','Đã đo','Đã bỏ qua','Chưa đo','🔒 Sẵn sàng','⏳ Đang đo...','✅ Đã đo','⏭ Bỏ qua','⚠️ Yếu','Độ đầy đủ','Chưa đo cảm biến','Bê tông tốt','Vết nứt','Rỗng','Độ ẩm','Không cần can thiệp','Bơm epoxy','Đào và gia cố','Xử lý độ ẩm','Tất cả đã đo','Bỏ qua 1','Bỏ qua 2','Bỏ qua hơn nửa','Chưa đo','Đồng ý trước','Camera, micrô và chuyển động','Đồng ý và bắt đầu','Từ chối','Hiệu chuẩn Tham chiếu','Bê tông bình thường?','Có, làm tham chiếu','Để sau','Đã lưu tham chiếu','Chỉ ước tính vật lý','Số dư không đủ','Mã không hợp lệ','Quyền bị từ chối','{0} lượt','Đo hoặc bỏ qua','Độ tương tự','Phân tích tín hiệu','Tần số','Màu sắc','Cường độ','Thêm ghi chú?','(Tùy chọn)','ký tự','🎤 Nói','🗑 Xóa','Đang ghi...','Ghi chú:','⌨️ Viết','Hiển thị tóm tắt','Hiển thị kết quả?','Xác nhận','Hủy','✅ 3/3','⚡ 2/3','⚠️ 1/3','❌ Không','Trừ 1 lượt','Không trừ','Lượt được giữ','Báo cáo kiểm tra','ID thiết bị','Ngày','Giờ','Tọa độ','Cảm biến đã dùng','Kết quả','Giải pháp','Đóng','Từ chối','K/H','Định vị...','Không hỗ trợ','Đang xác minh...','Lỗi','Mật khẩu sai','Hiển thị kết quả trước','Quyền riêng tư','Điều khoản','Hoàn tiền','Liên hệ','Đóng','Lịch sử','Không có kiểm tra','Xóa tất cả','Xuất JSON','Đã xóa','Đã xuất','📤 Chia sẻ','Email','Chia sẻ hệ thống','Sao chép văn bản','WhatsApp','Telegram','Twitter','Phân tích nơ-ron sâu','Phân tích học sâu thông minh','Độ tin cậy','Không chắc chắn','Chất lượng tín hiệu','Xác suất ứng viên','Tại sao quyết định này?','Đã phát hiện bất thường','Huấn luyện trên mẫu của tôi','Đang huấn luyện...','Huấn luyện hoàn tất','Cần ít nhất 3 phiên','Bản sao số sẵn sàng','Đang xây dựng bản sao','Đang phân tích sâu...','Phân tích sâu hoàn tất','Phân tích sâu thất bại','Đo ít nhất một cảm biến'
-]);
+TRANSLATIONS.vi = mkDict(['PT Vật lý Bê tông','Kiểm tra miễn phí','Kích hoạt','Mã','Chế độ dev','Mật khẩu','Xác nhận','Hủy','Đã sao chép','Đã chia sẻ','Cảm ơn','Quay lại','Nghe','Sao chép','Chia sẻ','In','Mới','Đặt lại','Lịch sử','Bắt đầu','Đo','Thử lại','Xong','Bỏ qua','📸 Camera','🎤 Micrô','📳 Rung','📸 Camera + Flash','🎙️ Micrô cấu trúc','📳 Gia tốc kế','Từ 30 cm','Gõ nhẹ','Đặt điện thoại','Sẵn sàng','Đã đo','Đã bỏ','Chưa đo','🔒 Sẵn sàng','⏳ Đang đo...','✅ Đã đo','⏭ Đã bỏ','⚠️ Yếu','Đầy đủ','Không cảm biến','Tốt','Nứt','Rỗng','Ẩm','Không can thiệp','Epoxy','Đào','Ẩm','Tất cả','Một','Hai','Hơn nửa','Không','Đồng ý','Camera, micrô','Đồng ý','Từ chối','Hiệu chuẩn','Bình thường?','Có','Để sau','Đã lưu','Ước tính','Số dư','Không hợp lệ','Từ chối','{0} tín dụng','Đo hoặc bỏ','Tương tự','Phân tích','Tần số','Màu','Cường độ','Ghi chú?','(Tùy chọn)','ký tự','🎤 Nói','🗑 Xóa','Đang ghi...','Ghi chú:','⌨️ Viết','Tóm tắt','Hiển thị?','Xác nhận','Hủy','✅ 3/3','⚡ 2/3','⚠️ 1/3','❌ Không','1 tín dụng','Không trừ','Giữ','Báo cáo','ID','Ngày','Giờ','Tọa độ','Cảm biến','Kết quả','Giải pháp','Đóng','Từ chối','K/H','Định vị...','Không hỗ trợ','Đang xác minh...','Lỗi','Mật khẩu','Kết quả trước','Riêng tư','Điều khoản','Hoàn tiền','Liên hệ','Đóng','Lịch sử','Không','Xóa hết','Xuất','Đã xóa','Đã xuất','📤 Chia sẻ','Email','Hệ thống','Sao chép','WhatsApp','Telegram','Twitter','Phân tích vật lý','Phân tích vật lý — Khớp Euclid','Chất lượng','Đầy đủ','Khớp với tham chiếu','Khoảng cách Euclid','Kết quả dựa trên khớp Euclid.','Đủ mẫu','Không đủ','Đang phân tích...','Hoàn tất','Thất bại','Đo ít nhất một cảm biến','📱 Cách dùng','🔬 Nhà phát triển — Vật lý','Đóng','Log cục bộ cho ML tương lai']);
 
-TRANSLATIONS.th = mkDict([
-    'ห้องปฏิบัติการฟิสิกส์คอนกรีต','การตรวจสอบทางกายภาพฟรี','เปิดใช้งาน','รหัสเปิดใช้งาน','โหมดนักพัฒนา','รหัสผ่าน','ยืนยัน','ยกเลิก','คัดลอกแล้ว','แชร์แล้ว','ขอบคุณ','กลับ','ฟัง','คัดลอก','แชร์','พิมพ์','การตรวจสอบใหม่','รีเซ็ต','ประวัติ','เริ่มการตรวจสอบ','วัด','ลองใหม่','เสร็จ','ข้าม','📸 กล้อง (สี)','🎤 ไมโครโฟน (เสียงสะท้อน)','📳 การสั่นสะเทือน','📸 กล้องหลัง + แฟลช','🎙️ ไมโครโฟนโครงสร้าง','📳 Haptic + มาตรวัดความเร่ง','ถ่ายภาพจาก 30 ซม.','เคาะคอนกรีตเบา ๆ','วางโทรศัพท์บนคอนกรีต','พร้อม','กำลังวัด... {p}%','วัดแล้ว','ข้ามแล้ว','ยังไม่ได้วัด','🔒 พร้อม','⏳ กำลังวัด...','✅ วัดแล้ว','⏭ ข้าม','⚠️ อ่อน','ความสมบูรณ์','ไม่มีเซ็นเซอร์','คอนกรีตสมบูรณ์','รอยแตก','ช่องว่าง','ความชื้น','ไม่ต้องดำเนินการ','อัดอีพ็อกซี่','ขุดและเสริมกำลัง','จัดการความชื้น','วัดทั้งหมด','ข้าม 1','ข้าม 2','ข้ามมากกว่าครึ่ง','ไม่ได้วัด','ความยินยอม','กล้อง ไมโครโฟน และการเคลื่อนไหว','ยอมรับและเริ่ม','ปฏิเสธ','การปรับเทียบค่าอ้างอิง','คอนกรีตปกติ?','ใช่ ใช้เป็นค่าอ้างอิง','ไว้ทีหลัง','บันทึกค่าอ้างอิง','การประมาณทางกายภาพเท่านั้น','ยอดไม่พอ','รหัสไม่ถูกต้อง','การอนุญาตถูกปฏิเสธ','{0} เครดิต','วัดหรือข้าม','ความคล้ายคลึง','การวิเคราะห์สัญญาณ','ความถี่','สี','ความเข้ม','เพิ่มบันทึก?','(ไม่บังคับ)','ตัวอักษร','🎤 พูด','🗑 ล้าง','กำลังบันทึก...','บันทึกผู้ใช้:','⌨️ เขียน','แสดงสรุป','แสดงผล?','ยืนยัน','ยกเลิก','✅ 3/3','⚡ 2/3','⚠️ 1/3','❌ ไม่มี','หัก 1 เครดิต','ไม่หัก','เครดิตถูกเก็บ','รายงานการตรวจสอบ','ID อุปกรณ์','วันที่','เวลา','พิกัด','เซ็นเซอร์ที่ใช้','ผลลัพธ์','วิธีแก้','ปิด','ถูกปฏิเสธ','ไม่มี','ค้นหา...','ไม่รองรับ','ตรวจสอบ...','ล้มเหลว','รหัสผิด','แสดงผลก่อน','ความเป็นส่วนตัว','ข้อกำหนด','คืนเงิน','ติดต่อเรา','ปิด','ประวัติ','ไม่มีการตรวจสอบ','ลบทั้งหมด','ส่งออก JSON','ลบแล้ว','ส่งออกแล้ว','📤 แชร์','อีเมล','แชร์ระบบ','คัดลอกข้อความ','WhatsApp','Telegram','Twitter','การวิเคราะห์โครงข่ายประสาทเชิงลึก','การวิเคราะห์การเรียนรู้เชิงลึกอัจฉริยะ','ความเชื่อมั่น','ความไม่แน่นอน','คุณภาพสัญญาณ','ความน่าจะเป็นของผู้สมัคร','ทำไมจึงตัดสินใจเช่นนี้?','ตรวจพบความผิดปกติ','ฝึกบนตัวอย่างของฉัน','กำลังฝึก...','ฝึกเสร็จสิ้น','ต้องการอย่างน้อย 3 เซสชัน','Digital Twin พร้อม','กำลังสร้าง Twin','กำลังวิเคราะห์เชิงลึก...','การวิเคราะห์เชิงลึกเสร็จสิ้น','การวิเคราะห์เชิงลึกล้มเหลว','วัดอย่างน้อยหนึ่งเซ็นเซอร์'
-]);
+TRANSLATIONS.th = mkDict(['ห้องปฏิบัติการฟิสิกส์คอนกรีต','ตรวจฟรี','เปิดใช้งาน','รหัส','โหมดนักพัฒนา','รหัสผ่าน','ยืนยัน','ยกเลิก','คัดลอก','แชร์','ขอบคุณ','กลับ','ฟัง','คัดลอก','แชร์','พิมพ์','ใหม่','รีเซ็ต','ประวัติ','เริ่ม','วัด','ลองใหม่','เสร็จ','ข้าม','📸 กล้อง','🎤 ไมค์','📳 สั่น','📸 กล้อง + แฟลช','🎙️ ไมค์โครงสร้าง','📳 มาตรวัดความเร่ง','30 ซม.','เคาะเบา','วางมือถือ','พร้อม','วัดแล้ว','ข้ามแล้ว','ยังไม่วัด','🔒 พร้อม','⏳ กำลังวัด...','✅ วัดแล้ว','⏭ ข้าม','⚠️ อ่อน','ความสมบูรณ์','ไม่มีเซ็นเซอร์','สมบูรณ์','รอยแตก','ช่องว่าง','ความชื้น','ไม่ต้องดำเนินการ','อีพ็อกซี่','ขุด','ความชื้น','ทั้งหมด','หนึ่ง','สอง','มากกว่าครึ่ง','ไม่มี','ยินยอม','กล้อง, ไมค์','ยอมรับ','ปฏิเสธ','ปรับเทียบ','ปกติ?','ใช่','ทีหลัง','บันทึก','ประมาณ','ยอด','ไม่ถูกต้อง','ปฏิเสธ','{0} เครดิต','วัดหรือข้าม','คล้าย','วิเคราะห์','ความถี่','สี','ความเข้ม','บันทึก?','(ไม่บังคับ)','ตัวอักษร','🎤 พูด','🗑 ล้าง','กำลังบันทึก...','บันทึก:','⌨️ เขียน','สรุป','แสดง?','ยืนยัน','ยกเลิก','✅ 3/3','⚡ 2/3','⚠️ 1/3','❌ ไม่มี','1 เครดิต','ไม่หัก','เก็บไว้','รายงาน','ID','วันที่','เวลา','พิกัด','เซ็นเซอร์','ผล','วิธี','ปิด','ปฏิเสธ','ไม่มี','ค้นหา...','ไม่รองรับ','ตรวจสอบ...','ล้มเหลว','รหัส','ผลก่อน','ความเป็นส่วนตัว','ข้อกำหนด','คืนเงิน','ติดต่อ','ปิด','ประวัติ','ไม่มี','ลบทั้งหมด','ส่งออก','ลบ','ส่งออก','📤 แชร์','อีเมล','ระบบ','คัดลอก','WhatsApp','Telegram','Twitter','การวิเคราะห์ทางกายภาพ','การวิเคราะห์ทางกายภาพ — ความสอดคล้องแบบยูคลิด','คุณภาพ','ความสมบูรณ์','ความสอดคล้องกับค่าอ้างอิง','ระยะยูคลิด','ผลลัพธ์ตามการจับคู่ยูคลิด','เพียงพอ','ไม่เพียงพอ','กำลังวิเคราะห์...','เสร็จสิ้น','ล้มเหลว','วัดอย่างน้อยหนึ่งเซ็นเซอร์','📱 วิธีใช้','🔬 นักพัฒนา — ฟิสิกส์','ปิด','บันทึกในเครื่องสำหรับ ML ในอนาคต']);
 
-TRANSLATIONS.nl = mkDict([
-    'Fysisch Betonlaboratorium','Gratis fysieke inspecties','Activeren','Activatiecode','Ontwikkelaarsmodus','Wachtwoord','Bevestigen','Annuleren','Gekopieerd','Gedeeld','Bedankt','Terug','Luisteren','Kopiëren','Delen','Afdrukken','Nieuwe inspectie','Resetten','Geschiedenis','Start fysieke inspectie','Meten','Opnieuw','Klaar','Overslaan','📸 Camera (Kleur)','🎤 Microfoon (Resonantie)','📳 Trilling','📸 Achtercamera + Flitser','🎙️ Structurele microfoon','📳 Haptisch + Versnellingsmeter','Fotografeer vanaf 30 cm','Tik zachtjes op het beton','Plaats telefoon op beton','Klaar','Meten... {p}%','Gemeten','Overgeslagen','Niet gemeten','🔒 Klaar','⏳ Meten...','✅ Gemeten','⏭ Overgeslagen','⚠️ Zwak','Volledigheid','Geen sensor gemeten','Beton intact','Scheuren','Holtes','Vocht','Geen ingreep','Epoxy injecteren','Uitgraven en versterken','Vocht behandelen','Alles gemeten','Eén overgeslagen','Twee overgeslagen','Meer dan helft','Niets gemeten','Toestemming','Camera, microfoon en beweging','Akkoord en start','Weigeren','Kalibratie','Beton normaal?','Ja, als referentie','Niet nu','Referentie opgeslagen','Alleen fysieke schatting','Onvoldoende saldo','Ongeldige code','Toegang geweigerd','{0} tegoed','Meet of sla over','Gelijkenis','Signaalanalyse','Frequentie','Kleur','Intensiteit','Notitie toevoegen?','(Optioneel)','tekens','🎤 Spreken','🗑 Wissen','Opnemen...','Gebruikersnotities:','⌨️ Schrijven','Toon samenvatting','Resultaat tonen?','Bevestigen','Annuleren','✅ 3/3','⚡ 2/3','⚠️ 1/3','❌ Geen','1 tegoed afgetrokken','Niets afgetrokken','Tegoed behouden','Fysiek inspectierapport','Apparaat-ID','Datum','Tijd','Coördinaten','Gebruikte sensoren','Resultaat','Oplossing','Sluiten','Geweigerd','N/B','Locatie...','Niet ondersteund','Verifiëren...','Mislukt','Verkeerd wachtwoord','Toon eerst resultaat','Privacy','Voorwaarden','Terugbetaling','Contact','Sluiten','Geschiedenis','Geen inspecties','Alles wissen','JSON exporteren','Gewist','Geëxporteerd','📤 Delen','E-mail','Systeem delen','Tekst kopiëren','WhatsApp','Telegram','Twitter','Diepe neurale analyse','Slimme deep-learning-analyse','Vertrouwen','Onzekerheid','Signaalkwaliteit','Kandidaat-waarschijnlijkheden','Waarom deze beslissing?','Anomalie gedetecteerd','Train op mijn monster','Trainen...','Training voltooid','Minimaal 3 sessies nodig','Digitale tweeling gereed','Tweeling bouwen','Diepe analyse...','Diepe analyse voltooid','Diepe analyse mislukt','Meet minstens één sensor'
-]);
+TRANSLATIONS.nl = mkDict(['Fysisch Betonlab','Gratis inspecties','Activeren','Code','Ontwikkelaarsmodus','Wachtwoord','Bevestigen','Annuleren','Gekopieerd','Gedeeld','Bedankt','Terug','Luisteren','Kopiëren','Delen','Afdrukken','Nieuw','Resetten','Geschiedenis','Starten','Meten','Opnieuw','Klaar','Overslaan','📸 Camera','🎤 Microfoon','📳 Trilling','📸 Camera + Flitser','🎙️ Structurele microfoon','📳 Versnellingsmeter','Vanaf 30 cm','Tik zachtjes','Plaats telefoon','Klaar','Gemeten','Overgeslagen','Niet gemeten','🔒 Klaar','⏳ Meten...','✅ Gemeten','⏭ Overgeslagen','⚠️ Zwak','Volledigheid','Geen sensor','Intact','Scheuren','Holtes','Vocht','Geen ingreep','Epoxy','Graaf','Vocht','Alle','Één','Twee','Meer dan helft','Geen','Toestemming','Camera, microfoon','Akkoord','Weigeren','Kalibratie','Normaal?','Ja','Niet nu','Opgeslagen','Schatting','Saldo','Ongeldig','Geweigerd','{0} tegoed','Meet of sla over','Gelijkenis','Analyse','Frequentie','Kleur','Intensiteit','Notitie?','(Optioneel)','tekens','🎤 Spreken','🗑 Wissen','Opnemen...','Notities:','⌨️ Schrijven','Samenvatting','Tonen?','Bevestigen','Annuleren','✅ 3/3','⚡ 2/3','⚠️ 1/3','❌ Geen','1 tegoed','Niet afgetrokken','Behouden','Rapport','ID','Datum','Tijd','Coördinaten','Sensoren','Resultaat','Oplossing','Sluiten','Geweigerd','N/B','Locatie...','Niet ondersteund','Verifiëren...','Mislukt','Wachtwoord','Eerst resultaat','Privacy','Voorwaarden','Terugbetaling','Contact','Sluiten','Geschiedenis','Geen','Alles wissen','Exporteren','Gewist','Geëxporteerd','📤 Delen','E-mail','Systeem','Kopiëren','WhatsApp','Telegram','Twitter','Fysische analyse','Fysische analyse — Euclidische overeenkomst','Kwaliteit','Volledigheid','Overeenkomst met referenties','Euclidische afstanden','Resultaat op basis van Euclidische matching.','Voldoende','Onvoldoende','Analyse...','Voltooid','Mislukt','Meet minstens één sensor','📱 Hoe te gebruiken','🔬 Ontwikkelaar — Fysica','Sluiten','Lokale stille log voor toekomstige ML']);
 
-TRANSLATIONS.pl = mkDict([
-    'Fizyczne Laboratorium Betonu','Darmowe inspekcje fizyczne','Aktywuj','Kod aktywacyjny','Tryb dewelopera','Hasło','Potwierdź','Anuluj','Skopiowano','Udostępniono','Dziękujemy','Wstecz','Odsłuchaj','Kopiuj','Udostępnij','Drukuj','Nowa inspekcja','Resetuj','Historia','Rozpocznij inspekcję','Zmierz','Ponów','Gotowe','Pomiń','📸 Aparat (Kolor)','🎤 Mikrofon (Rezonans)','📳 Drgania','📸 Aparat tylny + Lampa','🎙️ Mikrofon strukturalny','📳 Haptyczny + Akcelerometr','Sfotografuj z 30 cm','Delikatnie stuknij','Połóż telefon na betonie','Gotowe','Pomiar... {p}%','Zmierzono','Pominięto','Nie zmierzono','🔒 Gotowe','⏳ Pomiar...','✅ Zmierzono','⏭ Pominięto','⚠️ Słaby','Kompletność','Nie zmierzono czujnika','Beton w dobrym stanie','Pęknięcia','Pustki','Wilgoć','Brak interwencji','Wstrzyknij epoksyd','Wykop i wzmocnij','Usuń wilgoć','Wszystko zmierzone','Jeden pominięty','Dwa pominięte','Ponad połowa','Nic nie zmierzono','Zgoda','Aparat, mikrofon i ruch','Zgadzam się','Odmów','Kalibracja','Beton normalny?','Tak, jako odniesienie','Nie teraz','Odniesienie zapisane','Tylko ocena fizyczna','Niewystarczające saldo','Nieprawidłowy kod','Odmowa dostępu','{0} kredytów','Zmierz lub pomiń','Podobieństwo','Analiza sygnału','Częstotliwość','Kolor','Intensywność','Dodać notatkę?','(Opcjonalnie)','znaków','🎤 Mów','🗑 Wyczyść','Nagrywanie...','Notatki użytkownika:','⌨️ Napisz','Pokaż podsumowanie','Pokazać wynik?','Potwierdź','Anuluj','✅ 3/3','⚡ 2/3','⚠️ 1/3','❌ Brak','1 kredyt odliczony','Nie odliczono','Kredyt zachowany','Raport inspekcji','ID urządzenia','Data','Godzina','Współrzędne','Użyte czujniki','Werdykt','Rozwiązanie','Zamknij','Odrzucono','N/D','Lokalizacja...','Nieobsługiwane','Weryfikacja...','Błąd','Błędne hasło','Najpierw pokaż wynik','Prywatność','Warunki','Zwrot','Kontakt','Zamknij','Historia','Brak inspekcji','Wyczyść wszystko','Eksportuj JSON','Wyczyszczono','Wyeksportowano','📤 Udostępnij','Email','Udostępnianie systemowe','Kopiuj tekst','WhatsApp','Telegram','Twitter','Głęboka analiza neuronowa','Inteligentna analiza głębokiego uczenia','Pewność','Niepewność','Jakość sygnału','Prawdopodobieństwa kandydatów','Dlaczego ta decyzja?','Wykryto anomalię','Trenuj na mojej próbce','Trenowanie...','Trening zakończony','Wymagane co najmniej 3 sesje','Cyfrowy bliźniak gotowy','Budowanie bliźniaka','Głęboka analiza...','Głęboka analiza zakończona','Głęboka analiza nie powiodła się','Zmierz co najmniej jeden czujnik'
-]);
+TRANSLATIONS.pl = mkDict(['Laboratorium Fizyki Betonu','Darmowe inspekcje','Aktywuj','Kod','Tryb dev','Hasło','Potwierdź','Anuluj','Skopiowano','Udostępniono','Dziękujemy','Wstecz','Odsłuchaj','Kopiuj','Udostępnij','Drukuj','Nowa','Resetuj','Historia','Rozpocznij','Zmierz','Ponów','Gotowe','Pomiń','📸 Aparat','🎤 Mikrofon','📳 Drgania','📸 Aparat + Lampa','🎙️ Mikrofon strukturalny','📳 Akcelerometr','Z 30 cm','Delikatnie stuknij','Połóż telefon','Gotowe','Zmierzono','Pominięto','Nie zmierzono','🔒 Gotowe','⏳ Pomiar...','✅ Zmierzono','⏭ Pominięto','⚠️ Słaby','Kompletność','Brak czujnika','Beton zdrowy','Pęknięcia','Pustki','Wilgoć','Brak interwencji','Epoksyd','Wykop','Wilgoć','Wszystkie','Jeden','Dwa','Ponad połowa','Brak','Zgoda','Aparat, mikrofon','Zgadzam','Odmów','Kalibracja','Normalny?','Tak','Nie teraz','Zapisano','Szacunek','Saldo','Nieprawidłowy','Odmowa','{0} kredytów','Zmierz lub pomiń','Podobieństwo','Analiza','Częstotliwość','Kolor','Intensywność','Notatka?','(Opcjonalne)','znaków','🎤 Mów','🗑 Wyczyść','Nagrywanie...','Notatki:','⌨️ Napisz','Podsumowanie','Pokazać?','Potwierdź','Anuluj','✅ 3/3','⚡ 2/3','⚠️ 1/3','❌ Brak','1 kredyt','Nie odliczono','Zachowano','Raport','ID','Data','Godzina','Współrzędne','Czujniki','Werdykt','Rozwiązanie','Zamknij','Odmowa','N/D','Lokalizacja...','Nieobsługiwane','Weryfikacja...','Błąd','Hasło','Najpierw wynik','Prywatność','Warunki','Zwrot','Kontakt','Zamknij','Historia','Brak','Wyczyść wszystko','Eksportuj','Wyczyszczono','Wyeksportowano','📤 Udostępnij','Email','System','Kopiuj','WhatsApp','Telegram','Twitter','Analiza fizyczna','Analiza fizyczna — Dopasowanie euklidesowe','Jakość','Kompletność','Dopasowanie do wzorców','Odległości euklidesowe','Wynik oparty na dopasowaniu euklidesowym.','Wystarczająco','Niewystarczająco','Analiza...','Zakończono','Niepowodzenie','Zmierz co najmniej jeden czujnik','📱 Jak używać','🔬 Deweloper — Fizyka','Zamknij','Lokalny cichy log dla przyszłego ML']);
 
-TRANSLATIONS.sv = mkDict([
-    'Fysiskt betonglaboratorium','Gratis fysiska inspektioner','Aktivera','Aktiveringskod','Utvecklarläge','Lösenord','Bekräfta','Avbryt','Kopierat','Delat','Tack','Tillbaka','Lyssna','Kopiera','Dela','Skriv ut','Ny inspektion','Återställ','Historik','Starta fysisk inspektion','Mät','Försök igen','Klar','Hoppa över','📸 Kamera (Färg)','🎤 Mikrofon (Resonans)','📳 Vibration','📸 Bakre kamera + Blixt','🎙️ Strukturell mikrofon','📳 Haptik + Accelerometer','Fotografera från 30 cm','Knacka försiktigt','Placera telefon på betongen','Redo','Mäter... {p}%','Uppmätt','Överhoppad','Ej uppmätt','🔒 Redo','⏳ Mäter...','✅ Uppmätt','⏭ Överhoppad','⚠️ Svag','Fullständighet','Ingen sensor','Betong intakt','Sprickor','Hålrum','Fukt','Ingen åtgärd','Fyll med epoxi','Gräv och förstärk','Åtgärda fukt','Alla uppmätta','En överhoppad','Två överhoppade','Mer än hälften','Ingen uppmätt','Samtycke','Kamera, mikrofon och rörelse','Godkänn och starta','Neka','Kalibrering','Betong normal?','Ja, som referens','Inte nu','Referens sparad','Endast fysisk uppskattning','Otillräckligt saldo','Ogiltig kod','Åtkomst nekad','{0} krediter','Mät eller hoppa över','Likhet','Signalanalys','Frekvens','Färg','Intensitet','Lägg till anteckning?','(Valfritt)','tecken','🎤 Tala','🗑 Rensa','Spelar in...','Användaranteckningar:','⌨️ Skriv','Visa sammanfattning','Visa resultatet?','Bekräfta','Avbryt','✅ 3/3','⚡ 2/3','⚠️ 1/3','❌ Ingen','1 kredit dras','Ingen dras','Kredit bevarad','Inspektionsrapport','Enhets-ID','Datum','Tid','Koordinater','Använda sensorer','Resultat','Lösning','Stäng','Nekad','N/A','Lokaliserar...','Stöds ej','Verifierar...','Misslyckades','Fel lösenord','Visa resultat först','Integritet','Villkor','Återbetalning','Kontakt','Stäng','Historik','Inga inspektioner','Rensa allt','Exportera JSON','Rensad','Exporterad','📤 Dela','E-post','Systemdelning','Kopiera text','WhatsApp','Telegram','Twitter','Djup neural analys','Smart djupinlärningsanalys','Förtroende','Osäkerhet','Signalkvalitet','Kandidatsannolikheter','Varför detta beslut?','Anomali upptäckt','Träna på mitt prov','Tränar...','Träning klar','Minst 3 sessioner krävs','Digital tvilling redo','Bygger tvilling','Djupanalys...','Djupanalys klar','Djupanalys misslyckades','Mät minst en sensor'
-]);
+TRANSLATIONS.sv = mkDict(['Fysiskt betonglaboratorium','Gratis inspektioner','Aktivera','Kod','Utvecklarläge','Lösenord','Bekräfta','Avbryt','Kopierat','Delat','Tack','Tillbaka','Lyssna','Kopiera','Dela','Skriv ut','Ny','Återställ','Historik','Starta','Mät','Försök igen','Klar','Hoppa över','📸 Kamera','🎤 Mikrofon','📳 Vibration','📸 Kamera + Blixt','🎙️ Strukturell mikrofon','📳 Accelerometer','Från 30 cm','Knacka försiktigt','Placera telefon','Redo','Uppmätt','Överhoppad','Ej uppmätt','🔒 Redo','⏳ Mäter...','✅ Uppmätt','⏭ Överhoppad','⚠️ Svag','Fullständighet','Ingen sensor','Intakt','Sprickor','Hålrum','Fukt','Ingen åtgärd','Epoxi','Gräv','Fukt','Alla','En','Två','Mer än hälften','Ingen','Samtycke','Kamera, mikrofon','Godkänn','Neka','Kalibrering','Normal?','Ja','Inte nu','Sparad','Uppskattning','Saldo','Ogiltig','Nekad','{0} krediter','Mät eller hoppa över','Likhet','Analys','Frekvens','Färg','Intensitet','Anteckning?','(Valfritt)','tecken','🎤 Tala','🗑 Rensa','Spelar in...','Anteckningar:','⌨️ Skriv','Sammanfattning','Visa?','Bekräfta','Avbryt','✅ 3/3','⚡ 2/3','⚠️ 1/3','❌ Ingen','1 kredit','Ingen avdrag','Bevarad','Rapport','ID','Datum','Tid','Koordinater','Sensorer','Resultat','Lösning','Stäng','Nekad','N/A','Lokalisering...','Stöds ej','Verifierar...','Misslyckades','Lösenord','Resultat först','Integritet','Villkor','Återbetalning','Kontakt','Stäng','Historik','Ingen','Rensa alla','Exportera','Rensad','Exporterad','📤 Dela','E-post','System','Kopiera','WhatsApp','Telegram','Twitter','Fysisk analys','Fysisk analys — Euklidisk matchning','Kvalitet','Fullständighet','Matchning mot referenser','Euklidiska avstånd','Resultat baserat på euklidisk matchning.','Tillräckligt','Otillräckligt','Analyserar...','Klar','Misslyckades','Mät minst en sensor','📱 Hur man använder','🔬 Utvecklare — Fysik','Stäng','Lokal tyst logg för framtida ML']);
 
-TRANSLATIONS.fa = mkDict([
-    'آزمایشگاه فیزیک بتن','بازرسی‌های فیزیکی رایگان','فعال‌سازی','کد فعال‌سازی','حالت توسعه‌دهنده','رمز عبور','تأیید','لغو','کپی شد','به اشتراک گذاشته شد','متشکریم','بازگشت','گوش دادن','کپی','اشتراک‌گذاری','چاپ','بازرسی جدید','بازنشانی','تاریخچه','شروع بازرسی فیزیکی','اندازه‌گیری','تلاش مجدد','انجام شد','رد کردن','📸 دوربین (رنگ)','🎤 میکروفون (رزونانس)','📳 ارتعاش','📸 دوربین پشتی + فلاش','🎙️ میکروفون ساختاری','📳 لمسی + شتاب‌سنج','عکس از ۳۰ سانتی‌متر','به آرامی ضربه بزنید','تلفن را روی بتن قرار دهید','آماده','در حال اندازه‌گیری... {p}%','اندازه‌گیری شد','رد شد','اندازه‌گیری نشد','🔒 آماده','⏳ اندازه‌گیری...','✅ اندازه‌گیری شد','⏭ رد شد','⚠️ ضعیف','کامل بودن','هیچ سنسوری اندازه‌گیری نشد','بتن سالم','ترک','حفره','رطوبت','نیازی به مداخله نیست','اپوکسی تزریق کنید','حفاری و تقویت','رطوبت را درمان کنید','همه اندازه‌گیری','یک رد شد','دو رد شد','بیش از نیمی','هیچ اندازه‌گیری نشد','رضایت','دوربین، میکروفون و حرکت','موافقم و شروع','رد کردن','کالیبراسیون مرجع','بتن طبیعی؟','بله، به عنوان مرجع','الان نه','مرجع ذخیره شد','فقط ارزیابی فیزیکی','موجودی ناکافی','کد نامعتبر','دسترسی رد شد','{0} اعتبار','اندازه‌گیری یا رد','شباهت','تحلیل سیگنال','فرکانس','رنگ','شدت','افزودن یادداشت؟','(اختیاری)','حرف','🎤 صحبت','🗑 پاک','در حال ضبط...','یادداشت کاربر:','⌨️ نوشتن','نمایش خلاصه','نمایش نتیجه؟','تأیید','لغو','✅ 3/3','⚡ 2/3','⚠️ 1/3','❌ هیچ','1 اعتبار کسر شد','کسر نشد','اعتبار حفظ شد','گزارش بازرسی','شناسه دستگاه','تاریخ','زمان','مختصات','سنسورهای استفاده‌شده','نتیجه','راه‌حل','بستن','رد شد','ناموجود','مکانیابی...','پشتیبانی نمی‌شود','در حال بررسی...','خطا','رمز اشتباه','ابتدا نتیجه را نمایش دهید','حریم خصوصی','شرایط','بازپرداخت','تماس','بستن','تاریخچه','بازرسی‌ای نیست','پاک کردن همه','خروجی JSON','پاک شد','خروجی گرفته شد','📤 اشتراک‌گذاری','ایمیل','اشتراک سیستم','کپی متن','WhatsApp','Telegram','Twitter','تحلیل عصبی عمیق','تحلیل هوشمند یادگیری عمیق','اطمینان','عدم قطعیت','کیفیت سیگنال','احتمالات نامزدها','چرا این تصمیم؟','ناهنجاری شناسایی شد','آموزش روی نمونه من','در حال آموزش...','آموزش کامل شد','حداقل 3 جلسه لازم است','دوقلوی دیجیتال آماده','ساخت دوقلو','تحلیل عمیق...','تحلیل عمیق کامل شد','تحلیل عمیق شکست خورد','حداقل یک سنسور را اندازه بگیرید'
-]);
+TRANSLATIONS.fa = mkDict(['آزمایشگاه فیزیک بتن','بازرسی‌های رایگان','فعال‌سازی','کد','حالت توسعه','رمز','تأیید','لغو','کپی شد','به اشتراک','متشکریم','بازگشت','گوش','کپی','اشتراک','چاپ','جدید','بازنشانی','تاریخچه','شروع','اندازه','تلاش','انجام','رد','📸 دوربین','🎤 میکروفون','📳 ارتعاش','📸 دوربین + فلاش','🎙️ میکروفون','📳 شتاب‌سنج','از 30 سانتی','ضربه آرام','تلفن را بگذارید','آماده','اندازه شد','رد شد','اندازه نشد','🔒 آماده','⏳ اندازه‌گیری...','✅ اندازه شد','⏭ رد','⚠️ ضعیف','کامل بودن','بدون سنسور','سالم','ترک','حفره','رطوبت','بدون مداخله','اپوکسی','حفاری','رطوبت','همه','یک','دو','بیش از نیمی','هیچ','رضایت','دوربین, میکروفون','موافقم','رد','کالیبراسیون','طبیعی؟','بله','الان نه','ذخیره','تخمین','موجودی','نامعتبر','رد','{0} اعتبار','اندازه یا رد','شباهت','تحلیل','فرکانس','رنگ','شدت','یادداشت؟','(اختیاری)','حرف','🎤 صحبت','🗑 پاک','در حال ضبط...','یادداشت:','⌨️ نوشتن','خلاصه','نمایش؟','تأیید','لغو','✅ 3/3','⚡ 2/3','⚠️ 1/3','❌ هیچ','1 اعتبار','کسر نشد','حفظ شد','گزارش','ID','تاریخ','زمان','مختصات','سنسورها','نتیجه','راه‌حل','بستن','رد','ناموجود','مکانیابی...','پشتیبانی نمی‌شود','بررسی...','خطا','رمز','اول نتیجه','حریم','شرایط','بازپرداخت','تماس','بستن','تاریخچه','هیچ','پاک همه','خروجی','پاک','خروجی','📤 اشتراک','ایمیل','سیستم','کپی','WhatsApp','Telegram','Twitter','تحلیل فیزیکی','تحلیل فیزیکی — مطابقت اقلیدسی','کیفیت','کامل بودن','تطابق با مرجع','فواصل اقلیدسی','نتیجه بر اساس تطابق اقلیدسی.','کافی','ناکافی','تحلیل...','کامل','خطا','حداقل یک سنسور را اندازه بگیرید','📱 نحوه استفاده','🔬 توسعه‌دهنده — فیزیک','بستن','لاگ محلی برای ML آینده']);
 
-TRANSLATIONS.ur = mkDict([
-    'کنکریٹ فزکس لیبارٹری','مفت طبعی معائنے','فعال کریں','ایکٹیویشن کوڈ','ڈویلپر موڈ','پاس ورڈ','تصدیق','منسوخ','کاپی','شیئر','شکریہ','واپس','سنیں','کاپی','شیئر','پرنٹ','نیا معائنہ','ری سیٹ','تاریخ','طبعی معائنہ شروع کریں','ناپیں','دوبارہ','ہو گیا','نظر انداز','📸 کیمرہ (رنگ)','🎤 مائیک (گونج)','📳 کمپن','📸 پچھلا کیمرہ + فلیش','🎙️ ساختی مائیک','📳 ہیپٹک + ایکسیلرومیٹر','30 سینٹی میٹر سے فوٹو','کنکریٹ کو آہستہ تھپتھپائیں','فون کو کنکریٹ پر رکھیں','تیار','پیمائش... {p}%','ناپ لیا','نظر انداز','نہیں ناپا','🔒 تیار','⏳ پیمائش...','✅ ناپ لیا','⏭ نظر انداز','⚠️ کمزور','مکمل ہونا','کوئی سینسر نہیں','کنکریٹ مضبوط','دراڑیں','خلا','نمی','کوئی مداخلت نہیں','ایپوکسی بھریں','کھودیں اور مضبوط کریں','نمی کا علاج','تمام ناپے','ایک نظر انداز','دو نظر انداز','آدھے سے زیادہ','کوئی نہیں','رضامندی','کیمرہ، مائیک اور حرکت','راضی اور شروع','انکار','حوالہ جاتی کیلیبریشن','کنکریٹ معمول پر؟','ہاں، حوالہ بنائیں','ابھی نہیں','حوالہ محفوظ','صرف طبعی جائزہ','ناکافی بیلنس','غلط کوڈ','اجازت مسترد','{0} کریڈٹ','ناپیں یا نظر انداز','مشابہت','سگنل تجزیہ','فریکوئنسی','رنگ','شدت','نوٹ شامل کریں؟','(اختیاری)','حروف','🎤 بولیں','🗑 صاف','ریکارڈنگ...','صارف کے نوٹس:','⌨️ لکھیں','خلاصہ دکھائیں','نتیجہ دکھائیں؟','تصدیق','منسوخ','✅ 3/3','⚡ 2/3','⚠️ 1/3','❌ کوئی نہیں','1 کریڈٹ کٹے گا','نہیں کٹے گا','کریڈٹ محفوظ','طبعی معائنہ رپورٹ','ڈیوائس ID','تاریخ','وقت','نقاط','استعمال شدہ سینسرز','نتیجہ','حل','بند','انکار','دستیاب نہیں','مقام...','دستیاب نہیں','تصدیق...','ناکام','غلط پاس ورڈ','پہلے نتیجہ دکھائیں','رازداری','شرائط','واپسی','رابطہ','بند','تاریخ','کوئی معائنہ نہیں','سب صاف کریں','JSON ایکسپورٹ','صاف','ایکسپورٹ','📤 شیئر','ای میل','سسٹم شیئر','متن کاپی','WhatsApp','Telegram','Twitter','گہری عصبی تجزیہ','سمارٹ ڈیپ لرننگ تجزیہ','اعتماد','غیر یقینی','سگنل کا معیار','امیدواروں کی امکانات','یہ فیصلہ کیوں؟','بے ضابطگی پائی گئی','میرے نمونے پر تربیت','تربیت...','تربیت مکمل','کم از کم 3 سیشنز درکار','ڈیجیٹل ٹوئن تیار','ٹوئن بنایا جا رہا','گہری تجزیہ...','گہری تجزیہ مکمل','گہری تجزیہ ناکام','کم از کم ایک سینسر ناپیں'
-]);
+TRANSLATIONS.ur = mkDict(['کنکریٹ فزکس لیب','مفت معائنے','فعال','کوڈ','ڈویلپر','پاس ورڈ','تصدیق','منسوخ','کاپی','شیئر','شکریہ','واپس','سنیں','کاپی','شیئر','پرنٹ','نیا','ری سیٹ','تاریخ','شروع','ناپیں','دوبارہ','ہو گیا','نظر انداز','📸 کیمرہ','🎤 مائیک','📳 کمپن','📸 کیمرہ + فلیش','🎙️ مائیک','📳 ایکسیلرومیٹر','30 سینٹی','آہستہ تھپتھپائیں','فون رکھیں','تیار','ناپا','نظر انداز','نہیں ناپا','🔒 تیار','⏳ پیمائش...','✅ ناپا','⏭ نظر انداز','⚠️ کمزور','مکمل','کوئی سینسر','مضبوط','دراڑیں','خلا','نمی','مداخلت نہیں','ایپوکسی','کھودیں','نمی','سب','ایک','دو','آدھے سے','کوئی','رضامندی','کیمرہ، مائیک','راضی','انکار','کیلیبریشن','معمول؟','ہاں','ابھی نہیں','محفوظ','اندازہ','بیلنس','غلط','انکار','{0} کریڈٹ','ناپیں یا چھوڑیں','مشابہت','تجزیہ','فریکوئنسی','رنگ','شدت','نوٹ؟','(اختیاری)','حروف','🎤 بولیں','🗑 صاف','ریکارڈنگ...','نوٹس:','⌨️ لکھیں','خلاصہ','دکھائیں؟','تصدیق','منسوخ','✅ 3/3','⚡ 2/3','⚠️ 1/3','❌ کوئی','1 کریڈٹ','نہیں کٹا','محفوظ','رپورٹ','ID','تاریخ','وقت','نقاط','سینسر','نتیجہ','حل','بند','انکار','دستیاب نہیں','مقام...','دستیاب نہیں','تصدیق...','ناکام','پاس ورڈ','پہلے نتیجہ','رازداری','شرائط','واپسی','رابطہ','بند','تاریخ','کوئی','سب صاف','ایکسپورٹ','صاف','ایکسپورٹ','📤 شیئر','ای میل','سسٹم','کاپی','WhatsApp','Telegram','Twitter','طبعی تجزیہ','طبعی تجزیہ — اقلیدسی مماثلت','معیار','مکمل','حوالہ سے مطابقت','اقلیدسی فاصلے','اقلیدسی مماثلت پر مبنی نتیجہ۔','کافی','ناکافی','تجزیہ...','مکمل','ناکام','کم از کم ایک سینسر ناپیں','📱 استعمال کا طریقہ','🔬 ڈویلپر — فزکس','بند','مستقبل ML کے لیے مقامی لاگ']);
 
-TRANSLATIONS.sw = mkDict([
-    'Maabara ya Fizikia ya Zege','Ukaguzi wa kimwili wa bure','Amilisha','Msimbo wa uamilishaji','Hali ya Msanidi','Nenosiri','Thibitisha','Ghairi','Imenakiliwa','Imeshirikiwa','Asante','Rudi','Sikiliza','Nakili','Shiriki','Chapisha','Ukaguzi mpya','Weka upya','Historia','Anza ukaguzi','Pima','Jaribu tena','Imekamilika','Ruka','📸 Kamera (Rangi)','🎤 Maikrofoni (Msisimko)','📳 Mtetemo','📸 Kamera ya Nyuma + Mweko','🎙️ Maikrofoni ya Muundo','📳 Haptic + Kipima kasi','Piga picha kutoka sm 30','Gonga zege kwa upole','Weka simu kwenye zege','Tayari','Inapima... {p}%','Imepimwa','Imerukwa','Haijapimwa','🔒 Tayari','⏳ Inapima...','✅ Imepimwa','⏭ Imerukwa','⚠️ Dhaifu','Ukamilifu','Hakuna kihisi','Zege imara','Nyufa','Matuta','Unyevu','Hakuna uingiliaji','Jaza epoksi','Chimba na imarisha','Tibu unyevu','Vyote vimepimwa','Kimoja kimerukwa','Viwili vimerukwa','Zaidi ya nusu','Hakuna kilichopimwa','Idhini','Kamera, maikrofoni na mwendo','Nakubali na Naanza','Kataa','Urekebishaji','Zege la kawaida?','Ndiyo, kigezo','Si sasa','Kigezo kimehifadhiwa','Ukadiriaji wa kimwili tu','Salio halitoshi','Msimbo batili','Ruhusa imekataliwa','Mikopo {0}','Pima au ruka','Kufanana','Uchambuzi wa Ishara','Marudio','Rangi','Nguvu','Ongeza dokezo?','(Hiari)','herufi','🎤 Ongea','🗑 Futa','Inarekodi...','Madokezo ya mtumiaji:','⌨️ Andika','Onyesha muhtasari','Onyesha matokeo?','Thibitisha','Ghairi','✅ 3/3','⚡ 2/3','⚠️ 1/3','❌ Hakuna','Mkopo 1 utakatwa','Hakutakatwa','Mkopo umehifadhiwa','Ripoti ya Ukaguzi','Kitambulisho','Tarehe','Muda','Kuratibu','Vihisi vilivyotumika','Hitimisho','Suluhisho','Funga','Imekataliwa','Haipatikani','Inatafuta...','Haiungwi mkono','Inathibitisha...','Imeshindikana','Nenosiri si sahihi','Onyesha matokeo kwanza','Faragha','Masharti','Kurejesha','Wasiliana nasi','Funga','Historia','Hakuna ukaguzi','Futa zote','Hamisha JSON','Imefutwa','Imehamishwa','📤 Shiriki','Barua pepe','Kushiriki mfumo','Nakili maandishi','WhatsApp','Telegram','Twitter','Uchambuzi wa kina wa neva','Uchambuzi wa akili wa kujifunza kwa kina','Uhakika','Kutokuwa na uhakika','Ubora wa ishara','Uwezekano wa wagombea','Kwa nini uamuzi huu?','Hitilafu imegunduliwa','Fundisha kwa sampuli yangu','Inafundisha...','Mafunzo yamekamilika','Inahitajika vipindi 3 angalau','Pacha wa Kidijitali tayari','Kujenga pacha','Uchambuzi wa kina...','Uchambuzi wa kina umekamilika','Uchambuzi wa kina umeshindikana','Pima kihisi kimoja angalau'
-]);
+TRANSLATIONS.sw = mkDict(['Maabara ya Fizikia','Ukaguzi wa bure','Amilisha','Msimbo','Hali ya msanidi','Nenosiri','Thibitisha','Ghairi','Imenakiliwa','Imeshirikiwa','Asante','Rudi','Sikiliza','Nakili','Shiriki','Chapisha','Mpya','Weka upya','Historia','Anza','Pima','Jaribu','Imekamilika','Ruka','📸 Kamera','🎤 Maikrofoni','📳 Mtetemo','📸 Kamera + Mweko','🎙️ Maikrofoni','📳 Kipima kasi','Kutoka sm 30','Gonga upole','Weka simu','Tayari','Imepimwa','Imerukwa','Haijapimwa','🔒 Tayari','⏳ Inapima...','✅ Imepimwa','⏭ Imerukwa','⚠️ Dhaifu','Ukamilifu','Hakuna kihisi','Imara','Nyufa','Matuta','Unyevu','Hakuna uingiliaji','Epoksi','Chimba','Unyevu','Vyote','Kimoja','Viwili','Zaidi ya nusu','Hakuna','Idhini','Kamera, maikrofoni','Nakubali','Kataa','Urekebishaji','Kawaida?','Ndiyo','Si sasa','Imehifadhiwa','Ukadiriaji','Salio','Batili','Imekataliwa','Mikopo {0}','Pima au ruka','Kufanana','Uchambuzi','Marudio','Rangi','Nguvu','Dokezo?','(Hiari)','herufi','🎤 Ongea','🗑 Futa','Inarekodi...','Madokezo:','⌨️ Andika','Muhtasari','Onyesha?','Thibitisha','Ghairi','✅ 3/3','⚡ 2/3','⚠️ 1/3','❌ Hakuna','Mkopo 1','Hakutakatwa','Imehifadhiwa','Ripoti','ID','Tarehe','Muda','Kuratibu','Vihisi','Hitimisho','Suluhisho','Funga','Imekataliwa','Haipatikani','Inatafuta...','Haiungwi','Inathibitisha...','Imeshindikana','Nenosiri','Matokeo kwanza','Faragha','Masharti','Kurejesha','Wasiliana','Funga','Historia','Hakuna','Futa zote','Hamisha','Imefutwa','Imehamishwa','📤 Shiriki','Barua pepe','Mfumo','Nakili','WhatsApp','Telegram','Twitter','Uchambuzi wa kimwili','Uchambuzi wa kimwili — Ulinganifu wa Euclidean','Ubora','Ukamilifu','Ulinganifu na marejeleo','Umbali wa Euclidean','Matokeo kulingana na ulinganifu wa Euclidean.','Inatosha','Haitoshi','Uchambuzi...','Imekamilika','Imeshindikana','Pima kihisi kimoja','📱 Jinsi ya kutumia','🔬 Msanidi — Fizikia','Funga','Kumbukumbu ya ndani kwa ML ya baadaye']);
 
-// ═════ المتغيرات العامة ═════
+// ═════ Global State ═════
 var currentLang = localStorage.getItem('concreteLang') || 'ar';
-var freeCredits = parseInt(localStorage.getItem('concreteFree') || '0');
+var usedFreeCredits = parseInt(localStorage.getItem('concreteUsedFree') || '0');
+var paidBalance = parseInt(localStorage.getItem('concretePaidBalance') || '0');
 var admin = false;
 var STATIC_PASSWORD = 'MOULOUD2026';
 var userNotes = '';
@@ -688,8 +858,9 @@ var historyData = [];
 var DEVICE_KEY = 'concreteDeviceId';
 var BASELINE_KEY = 'concreteBaseline';
 var HISTORY_KEY = 'concreteHistory';
+var ML_LOG_KEY = 'concreteMLLog';
 
-var currentDeepResult = null, autoDeepRan = false;
+var currentPhysicalResult = null;
 
 function t(key, vars) {
     var dict = TRANSLATIONS[currentLang] || TRANSLATIONS.ar;
@@ -721,44 +892,24 @@ function verifyGumroadLicense(key) {
     return tryNext(0);
 }
 
-// ═════ الرصيد ═════
-function generateSignature(value) {
-    var str = value + 'Concrete-2026-S3cur3!';
-    var hash = 0;
-    for (var i = 0; i < str.length; i++) { hash = ((hash << 5) - hash) + str.charCodeAt(i); hash = hash & hash; }
-    return hash.toString(36);
+// ═════ Credits ═════
+function freeLeft() { return Math.max(0, 3 - usedFreeCredits); }
+function totalCredits() { return admin ? 9999 : (freeLeft() + paidBalance); }
+function updateCreditsUI() {
+    var el = document.getElementById('freeCount');
+    if (el) el.textContent = admin ? '∞' : freeLeft();
 }
-function getSecureBalance() {
-    try {
-        var stored = localStorage.getItem('concreteBalance');
-        var sig = localStorage.getItem('concreteBalanceSig');
-        if (!stored) return 0;
-        var value = parseInt(stored) || 0;
-        if (!sig || generateSignature(value) !== sig) { localStorage.removeItem('concreteBalance'); localStorage.removeItem('concreteBalanceSig'); return 0; }
-        return value;
-    } catch(e) { return 0; }
-}
-function setSecureBalance(value) {
-    var safeValue = Math.max(0, parseInt(value) || 0);
-    localStorage.setItem('concreteBalance', safeValue.toString());
-    localStorage.setItem('concreteBalanceSig', generateSignature(safeValue));
-    return safeValue;
-}
-function totalCredits() { return admin ? 9999 : Math.max(0, 3 - freeCredits) + getSecureBalance(); }
-function updateCreditsUI() { document.getElementById('freeCount').textContent = totalCredits(); }
 function consumeCredit() {
     if (admin) return true;
-    var left = Math.max(0, 3 - freeCredits);
-    if (left > 0) { freeCredits++; localStorage.setItem('concreteFree', freeCredits); updateCreditsUI(); return true; }
-    var balance = getSecureBalance();
-    if (balance > 0) { setSecureBalance(balance - 1); updateCreditsUI(); return true; }
+    if (freeLeft() > 0) { usedFreeCredits++; localStorage.setItem('concreteUsedFree', usedFreeCredits); updateCreditsUI(); return true; }
+    if (paidBalance > 0) { paidBalance--; localStorage.setItem('concretePaidBalance', paidBalance); updateCreditsUI(); return true; }
     return false;
 }
 function buyPack(amount) {
     if (admin) { showToast('👑 Admin'); return; }
     var urls = { 1: 'https://mouloudkamali.gumroad.com/l/vwsfot', 5: 'https://mouloudkamali.gumroad.com/l/pegid', 15: 'https://mouloudkamali.gumroad.com/l/jetfe' };
     window.open(urls[amount], '_blank');
-    setTimeout(function() { if (confirm('Done?')) { setSecureBalance(getSecureBalance() + amount); updateCreditsUI(); showToast('✅ +' + amount); } }, 3000);
+    setTimeout(function() { if (confirm('Done?')) { paidBalance += amount; localStorage.setItem('concretePaidBalance', paidBalance); updateCreditsUI(); showToast('✅ +' + amount); } }, 3000);
 }
 function activateCode() {
     var code = document.getElementById('codeInput').value.trim();
@@ -767,13 +918,13 @@ function activateCode() {
     verifyGumroadLicense(code).then(function(result) {
         if (result.valid) {
             if (result.uses > 1) showToast('⚠️ Used');
-            else { setSecureBalance(getSecureBalance() + result.credits); updateCreditsUI(); showToast('✅ ' + t('license_activated', {0: result.credits})); }
+            else { paidBalance += result.credits; localStorage.setItem('concretePaidBalance', paidBalance); updateCreditsUI(); showToast('✅ ' + t('license_activated', {0: result.credits})); }
         } else showToast('❌ ' + t('invalid'));
         document.getElementById('codeInput').value = '';
     }).catch(function() { showToast('❌ ' + t('network_error')); document.getElementById('codeInput').value = ''; });
 }
 
-// ═════ المطور ═════
+// ═════ Developer Mode ═════
 function attachLogoEvents() {
     var logoBtn = document.getElementById('adminIcon');
     if (!logoBtn) return;
@@ -789,11 +940,22 @@ function closeAdminModal() { document.getElementById('secretModal').classList.re
 function checkAdminPassword() {
     var pwd = document.getElementById('secretPassword').value.trim();
     if (!pwd) { showToast('⚠️ Password required'); return; }
-    if (pwd === STATIC_PASSWORD) { admin = true; updateCreditsUI(); showToast('👑 ' + t('developer')); document.getElementById('secretPassword').value = ''; closeAdminModal(); }
-    else { showToast('❌ ' + t('wrong_password')); document.getElementById('secretPassword').value = ''; }
+    if (pwd === STATIC_PASSWORD) {
+        admin = true;
+        // 🔬 Reveal developer tab instantly if a sensor-info modal is already open
+        var deepTab = document.getElementById('sensorTabDeep');
+        if (deepTab) deepTab.style.display = 'inline-block';
+        updateCreditsUI();
+        showToast('👑 ' + t('developer'));
+        document.getElementById('secretPassword').value = '';
+        closeAdminModal();
+    } else {
+        showToast('❌ ' + t('wrong_password'));
+        document.getElementById('secretPassword').value = '';
+    }
 }
 
-// ═════ أدوات ═════
+// ═════ Utils ═════
 function showToast(msg) {
     var el = document.getElementById('toast'); if (!el) return;
     el.textContent = msg; el.style.display = 'block';
@@ -813,7 +975,7 @@ function rate(n) {
 }
 function loadRating() { document.querySelectorAll('#starsDisplay span').forEach(function(s, i) { if (i < ratingValue) s.classList.add('active'); }); }
 
-// ═════ اللغة ═════
+// ═════ Language ═════
 function buildLangSelect() {
     var sel = document.getElementById('langSelect'); sel.innerHTML = '';
     LANG_LIST.forEach(function(lang) {
@@ -828,6 +990,11 @@ function buildLangSelect() {
         document.documentElement.lang = currentLang;
         applyTranslations();
         if (finalShown) renderFinalVerdict();
+        if (document.getElementById('sensorInfoOverlay').classList.contains('show') && currentSensorInfo.id) {
+            renderSensorInfo(currentSensorInfo.id, currentSensorInfo.tab);
+            var info = SENSOR_INFO[currentSensorInfo.id];
+            if (info) document.getElementById('sensorInfoTitle').textContent = info.title[currentLang] || info.title.en;
+        }
     };
 }
 
@@ -854,10 +1021,10 @@ function applyTranslations() {
         historyTitleLabel:'history_title', historyClearLabel:'history_clear', historyExportLabel:'history_export',
         ratingLabel:'thanks', shareTitle:'share_title', shareEmailLabel:'share_email',
         shareNativeLabel:'share_native', shareCopyLabel:'share_copy', shareCloseLabel:'legal_close_btn',
-        deepPanelTitle:'deep_panel_title', smartAnalyzeLabel:'deep_analyze_btn',
-        lblConfidence:'deep_confidence', lblUncertainty:'deep_uncertainty', lblSNR:'deep_snr',
-        lblTopFamilies:'deep_alternatives', lblXAI:'deep_xai', lblAnomaly:'deep_anomaly_detected',
-        trainBtnLabel:'deep_train_btn'
+        physPanelTitle:'phys_panel_title', smartAnalyzeLabel:'phys_analyze_btn',
+        lblQuality:'phys_quality', lblCompleteness:'phys_completeness',
+        lblTopFamilies:'phys_alternatives', lblDistances:'phys_distances',
+        sensorTabBriefLabel:'sensor_info_brief', sensorTabDeepLabel:'sensor_info_deep'
     };
     for (var id in map) { var el = document.getElementById(id); if (el) el.textContent = t(map[id]); }
     var ci = document.getElementById('codeInput'); if (ci) ci.placeholder = '🔑 ' + t('activation_code');
@@ -872,11 +1039,11 @@ function applyTranslations() {
     }
     updateCreditsUI();
     if (document.getElementById('labArea').style.display === 'block') renderSensors();
-    updateNotesUI(); renderHistory(); updateTwinStatus(); updateSmartAnalyzeBtn();
+    updateNotesUI(); renderHistory();
     if (document.getElementById('legalModalOverlay').classList.contains('show')) switchLegalTab(currentLegalTab);
 }
 
-// ═════ الملاحظات ═════
+// ═════ Notes ═════
 function updateNotesUI() {
     var ta = document.getElementById('notesText'); if (!ta) return;
     document.getElementById('notesCharCount').textContent = ta.value.length;
@@ -917,24 +1084,37 @@ function clearNotes() {
     updateNotesUI(); showToast('🗑 ' + t('notes_clear'));
 }
 
-// ═════ الحساسات ═════
+// ═════ Sensors Render ═════
 function renderSensors() {
     var container = document.getElementById('sensorsContainer');
+    if (!container) return;
     container.innerHTML = '';
-    gateStates = {}; sensorReadings = {};
     APP_CONFIG.sensors.forEach(function(s) {
         var acc = document.createElement('div');
         acc.className = 'sensor-accordion'; acc.id = 'acc_' + s.id;
-        acc.innerHTML = '<div class="sensor-accordion-header"><div class="title"><span class="icon">' + s.icon + '</span><div><span>' + t(s.labelKey) + '</span><span class="tool">' + t(s.toolKey) + '</span></div></div><span class="status-badge waiting" id="badge_' + s.id + '">' + t('status_waiting') + '</span></div><div class="sensor-accordion-body"><div class="sensor-instruction">📌 ' + t(s.instructionKey) + '</div><div class="sensor-preview" id="preview_' + s.id + '"><span id="previewText_' + s.id + '">' + t('waiting') + '</span></div><div class="sensor-result" id="result_' + s.id + '"></div><div class="sensor-result sub" id="subResult_' + s.id + '"></div><div class="sensor-actions-grid"><button class="btn-measure-new" id="measure_' + s.id + '" onclick="measureSensor(\'' + s.id + '\')">▶️ ' + t('measure') + '</button><button class="btn-retry-new" id="retry_' + s.id + '" onclick="retrySensor(\'' + s.id + '\')" disabled>🔄 ' + t('retry') + '</button><button class="btn-done-new" id="done_' + s.id + '" onclick="confirmSensor(\'' + s.id + '\')" disabled>✅ ' + t('done_btn') + '</button><button class="btn-skip-new" id="skip_' + s.id + '" onclick="skipSensor(\'' + s.id + '\')">⏭ ' + t('skip') + '</button></div></div>';
+        acc.innerHTML = '<div class="sensor-accordion-header"><div class="title"><span class="icon">' + s.icon + '</span><div><span>' + t(s.labelKey) + '</span><span class="tool">' + t(s.toolKey) + '</span></div></div>' +
+            '<button class="info-btn" onclick="showSensorInfo(\'' + s.id + '\')" title="Info">ℹ</button>' +
+            '<span class="status-badge waiting" id="badge_' + s.id + '">' + t('status_waiting') + '</span></div>' +
+            '<div class="sensor-accordion-body"><div class="sensor-instruction">📌 ' + t(s.instructionKey) + '</div>' +
+            '<div class="sensor-preview" id="preview_' + s.id + '"><span id="previewText_' + s.id + '">' + t('waiting') + '</span></div>' +
+            '<div class="sensor-result" id="result_' + s.id + '"></div>' +
+            '<div class="sensor-result sub" id="subResult_' + s.id + '"></div>' +
+            '<div class="sensor-actions-grid">' +
+            '<button class="btn-measure-new" id="measure_' + s.id + '" onclick="measureSensor(\'' + s.id + '\')">▶️ ' + t('measure') + '</button>' +
+            '<button class="btn-retry-new" id="retry_' + s.id + '" onclick="retrySensor(\'' + s.id + '\')" disabled>🔄 ' + t('retry') + '</button>' +
+            '<button class="btn-done-new" id="done_' + s.id + '" onclick="confirmSensor(\'' + s.id + '\')" disabled>✅ ' + t('done_btn') + '</button>' +
+            '<button class="btn-skip-new" id="skip_' + s.id + '" onclick="skipSensor(\'' + s.id + '\')">⏭ ' + t('skip') + '</button>' +
+            '</div></div>';
         container.appendChild(acc);
-        gateStates[s.id] = { measured: false, skipped: false, confirmed: false, val: null, isMeasuring: false };
-        sensorReadings[s.id] = null;
+        if (!gateStates[s.id]) gateStates[s.id] = { measured: false, skipped: false, confirmed: false, val: null, isMeasuring: false };
+        if (!(s.id in sensorReadings)) sensorReadings[s.id] = null;
     });
     updateSummaryButton(); updateSmartAnalyzeBtn();
+    APP_CONFIG.sensors.forEach(function(s) { updateSensorBadge(s.id); });
 }
 function updateSensorBadge(sensorId) {
     var badge = document.getElementById('badge_' + sensorId); if (!badge) return;
-    var state = gateStates[sensorId];
+    var state = gateStates[sensorId]; if (!state) return;
     badge.className = 'status-badge';
     if (state.confirmed) { badge.classList.add('confirmed'); badge.textContent = '✅ ' + t('done_btn'); }
     else if (state.measured) { badge.classList.add('done'); badge.textContent = '✅ ' + t('done'); }
@@ -951,7 +1131,47 @@ function updateSmartAnalyzeBtn() {
     btn.disabled = getMeasuredCount() === 0;
 }
 
-// ═════ القياسات ═════
+// ═════ Sensor Info Modal (usage for users, physics for developer) ═════
+function showSensorInfo(sensorId) {
+    currentSensorInfo.id = sensorId;
+    currentSensorInfo.tab = 'brief';
+    var info = SENSOR_INFO[sensorId]; if (!info) return;
+    document.getElementById('sensorInfoIcon').textContent = info.icon;
+    document.getElementById('sensorInfoTitle').textContent = info.title[currentLang] || info.title.en;
+    var deepTab = document.getElementById('sensorTabDeep');
+    if (deepTab) deepTab.style.display = admin ? 'inline-block' : 'none';
+    document.getElementById('sensorTabBrief').classList.add('active');
+    if (deepTab) deepTab.classList.remove('active');
+    renderSensorInfo(sensorId, 'brief');
+    document.getElementById('sensorInfoOverlay').classList.add('show');
+}
+function closeSensorInfo() { document.getElementById('sensorInfoOverlay').classList.remove('show'); }
+function switchSensorTab(tab) {
+    if (tab === 'deep' && !admin) return; // 🛡️ silently block non-devs
+    currentSensorInfo.tab = tab;
+    document.getElementById('sensorTabBrief').classList.toggle('active', tab === 'brief');
+    var deepTab = document.getElementById('sensorTabDeep');
+    if (deepTab) deepTab.classList.toggle('active', tab === 'deep');
+    renderSensorInfo(currentSensorInfo.id, tab);
+}
+function renderSensorInfo(sensorId, tab) {
+    var info = SENSOR_INFO[sensorId]; if (!info) return;
+    var body = document.getElementById('sensorInfoBody');
+    // 🛡️ Hard guard: non-admin never sees deep physics
+    if (tab !== 'deep' || !admin) {
+        var txt = info.usage[currentLang] || info.usage.en;
+        body.innerHTML = '<div style="display:flex;flex-direction:column;gap:10px">' +
+            '<div style="font-size:1.6rem;text-align:center">' + info.icon + '</div>' +
+            '<p style="font-size:.9rem;line-height:2;background:#0a0f1a;padding:14px 16px;border-radius:12px;border-right:3px solid #3b82f6">' + txt + '</p>' +
+            '</div>';
+    } else {
+        var txtDeep = info.deep[currentLang] || info.deep.en;
+        body.innerHTML = txtDeep;
+    }
+    body.scrollTop = 0;
+}
+
+// ═════ Real measurements ═════
 function readCamera() {
     return new Promise(function(resolve) {
         if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) { resolve(null); return; }
@@ -1028,6 +1248,7 @@ function readAccelerometer() {
         }, 2500);
     });
 }
+
 function measureSensor(sensorId) {
     var state = gateStates[sensorId];
     if (!state || state.measured || state.skipped || state.isMeasuring) return;
@@ -1068,8 +1289,6 @@ function measureSensor(sensorId) {
         var acc2 = document.getElementById('acc_' + sensorId);
         if (acc2) { acc2.classList.remove('error', 'skipped'); acc2.classList.add('done'); }
         updateSensorBadge(sensorId); updateSummaryButton(); updateSmartAnalyzeBtn();
-        autoDeepRan = false;
-        if (getMeasuredCount() >= 2) setTimeout(function() { runDeepAnalysis(true); }, 600);
     });
 }
 function confirmSensor(sensorId) {
@@ -1099,7 +1318,7 @@ function retrySensor(sensorId) {
     if (doneBtn) doneBtn.disabled = true;
     if (skipBtn) skipBtn.disabled = false;
     updateSensorBadge(sensorId); updateSummaryButton(); updateSmartAnalyzeBtn();
-    currentDeepResult = null; autoDeepRan = false;
+    currentPhysicalResult = null;
 }
 function skipSensor(sensorId) {
     var state = gateStates[sensorId]; if (!state || state.confirmed) return;
@@ -1165,276 +1384,139 @@ var DSP = {
     }
 };
 
-// ═════ Feature Extractors ═════
-function extractCameraFeatures() {
-    return new Promise(function(resolve) {
-        var st = gateStates.camera;
-        if (!st || !st.measured || !sensorReadings.camera) { resolve({ ok: false }); return; }
+// ═════ Feature extraction (silent logging only) ═════
+function extractFeaturesForLog() {
+    var feat = {};
+    if (gateStates.camera && gateStates.camera.measured && sensorReadings.camera) {
         var rgb = sensorReadings.camera.rgb;
         var fv = new Float32Array(48);
-        fv[0] = rgb.r / 255; fv[1] = rgb.g / 255; fv[2] = rgb.b / 255;
-        fv[3] = (rgb.r - rgb.g) / 255; fv[4] = (rgb.g - rgb.b) / 255;
-        fv[5] = Math.max(rgb.r, rgb.g, rgb.b) / 255;
-        fv[6] = Math.min(rgb.r, rgb.g, rgb.b) / 255;
-        fv[7] = (rgb.r + rgb.g + rgb.b) / 765;
+        fv[0] = rgb.r/255; fv[1] = rgb.g/255; fv[2] = rgb.b/255;
+        fv[3] = (rgb.r-rgb.g)/255; fv[4] = (rgb.g-rgb.b)/255;
         if (sensorReadings.camera.pixelSamples) {
             var px = sensorReadings.camera.pixelSamples;
-            for (var i = 0; i < Math.min(40, px.length); i++) fv[8+i] = px[i] / 255;
+            for (var i = 0; i < Math.min(40, px.length); i++) fv[8+i] = px[i]/255;
         }
-        resolve({ ok: true, featureVec: Array.from(fv), color: rgb });
-    });
-}
-function extractMicrophoneFeatures() {
-    return new Promise(function(resolve) {
-        var st = gateStates.microphone;
-        if (!st || !st.measured || !sensorReadings.microphone) { resolve({ ok: false }); return; }
+        feat.camera = { color: rgb, featureVec: Array.from(fv) };
+    }
+    if (gateStates.microphone && gateStates.microphone.measured && sensorReadings.microphone) {
         var m = sensorReadings.microphone;
-        var fv = new Float32Array(48);
-        fv[0] = Math.min(1, m.freq / 2000);
+        var fm = new Float32Array(48);
+        fm[0] = Math.min(1, m.freq/2000);
         if (m.samples && m.samples.length >= 8) {
             var sp = DSP.spectrum(m.samples);
-            for (var i = 0; i < Math.min(32, sp.mag.length); i++) fv[1+i] = Math.min(1, sp.mag[i] / 100);
+            for (var k = 0; k < Math.min(32, sp.mag.length); k++) fm[1+k] = Math.min(1, sp.mag[k]/100);
             var s = DSP.stats(m.samples);
-            fv[33] = Math.min(1, s.rms); fv[34] = Math.min(1, s.crest / 5); fv[35] = Math.min(1, s.kurtosis / 10);
+            fm[33] = Math.min(1, s.rms); fm[34] = Math.min(1, s.crest/5); fm[35] = Math.min(1, s.kurtosis/10);
         }
-        resolve({ ok: true, featureVec: Array.from(fv), freq: m.freq, samples: m.samples });
-    });
-}
-function extractAccelerometerFeatures() {
-    return new Promise(function(resolve) {
-        var st = gateStates.accelerometer;
-        if (!st || !st.measured || !sensorReadings.accelerometer) { resolve({ ok: false }); return; }
-        var a = sensorReadings.accelerometer;
-        var fv = new Float32Array(48);
-        fv[0] = Math.min(1, a.mag / 20);
-        if (a.samples && a.samples.length >= 4) {
-            var s = DSP.stats(a.samples);
-            fv[1] = Math.min(1, s.rms / 20); fv[2] = Math.min(1, s.crest / 5);
-            fv[3] = Math.min(1, s.kurtosis / 10); fv[4] = Math.min(1, s.std / 5);
-            var sp = DSP.spectrum(a.samples);
-            for (var i = 0; i < Math.min(40, sp.mag.length); i++) fv[5+i] = Math.min(1, sp.mag[i] / 20);
-        }
-        resolve({ ok: true, featureVec: Array.from(fv), mag: a.mag, samples: a.samples });
-    });
-}
-
-// ═════ AI Engine ═════
-var AI_ENGINE_CONCRETE = {
-    mobilenet: null, fusionNet: null, autoencoder: null, ready: false, loading: false,
-    NUM_CLASSES: 4, INPUT_DIM: 144, MC_SAMPLES: 30,
-    load: function() {
-        var self = this;
-        if (self.ready || self.loading) return Promise.resolve(self.ready);
-        self.loading = true;
-        return new Promise(function(resolve) {
-            if (typeof tf === 'undefined') { self.loading = false; resolve(false); return; }
-            var chain = Promise.resolve();
-            if (typeof mobilenet !== 'undefined' && mobilenet.load) {
-                chain = chain.then(function() { return mobilenet.load({ version: 2, alpha: 0.5 }).then(function(m) { self.mobilenet = m; }).catch(function() {}); });
-            }
-            chain.then(function() { self.fusionNet = self.buildFusion(); self.autoencoder = self.buildAE(); return self.loadWeights(); })
-              .then(function() { self.ready = true; self.loading = false; console.log('🧠 Concrete AI ready'); resolve(true); })
-              .catch(function(e) { console.warn('AI load:', e); self.loading = false; resolve(false); });
-        });
-    },
-    buildFusion: function() {
-        var self = this;
-        var input = tf.input({ shape: [self.INPUT_DIM] });
-        var attn = tf.layers.dense({ units: self.INPUT_DIM, activation: 'sigmoid' }).apply(input);
-        var att = tf.layers.multiply().apply([input, attn]);
-        var h = tf.layers.dense({ units: 256, activation: 'relu' }).apply(att);
-        h = tf.layers.dropout({ rate: 0.4 }).apply(h);
-        h = tf.layers.dense({ units: 128, activation: 'relu' }).apply(h);
-        h = tf.layers.dropout({ rate: 0.3 }).apply(h);
-        h = tf.layers.dense({ units: 64, activation: 'relu' }).apply(h);
-        var fam = tf.layers.dense({ units: self.NUM_CLASSES, activation: 'softmax' }).apply(h);
-        var conf = tf.layers.dense({ units: 1, activation: 'sigmoid' }).apply(h);
-        return tf.model({ inputs: input, outputs: [fam, conf, attn] });
-    },
-    buildAE: function() {
-        var m = tf.sequential();
-        m.add(tf.layers.dense({ units: 64, activation: 'relu', inputShape: [this.INPUT_DIM] }));
-        m.add(tf.layers.dense({ units: 16, activation: 'relu' }));
-        m.add(tf.layers.dense({ units: 8, activation: 'relu' }));
-        m.add(tf.layers.dense({ units: 16, activation: 'relu' }));
-        m.add(tf.layers.dense({ units: 64, activation: 'relu' }));
-        m.add(tf.layers.dense({ units: this.INPUT_DIM, activation: 'sigmoid' }));
-        m.compile({ optimizer: tf.train.adam(0.001), loss: 'meanSquaredError' });
-        return m;
-    },
-    saveWeights: function() { return Promise.all([this.fusionNet.save('indexeddb://concrete-fusion').catch(function(){}), this.autoencoder.save('indexeddb://concrete-ae').catch(function(){})]); },
-    loadWeights: function() {
-        var self = this;
-        return Promise.all([
-            tf.loadLayersModel('indexeddb://concrete-fusion').then(function(m) { self.fusionNet = m; }).catch(function(){}),
-            tf.loadLayersModel('indexeddb://concrete-ae').then(function(m) { self.autoencoder = m; }).catch(function(){})
-        ]);
-    },
-    mcDropoutPredict: function(features) {
-        var self = this;
-        if (!self.fusionNet) return Promise.resolve(null);
-        return new Promise(function(resolve) {
-            var inputTensor = tf.tensor2d([features]);
-            var famS = [], confS = [], attnAcc = new Float32Array(features.length);
-            for (var i = 0; i < self.MC_SAMPLES; i++) {
-                var r = tf.tidy(function() {
-                    var p = self.fusionNet.apply(inputTensor, { training: true });
-                    return { fam: Array.from(p[0].dataSync()), conf: p[1].dataSync()[0], attn: Array.from(p[2].dataSync()) };
-                });
-                famS.push(r.fam); confS.push(r.conf);
-                for (var j = 0; j < r.attn.length; j++) attnAcc[j] += r.attn[j] / self.MC_SAMPLES;
-            }
-            inputTensor.dispose();
-            var means = new Float32Array(self.NUM_CLASSES), stds = new Float32Array(self.NUM_CLASSES);
-            for (var k = 0; k < self.NUM_CLASSES; k++) {
-                var s = 0; for (var a = 0; a < self.MC_SAMPLES; a++) s += famS[a][k]; means[k] = s / self.MC_SAMPLES;
-                var v = 0; for (var b = 0; b < self.MC_SAMPLES; b++) v += Math.pow(famS[b][k] - means[k], 2);
-                stds[k] = Math.sqrt(v / self.MC_SAMPLES);
-            }
-            var cM = confS.reduce(function(a,b) { return a+b; }, 0) / confS.length;
-            var cS = Math.sqrt(confS.reduce(function(a,b) { return a + Math.pow(b-cM, 2); }, 0) / confS.length);
-            var ranking = Array.from(means).map(function(v, i) { return { id: i, mean: v, std: stds[i] }; }).sort(function(a,b) { return b.mean - a.mean; });
-            resolve({ classes: Array.from(means), classesStd: Array.from(stds), confidence: Math.min(0.92, cM), confidenceStd: cS, attention: Array.from(attnAcc), top3: ranking.slice(0, 3) });
-        });
-    },
-    anomalyScore: function(features) {
-        var self = this;
-        if (!self.autoencoder) return Promise.resolve(null);
-        return new Promise(function(resolve) {
-            var inputTensor = tf.tensor2d([features]);
-            var recon = tf.tidy(function() { return Array.from(self.autoencoder.predict(inputTensor).dataSync()); });
-            inputTensor.dispose();
-            var mse = 0; for (var i = 0; i < features.length; i++) mse += Math.pow(features[i] - recon[i], 2);
-            mse /= features.length;
-            resolve({ score: mse, isAnomaly: mse > 0.08, severity: mse > 0.15 ? 'high' : mse > 0.08 ? 'medium' : 'low' });
-        });
-    },
-    buildFeatureVector: function(a, b, c) {
-        var f = new Float32Array(this.INPUT_DIM);
-        if (a) for (var i = 0; i < Math.min(a.length, 48); i++) f[i] = a[i];
-        if (b) for (var j = 0; j < Math.min(b.length, 48); j++) f[48+j] = b[j];
-        if (c) for (var k = 0; k < Math.min(c.length, 48); k++) f[96+k] = c[k];
-        var n = 0; for (var m = 0; m < f.length; m++) n += f[m]*f[m];
-        n = Math.sqrt(n) || 1;
-        for (var p = 0; p < f.length; p++) f[p] /= n;
-        return Array.from(f);
+        feat.microphone = { freq: m.freq, featureVec: Array.from(fm) };
     }
-};
-
-// ═════ Digital Twin ═════
-var TWIN_KEY = 'concreteTwinV1';
-var DIGITAL_TWIN_CONCRETE = {
-    MIN_SESSIONS: 3,
-    get: function() { try { var r = localStorage.getItem(TWIN_KEY); return r ? JSON.parse(r) : null; } catch(e) { return null; } },
-    save: function(t) { try { localStorage.setItem(TWIN_KEY, JSON.stringify(t)); } catch(e) {} },
-    update: function(feat) {
-        var t = this.get() || { created: Date.now(), sessions: 0, features: { colorR: [], freq: [], mag: [] } };
-        t.sessions++;
-        if (feat.camera && feat.camera.color) t.features.colorR.push(feat.camera.color.r);
-        if (feat.microphone && feat.microphone.freq) t.features.freq.push(feat.microphone.freq);
-        if (feat.accelerometer && feat.accelerometer.mag) t.features.mag.push(feat.accelerometer.mag);
-        Object.keys(t.features).forEach(function(k) { if (t.features[k].length > 50) t.features[k].shift(); });
-        this.save(t); return t;
-    },
-    stats: function() { var t = this.get(); if (!t) return { sessions: 0, ready: false }; return { sessions: t.sessions, ready: t.sessions >= this.MIN_SESSIONS }; },
-    reset: function() { localStorage.removeItem(TWIN_KEY); }
-};
-
-function resetTwinConcrete() { if (confirm('Reset Digital Twin?')) { DIGITAL_TWIN_CONCRETE.reset(); updateTwinStatus(); showToast('🔄 Reset'); } }
-function updateTwinStatus() {
-    var stats = DIGITAL_TWIN_CONCRETE.stats();
-    var el = document.getElementById('twinStatus'); if (!el) return;
-    if (stats.sessions === 0) { el.style.display = 'none'; return; }
-    el.style.display = 'flex';
-    var ic = document.getElementById('twinIcon'); if (ic) ic.textContent = stats.ready ? '🧱' : '⏳';
-    var tx = document.getElementById('twinText');
-    if (tx) tx.textContent = stats.ready ? t('deep_twin_ready') + ' · ' + stats.sessions : t('deep_twin_building') + ' · ' + stats.sessions + '/3';
+    if (gateStates.accelerometer && gateStates.accelerometer.measured && sensorReadings.accelerometer) {
+        var a = sensorReadings.accelerometer;
+        var fa = new Float32Array(48);
+        fa[0] = Math.min(1, a.mag/20);
+        if (a.samples && a.samples.length >= 4) {
+            var st = DSP.stats(a.samples);
+            fa[1] = Math.min(1, st.rms/20); fa[2] = Math.min(1, st.crest/5);
+            fa[3] = Math.min(1, st.kurtosis/10); fa[4] = Math.min(1, st.std/5);
+            var sp2 = DSP.spectrum(a.samples);
+            for (var k2 = 0; k2 < Math.min(40, sp2.mag.length); k2++) fa[5+k2] = Math.min(1, sp2.mag[k2]/20);
+        }
+        feat.accelerometer = { mag: a.mag, featureVec: Array.from(fa) };
+    }
+    return feat;
 }
 
-// ═════ Pipeline ═════
+// Silent local log — ready for real ML training in the future
+function logSessionForFutureML(feat, ranking) {
+    try {
+        var log = JSON.parse(localStorage.getItem(ML_LOG_KEY) || '[]');
+        log.push({
+            t: Date.now(),
+            device: document.getElementById('deviceId').textContent,
+            feat: feat,
+            topMatch: ranking && ranking[0] ? { id: ranking[0].faultId, score: ranking[0].physical } : null
+        });
+        if (log.length > 300) log = log.slice(-300);
+        localStorage.setItem(ML_LOG_KEY, JSON.stringify(log));
+    } catch(e) {}
+}
+
+// ═════ Physical analysis (pure Euclidean) ═════
 function getMeasuredCount() { return APP_CONFIG.sensors.filter(function(s) { return gateStates[s.id] && gateStates[s.id].measured; }).length; }
 function getConfirmedCount() { return APP_CONFIG.sensors.filter(function(s) { return gateStates[s.id] && gateStates[s.id].confirmed; }).length; }
 
-function runDeepAnalysis(silent) {
+function runPhysicalAnalysis(silent) {
     var measured = getMeasuredCount();
-    if (measured === 0) { if (!silent) showToast('⚠️ ' + t('deep_need_measure_first')); return; }
+    if (measured === 0) { if (!silent) showToast('⚠️ ' + t('phys_need_measure')); return; }
     var btn = document.getElementById('smartAnalyzeBtn');
-    if (btn) { btn.disabled = true; btn.textContent = '⏳ ' + t('deep_running'); }
-    if (!silent) showToast('🧠 ' + t('deep_running'));
+    if (btn) { btn.disabled = true; btn.textContent = '⏳ ' + t('phys_analyze_running'); }
+    if (!silent) showToast('🔬 ' + t('phys_analyze_running'));
 
-    var loadPromise = AI_ENGINE_CONCRETE.ready ? Promise.resolve(true) : AI_ENGINE_CONCRETE.load();
+    try {
+        var feat = extractFeaturesForLog();
+        var validCount = Object.keys(feat).length;
+        if (validCount === 0) { if (btn) { btn.disabled = false; btn.textContent = '🔬 ' + t('phys_analyze_btn'); } if (!silent) showToast('❌ ' + t('phys_analyze_error')); return; }
 
-    Promise.all([extractCameraFeatures(), extractMicrophoneFeatures(), extractAccelerometerFeatures()]).then(function(results) {
-        var cam = results[0], mic = results[1], accel = results[2];
-        return loadPromise.then(function() {
-            var feat = {};
-            if (cam.ok) feat.camera = cam;
-            if (mic.ok) feat.microphone = mic;
-            if (accel.ok) feat.accelerometer = accel;
-            var validCount = Object.keys(feat).length;
-            if (validCount === 0) return { ok: false };
-            var twin = DIGITAL_TWIN_CONCRETE.update(feat);
+        var ranking = APP_CONFIG.faults.map(function(fault) {
+            var score = 0, total = 0;
+            var localDists = {};
+            if (feat.camera && feat.camera.color) {
+                var d = Math.sqrt(
+                    Math.pow(feat.camera.color.r - fault.fingerprints.camera.r, 2) +
+                    Math.pow(feat.camera.color.g - fault.fingerprints.camera.g, 2) +
+                    Math.pow(feat.camera.color.b - fault.fingerprints.camera.b, 2)
+                ) / 255;
+                localDists.camera = d;
+                score += Math.max(0, 1 - d); total++;
+            }
+            if (feat.microphone) {
+                var d2 = Math.abs(feat.microphone.freq - fault.fingerprints.microphone.freq) / Math.max(fault.fingerprints.microphone.freq, 1);
+                localDists.microphone = d2;
+                score += Math.max(0, 1 - d2); total++;
+            }
+            if (feat.accelerometer) {
+                var d3 = Math.abs(feat.accelerometer.mag - fault.fingerprints.accelerometer.mag) / Math.max(fault.fingerprints.accelerometer.mag, 0.1);
+                localDists.accelerometer = d3;
+                score += Math.max(0, 1 - d3); total++;
+            }
+            return {
+                faultId: fault.id,
+                faultKey: fault.nameKey,
+                severity: fault.severity,
+                solutionKey: fault.solutionKey,
+                physical: total > 0 ? score/total : 0,
+                distances: localDists
+            };
+        }).sort(function(a,b) { return b.physical - a.physical; });
 
-            var fv = AI_ENGINE_CONCRETE.buildFeatureVector(
-                feat.camera ? feat.camera.featureVec : null,
-                feat.microphone ? feat.microphone.featureVec : null,
-                feat.accelerometer ? feat.accelerometer.featureVec : null
-            );
+        logSessionForFutureML(feat, ranking);
+        currentPhysicalResult = { ok: true, feat: feat, ranking: ranking.slice(0, 4), validCount: validCount };
 
-            var aiP = AI_ENGINE_CONCRETE.ready ? AI_ENGINE_CONCRETE.mcDropoutPredict(fv).then(function(ai) {
-                if (ai) return AI_ENGINE_CONCRETE.anomalyScore(fv).then(function(a) { ai.anomaly = a; return ai; });
-                return null;
-            }) : Promise.resolve(null);
-
-            return aiP.then(function(ai) {
-                var ranking = APP_CONFIG.faults.map(function(fault) {
-                    var score = 0, total = 0;
-                    if (feat.camera) {
-                        var d = Math.sqrt(Math.pow(feat.camera.color.r - fault.fingerprints.camera.r, 2) + Math.pow(feat.camera.color.g - fault.fingerprints.camera.g, 2) + Math.pow(feat.camera.color.b - fault.fingerprints.camera.b, 2)) / 255;
-                        score += Math.max(0, 1 - d); total++;
-                    }
-                    if (feat.microphone) {
-                        var d2 = Math.abs(feat.microphone.freq - fault.fingerprints.microphone.freq) / fault.fingerprints.microphone.freq;
-                        score += Math.max(0, 1 - d2); total++;
-                    }
-                    if (feat.accelerometer) {
-                        var d3 = Math.abs(feat.accelerometer.mag - fault.fingerprints.accelerometer.mag) / Math.max(fault.fingerprints.accelerometer.mag, 0.1);
-                        score += Math.max(0, 1 - d3); total++;
-                    }
-                    return { faultId: fault.id, faultKey: fault.nameKey, severity: fault.severity, solutionKey: fault.solutionKey, physical: total > 0 ? score/total : 0 };
-                }).sort(function(a,b) { return b.physical - a.physical; });
-                return { ok: true, feat: feat, ranking: ranking.slice(0, 4), ai: ai, twin: twin, validCount: validCount };
-            });
-        });
-    }).then(function(result) {
-        if (btn) { btn.disabled = false; btn.textContent = '🧠 ' + t('deep_analyze_btn'); }
-        if (!result || !result.ok) { if (!silent) showToast('❌ ' + t('deep_analyze_error')); return; }
-        currentDeepResult = result; autoDeepRan = true;
-        renderDeepPanel(result); updateTwinStatus();
-        if (!silent) showToast('✅ ' + t('deep_analyze_done'));
-    }).catch(function(e) {
-        console.warn('Deep:', e);
-        if (btn) { btn.disabled = false; btn.textContent = '🧠 ' + t('deep_analyze_btn'); }
-        if (!silent) showToast('❌ ' + t('deep_analyze_error'));
-    });
+        if (btn) { btn.disabled = false; btn.textContent = '🔬 ' + t('phys_analyze_btn'); }
+        renderPhysPanel(currentPhysicalResult);
+        if (!silent) showToast('✅ ' + t('phys_analyze_done'));
+    } catch(e) {
+        console.warn('Phys:', e);
+        if (btn) { btn.disabled = false; btn.textContent = '🔬 ' + t('phys_analyze_btn'); }
+        if (!silent) showToast('❌ ' + t('phys_analyze_error'));
+    }
 }
 
-function renderDeepPanel(deep) {
-    if (!deep || !deep.ok) return;
-    var panel = document.getElementById('deepPanel'); if (!panel) return;
+function renderPhysPanel(phys) {
+    if (!phys || !phys.ok) return;
+    var panel = document.getElementById('physPanel'); if (!panel) return;
     panel.style.display = 'block';
-    var conf = deep.ai ? Math.round(deep.ai.confidence * 100) : Math.round(deep.ranking[0].physical * 100);
-    var unc = deep.ai ? Math.round(deep.ai.confidenceStd * 100) : 0;
-    var snr = deep.validCount === 3 ? 95 : deep.validCount === 2 ? 65 : 35;
-    document.getElementById('valConfidence').textContent = conf + '%';
-    document.getElementById('barConfidence').style.width = conf + '%';
-    document.getElementById('valUncertainty').textContent = '± ' + unc + '%';
-    document.getElementById('barUncertainty').style.width = Math.min(100, unc*4) + '%';
-    document.getElementById('valSNR').textContent = snr + '%';
-    document.getElementById('barSNR').style.width = snr + '%';
+
+    var quality = Math.round(phys.ranking[0].physical * 100);
+    var completeness = Math.round((phys.validCount / 3) * 100);
+
+    document.getElementById('valQuality').textContent = quality + '%';
+    document.getElementById('barQuality').style.width = quality + '%';
+    document.getElementById('valCompleteness').textContent = completeness + '%';
+    document.getElementById('barCompleteness').style.width = completeness + '%';
 
     var list = document.getElementById('topFamiliesList'); list.innerHTML = '';
-    deep.ranking.slice(0, 3).forEach(function(item, idx) {
+    phys.ranking.slice(0, 3).forEach(function(item, idx) {
         var row = document.createElement('div');
         row.className = 'family-row' + (idx === 0 ? ' primary' : '');
         var pct = Math.round(item.physical * 100);
@@ -1443,89 +1525,26 @@ function renderDeepPanel(deep) {
         list.appendChild(row);
     });
 
-    if (deep.ai && deep.ai.attention) {
-        var groups = { '📸 Camera': [0, 10], '🎤 Microphone': [48, 58], '📳 Accelerometer': [96, 106] };
-        var xai = [];
-        Object.keys(groups).forEach(function(name) {
-            var r = groups[name];
-            var s = 0; for (var i = r[0]; i < r[1]; i++) s += Math.abs(deep.ai.attention[i] || 0);
-            xai.push({ name: name, score: s / (r[1] - r[0]) });
-        });
-        xai.sort(function(a,b) { return b.score - a.score; });
-        var xSec = document.getElementById('xaiSection'); xSec.style.display = 'block';
-        var xl = document.getElementById('xaiList'); xl.innerHTML = '';
-        xai.forEach(function(x) {
+    if (phys.ranking[0] && phys.ranking[0].distances) {
+        var distSec = document.getElementById('distSection');
+        var distList = document.getElementById('distList');
+        distSec.style.display = 'block';
+        distList.innerHTML = '';
+        var dists = phys.ranking[0].distances;
+        Object.keys(dists).forEach(function(sid) {
             var row = document.createElement('div');
-            row.className = 'xai-row';
-            row.innerHTML = '<span>' + x.name + '</span><span>' + Math.round(x.score*100) + '</span>';
-            xl.appendChild(row);
+            row.className = 'phys-row';
+            var label = sid === 'camera' ? '📸 d(RGB)' : sid === 'microphone' ? '🎤 d(f)' : '📳 d(|a|)';
+            row.innerHTML = '<span>' + label + '</span><span>' + dists[sid].toFixed(4) + '</span>';
+            distList.appendChild(row);
         });
-        if (deep.ai.anomaly && deep.ai.anomaly.isAnomaly) {
-            var aSec = document.getElementById('anomalySection'); aSec.style.display = 'block';
-            var at = document.getElementById('anomalyText');
-            var sev = deep.ai.anomaly.severity;
-            var cls = sev === 'high' ? 'high' : sev === 'medium' ? 'medium' : '';
-            at.innerHTML = '<div class="anomaly-box ' + cls + '">⚠️ ' + t('deep_anomaly_detected') + ' — Score: ' + deep.ai.anomaly.score.toFixed(4) + '</div>';
-        }
     }
-    var stats = DIGITAL_TWIN_CONCRETE.stats();
-    if (stats.sessions >= 3) {
-        var tb = document.getElementById('trainBtn');
-        tb.style.display = 'inline-block';
-        document.getElementById('trainBtnLabel').textContent = t('deep_train_btn') + ' (' + stats.sessions + ')';
-    }
+
+    var noteEl = document.getElementById('physNote');
+    noteEl.textContent = phys.validCount >= 2 ? t('phys_note_ok') : t('phys_note_insufficient');
 }
 
-// ═════ Train ═════
-function trainOnMySample() {
-    var stats = DIGITAL_TWIN_CONCRETE.stats();
-    if (stats.sessions < 3) { showToast('⚠️ ' + t('deep_train_need_sessions')); return; }
-    var ov = document.getElementById('trainOverlay'); ov.classList.add('show');
-    var msg = document.getElementById('trainMsg'), fill = document.getElementById('trainProgressFill'), pct = document.getElementById('trainPct');
-    document.getElementById('trainCloseBtn').style.display = 'none';
-    msg.textContent = t('deep_train_running');
-    var loadP = AI_ENGINE_CONCRETE.ready ? Promise.resolve(true) : AI_ENGINE_CONCRETE.load();
-    loadP.then(function() {
-        var twin = DIGITAL_TWIN_CONCRETE.get();
-        if (!twin) throw new Error('No twin');
-        var maxN = Math.min(twin.features.colorR.length, twin.features.freq.length, twin.features.mag.length);
-        if (maxN < 3) throw new Error('Not enough');
-        var samples = [];
-        for (var i = 0; i < maxN; i++) {
-            var fv = new Float32Array(AI_ENGINE_CONCRETE.INPUT_DIM);
-            fv[0] = twin.features.colorR[i] / 255;
-            fv[48] = Math.min(1, twin.features.freq[i] / 2000);
-            fv[96] = Math.min(1, twin.features.mag[i] / 20);
-            var n = 0; for (var j = 0; j < fv.length; j++) n += fv[j]*fv[j];
-            n = Math.sqrt(n) || 1; for (var k = 0; k < fv.length; k++) fv[k] /= n;
-            samples.push(Array.from(fv));
-        }
-        msg.textContent = '🎓 ' + t('deep_train_running') + ' (' + samples.length + ')';
-        var xs = tf.tensor2d(samples);
-        var ep = 0; var total = 50;
-        return AI_ENGINE_CONCRETE.autoencoder.fit(xs, xs, {
-            epochs: total, batchSize: Math.min(4, samples.length), verbose: 0,
-            callbacks: { onEpochEnd: function(e, l) {
-                ep++; var p = Math.round((ep/total)*100);
-                fill.style.width = p + '%'; pct.textContent = p + '%';
-                msg.textContent = t('deep_train_running') + ' · ' + ((l && l.loss) || 0).toFixed(4);
-                return new Promise(function(r) { setTimeout(r, 5); });
-            }}
-        }).then(function() { xs.dispose(); return AI_ENGINE_CONCRETE.saveWeights(); })
-          .then(function() {
-              msg.textContent = '✅ ' + t('deep_train_success');
-              fill.style.width='100%'; pct.textContent='100%';
-              document.getElementById('trainCloseBtn').style.display='inline-block';
-              showToast('✅ ' + t('deep_train_success'));
-          });
-    }).catch(function(e) {
-        msg.textContent = '❌ ' + e.message;
-        document.getElementById('trainCloseBtn').style.display = 'inline-block';
-    });
-}
-function closeTrainOverlay() { document.getElementById('trainOverlay').classList.remove('show'); }
-
-// ═════ الخلاصة ═════
+// ═════ Final verdict ═════
 function requestFinalVerdict() {
     var measured = getMeasuredCount();
     if (measured === 0) {
@@ -1564,11 +1583,11 @@ function confirmFinalVerdict() {
     finalShown = true;
     renderFinalVerdict(); saveToHistory();
 }
+
 function renderFinalVerdict() {
     var confirmed = getConfirmedCount();
     var measured = getMeasuredCount();
     var fv = document.getElementById('finalVerdict');
-    var icon = document.getElementById('finalIcon');
     var sentence = document.getElementById('verdictSentence');
     var solDiv = document.getElementById('verdictSolution');
     var countNotice = document.getElementById('sensorCountNotice');
@@ -1577,7 +1596,7 @@ function renderFinalVerdict() {
     document.getElementById('confidenceTotal').textContent = APP_CONFIG.sensors.length;
 
     if (measured === 0) {
-        fv.classList.add('gray'); icon.textContent = '⚠️';
+        fv.classList.add('gray'); document.getElementById('finalIcon').textContent = '⚠️';
         document.getElementById('finalShortText').textContent = '⚠️ ' + t('no_data');
         document.getElementById('finalShortText').className = 'final-short-text muted';
         sentence.textContent = t('no_data'); solDiv.style.display = 'none';
@@ -1595,35 +1614,20 @@ function renderFinalVerdict() {
             var reading = sensorReadings[s.id]; if (!reading) return;
             var fp = f.fingerprints[s.id]; if (!fp) return;
             if (s.id === 'camera') { dist += Math.sqrt(Math.pow(reading.rgb.r - fp.r, 2) + Math.pow(reading.rgb.g - fp.g, 2) + Math.pow(reading.rgb.b - fp.b, 2)) / 255; c++; }
-            if (s.id === 'microphone') { dist += Math.abs(reading.freq - fp.freq) / fp.freq; c++; }
+            if (s.id === 'microphone') { dist += Math.abs(reading.freq - fp.freq) / Math.max(fp.freq, 1); c++; }
             if (s.id === 'accelerometer') { dist += Math.abs(reading.mag - fp.mag) / Math.max(fp.mag, 0.1); c++; }
         });
         if (c > 0) { var avg = dist / c; if (avg < minDist) { minDist = avg; match = f.id; } }
     });
 
-    var deep = currentDeepResult;
     var finalFault = APP_CONFIG.faults.find(function(f) { return f.id === match; }) || APP_CONFIG.faults[0];
-    var deepMatch = false;
-
-    if (deep && deep.ok && deep.ranking[0]) {
-        var deepConf = deep.ai ? deep.ai.confidence : deep.ranking[0].physical;
-        var physScore = 1 - minDist;
-        var combined = (physScore + deepConf) / 2;
-        if (deepConf > 0.6) {
-            var topFaultId = deep.ranking[0].faultId;
-            finalFault = APP_CONFIG.faults.find(function(f) { return f.id === topFaultId; }) || finalFault;
-            deepMatch = true;
-        }
-    }
-
     var level = finalFault.severity === 'low' ? 'high' : (finalFault.severity === 'medium' ? 'medium' : 'low');
     var colorClass = level === 'high' ? 'green' : (level === 'medium' ? 'yellow' : 'orange');
     var iconEmoji = level === 'high' ? '🟢' : (level === 'medium' ? '🟡' : '🟠');
 
     document.getElementById('finalIcon').textContent = iconEmoji;
     var shortEl = document.getElementById('finalShortText');
-    var deepBadge = deepMatch ? ' 🧠' : '';
-    shortEl.textContent = iconEmoji + ' ' + t(finalFault.nameKey) + deepBadge;
+    shortEl.textContent = iconEmoji + ' ' + t(finalFault.nameKey);
     shortEl.className = 'final-short-text ' + (level === 'high' ? 'good' : level === 'medium' ? 'warning' : 'danger');
     sentence.textContent = t(finalFault.nameKey) + ' – ' + t(finalFault.solutionKey);
     solDiv.textContent = '🔧 ' + t(finalFault.solutionKey);
@@ -1634,8 +1638,8 @@ function renderFinalVerdict() {
     var summaryText = measured >= 2 ? t('summary_good') : (measured === 1 ? t('summary_med') : t('summary_low'));
     document.getElementById('summaryContainer').innerHTML = '<div class="summary-text ' + (level === 'high' ? 'good' : level === 'medium' ? 'warning' : 'danger') + '">' + summaryText + '</div>';
 
-    if (!currentDeepResult && measured >= 1) runDeepAnalysis(true);
-    else if (currentDeepResult && currentDeepResult.ok) renderDeepPanel(currentDeepResult);
+    if (!currentPhysicalResult && measured >= 1) runPhysicalAnalysis(true);
+    else if (currentPhysicalResult && currentPhysicalResult.ok) renderPhysPanel(currentPhysicalResult);
 
     var noteText = (document.getElementById('notesText').value || '').trim();
     if (noteText) {
@@ -1644,6 +1648,7 @@ function renderFinalVerdict() {
     } else { document.getElementById('userNotesContainer').style.display = 'none'; }
     fv.scrollIntoView({ behavior: 'smooth', block: 'center' });
 }
+
 function quickReset() {
     APP_CONFIG.sensors.forEach(function(s) {
         var state = gateStates[s.id]; if (!state) return;
@@ -1659,11 +1664,11 @@ function quickReset() {
         var skipBtn = document.getElementById('skip_' + s.id); if (skipBtn) skipBtn.disabled = false;
         updateSensorBadge(s.id);
     });
-    var fv = document.getElementById('finalVerdict'); if (fv) fv.style.display = 'none';
-    var dp = document.getElementById('deepPanel'); if (dp) dp.style.display = 'none';
+    var fv = document.getElementById('finalVerdict'); if (fv) { fv.style.display = 'none'; fv.className = 'final-verdict'; }
+    var pp = document.getElementById('physPanel'); if (pp) pp.style.display = 'none';
     var ta = document.getElementById('notesText'); if (ta) ta.value = '';
     updateNotesUI();
-    finalShown = false; currentDeepResult = null; autoDeepRan = false;
+    finalShown = false; currentPhysicalResult = null;
     updateSummaryButton(); updateSmartAnalyzeBtn();
     showToast('🔄 ' + t('reset'));
 }
@@ -1673,7 +1678,7 @@ function resetApp() {
     document.getElementById('labArea').style.display = 'none';
 }
 
-// ═════ البدء ═════
+// ═════ Start ═════
 function requestStart() {
     if (totalCredits() <= 0) { showToast('⚠️ ' + t('no_credits')); return; }
     document.getElementById('consentOverlay').classList.add('show');
@@ -1710,7 +1715,7 @@ function startDiagnosis() {
     document.getElementById('labArea').scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
-// ═════ الأدوات ═════
+// ═════ Tools ═════
 var LANG_MAP = { ar:'ar-SA', en:'en-US', fr:'fr-FR', es:'es-ES', de:'de-DE', it:'it-IT', pt:'pt-PT', ru:'ru-RU', zh:'zh-CN', ja:'ja-JP', ko:'ko-KR', hi:'hi-IN', tr:'tr-TR', id:'id-ID', ms:'ms-MY', vi:'vi-VN', th:'th-TH', nl:'nl-NL', pl:'pl-PL', sv:'sv-SE', fa:'fa-IR', ur:'ur-PK', sw:'sw-KE' };
 
 function buildReportText() {
@@ -1726,7 +1731,6 @@ function buildReportText() {
     lines.push('━━━━━━━━━━━━━━━━━━━━');
     var vs = document.getElementById('verdictSentence').textContent;
     if (vs) lines.push('📋 ' + vs);
-    if (currentDeepResult && currentDeepResult.ai) lines.push('🧠 ' + t('deep_confidence') + ': ' + Math.round(currentDeepResult.ai.confidence*100) + '%');
     var notes = document.getElementById('notesText').value.trim();
     if (notes) lines.push('📝 ' + notes);
     lines.push(''); lines.push('⚠️ ' + t('legal'));
@@ -1768,7 +1772,7 @@ function shareVia(method) {
     if (method !== 'copy') setTimeout(closeShareModal, 500); else closeShareModal();
 }
 
-// ═════ السجل ═════
+// ═════ History ═════
 function loadHistory() {
     try { var raw = localStorage.getItem(HISTORY_KEY); if (raw) historyData = JSON.parse(raw).slice(0, 30); } catch(e) { historyData = []; }
 }
@@ -1781,7 +1785,6 @@ function saveToHistory() {
         verdict: document.getElementById('verdictSentence').textContent || '',
         notes: (document.getElementById('notesText').value || '').trim()
     };
-    if (currentDeepResult && currentDeepResult.ai) entry.deepConfidence = Math.round(currentDeepResult.ai.confidence * 100);
     APP_CONFIG.sensors.forEach(function(s) {
         var state = gateStates[s.id];
         entry.sensors[s.id] = { status: state.measured ? 'done' : (state.skipped ? 'skipped' : 'idle'), value: sensorReadings[s.id] ? formatReading(s.id, sensorReadings[s.id]) : null };
@@ -1829,7 +1832,7 @@ function exportHistory() {
     } catch(e) { showToast('❌ ' + t('network_error')); }
 }
 
-// ═════ PDF ═════
+// ═════ Report ═════
 function printReport() {
     if (!finalShown) { showToast('⚠️ ' + t('print_needs_verdict')); return; }
     var container = document.getElementById('reportContainer');
@@ -1853,12 +1856,10 @@ function printReport() {
     html += '<div><strong>' + t('report_gps') + '</strong>' + (locationStatus || '—') + '</div>';
     html += '</div>';
     html += '<div class="report-section"><h2>📊 ' + t('report_sensors_used') + '</h2>' + sensorRows + '</div>';
-    html += '<div class="report-section"><h2>📋 ' + t('report_verdict') + '</h2><div class="report-verdict"><p>' + verdict + '</p>';
-    if (currentDeepResult && currentDeepResult.ai) html += '<p style="margin-top:8px;font-size:.85rem;"><strong>🧠 ' + t('deep_confidence') + ':</strong> ' + Math.round(currentDeepResult.ai.confidence*100) + '%</p>';
-    html += '</div></div>';
+    html += '<div class="report-section"><h2>📋 ' + t('report_verdict') + '</h2><div class="report-verdict"><p>' + verdict + '</p></div></div>';
     if (note.length >= 4) html += '<div class="report-note">💭 ' + note + '</div>';
     html += '<div class="report-disclaimer">⚠️ ' + t('legal') + '</div>';
-    html += '<div class="report-watermark">Physics Lab Concrete © 2026 · Deep AI</div>';
+    html += '<div class="report-watermark">Physics Lab Concrete © 2026 · Pure Physics</div>';
     html += '<div class="report-actions"><button class="btn-print-pdf" onclick="window.print()">🖨️ PDF</button><button class="btn-close-report" onclick="closeReport()">✖ ' + t('report_close_btn') + '</button></div>';
     container.innerHTML = html;
     document.getElementById('reportOverlay').classList.add('show');
@@ -1871,9 +1872,9 @@ function closeLegalModal() { document.getElementById('legalModalOverlay').classL
 function switchLegalTab(tab) {
     currentLegalTab = tab;
     var texts = {
-        privacy: '<h4>📍 ' + t('legal_privacy_tab') + '</h4><p>All measurements processed locally on your device.</p><h4>✉️ Contact</h4><p><a href="mailto:moulkamali@gmail.com">moulkamali@gmail.com</a></p>',
-        terms: '<h4>⚠️ ' + t('legal_terms_tab') + '</h4><p>Purely physical measurement tool via phone sensors.</p><h4>© Copyright</h4><p>© 2026 Physics Lab Concrete.</p>',
-        refund: '<h4>💰 ' + t('legal_refund_tab') + '</h4><p>Digital credits. Cannot be refunded once used.</p>',
+        privacy: '<h4>📍 ' + t('legal_privacy_tab') + '</h4><p>All measurements are processed locally on your device. Sensor readings are stored in your browser localStorage only — they never leave your phone.</p><h4>🧠 Data for future ML</h4><p>A silent local feature log (<code>concreteMLLog</code>) stores anonymized measurement vectors to enable training a real classifier in a future release.</p><h4>✉️ Contact</h4><p><a href="mailto:moulkamali@gmail.com">moulkamali@gmail.com</a></p>',
+        terms: '<h4>⚠️ ' + t('legal_terms_tab') + '</h4><p>Physics Lab Concrete is a purely physical measurement assistant. It reads RGB color, FFT-dominant acoustic frequency, and tri-axial vibration magnitude. Verdicts are computed via Euclidean distance against pre-recorded reference fingerprints.</p><p>This tool is not a substitute for professional structural engineering inspection.</p><h4>© Copyright</h4><p>© 2026 Physics Lab Concrete.</p>',
+        refund: '<h4>💰 ' + t('legal_refund_tab') + '</h4><p>Digital credits. Cannot be refunded once used. The 3 free inspections are provided permanently without any condition.</p>',
         contact: '<h4>✉️ ' + t('legal_contact_tab') + '</h4><ul><li>📧 <a href="mailto:moulkamali@gmail.com">moulkamali@gmail.com</a></li></ul>'
     };
     ['privacy','terms','refund','contact'].forEach(function(x) {
@@ -1904,7 +1905,7 @@ function init() {
     if (savedNotes) document.getElementById('notesText').value = savedNotes;
     loadHistory(); buildLangSelect(); applyTranslations();
     updateDateTime(); setInterval(updateDateTime, 1000);
-    initLocation(); attachLogoEvents(); updateNotesUI(); loadRating(); updateTwinStatus();
+    initLocation(); attachLogoEvents(); updateNotesUI(); loadRating();
 
     document.getElementById('notesText').addEventListener('input', function() { updateNotesUI(); localStorage.setItem('concreteNotes', this.value); });
 
@@ -1915,21 +1916,19 @@ function init() {
     document.getElementById('calibrationOverlay').addEventListener('click', function(e) { if (e.target.id === 'calibrationOverlay') document.getElementById('calibrationOverlay').classList.remove('show'); });
     document.getElementById('legalModalOverlay').addEventListener('click', function(e) { if (e.target.id === 'legalModalOverlay') closeLegalModal(); });
     document.getElementById('shareOverlay').addEventListener('click', function(e) { if (e.target.id === 'shareOverlay') closeShareModal(); });
-    document.getElementById('trainOverlay').addEventListener('click', function(e) { if (e.target.id === 'trainOverlay') closeTrainOverlay(); });
+    document.getElementById('sensorInfoOverlay').addEventListener('click', function(e) { if (e.target.id === 'sensorInfoOverlay') closeSensorInfo(); });
     document.addEventListener('keydown', function(e) {
         if (e.key === 'Escape') {
-            closeAdminModal(); closeReport(); cancelFinalVerdict(); closeLegalModal(); closeShareModal(); closeTrainOverlay();
+            closeAdminModal(); closeReport(); cancelFinalVerdict(); closeLegalModal(); closeShareModal(); closeSensorInfo();
             document.getElementById('consentOverlay').classList.remove('show');
             document.getElementById('calibrationOverlay').classList.remove('show');
         }
     });
 
-    setTimeout(function() { AI_ENGINE_CONCRETE.load().then(function(ok) { if (ok) console.log('✅ Concrete AI ready'); }); }, 1500);
-
-    console.log('🧱 Physics Lab Concrete — V-Final + Deep AI Layer');
-    console.log('📊 3 sensors · 4 fault classes · 23 languages');
-    console.log('🧠 TensorFlow.js + MC Dropout + Autoencoder + Digital Twin');
-    console.log('👆 Tap 🧱 5 times for Developer Mode');
+    console.log('🧱 Physics Lab Concrete — Pure Physics Edition');
+    console.log('📱 Users see: usage instructions only');
+    console.log('🔬 Developer (tap 🧱 5×): physics + references');
+    console.log('⚙️  Euclidean fingerprint matching · 3 free inspections');
 }
 if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
 else init();
